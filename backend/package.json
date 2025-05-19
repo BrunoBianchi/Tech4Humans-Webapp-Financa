@@ -1,26 +1,31 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "Servidor Backend para aplicacao do desafio",
-  "author": "Bruno Raiado Bianchi",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon ./src/main.ts",
-    "postgres":" cd../database && docker-compose up -d"
-  },
-  "keywords": [],
-  "license": "ISC",
-  "packageManager": "pnpm@10.10.0",
-  "dependencies": {
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "jose": "^6.0.11",
-    "nodemon": "^3.1.10",
-    "reflect-metadata": "^0.2.2",
-    "typescript": "^5.8.3",
-    "zod": "^3.24.4"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.2"
-  }
+   "name": "backend",
+   "version": "1.0.0",
+   "description": "Servidor Backend para aplicacao do desafio",
+   "author": "Bruno Raiado Bianchi",
+   "main": "./src/main.ts",
+   "scripts": {
+      "start": "nodemon ./src/main.ts",
+      "postgres": " cd../database && docker-compose up -d"
+   },
+   "keywords": [],
+   "license": "ISC",
+   "packageManager": "pnpm@10.10.0",
+   "dependencies": {
+      "dotenv": "^16.5.0",
+      "express": "^5.1.0",
+      "jose": "^6.0.11",
+      "nodemon": "^3.1.10",
+      "typeorm": "0.3.24",
+      "typescript": "^5.8.3",
+      "zod": "^3.24.4",
+      "reflect-metadata": "^0.2.2",
+      "pg": "^8.14.1"
+   },
+   "devDependencies": {
+      "@types/node": "^22.13.10",
+      "ts-node": "^10.9.2",
+      "typescript": "^5.8.2",
+      "@types/express": "^5.0.2"
+   }
 }
