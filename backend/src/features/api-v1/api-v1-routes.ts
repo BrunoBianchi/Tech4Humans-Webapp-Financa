@@ -1,12 +1,12 @@
-import { Router, Request, Response } from "express";
+import { Get } from "../../utils/decorators/router/get-decorator";
+import { Router } from "../../utils/decorators/router/router-decorator";
+@Router()
+export  class ApiV1Routes { 
+  @Get({
+    path:'/',
 
-const apiRoutes: Router = Router();
-
-apiRoutes.get("/", (req: Request, res: Response) => {
-  res.status(200).json({
-    message: "Welcome to the API v1",
-    status: 200,
-  });
-});
-
-export default apiRoutes;
+  })
+  public getIndex() {
+    return "api-v1";
+  }
+}

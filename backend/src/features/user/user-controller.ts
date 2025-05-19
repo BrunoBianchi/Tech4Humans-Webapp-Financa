@@ -1,11 +1,10 @@
 import Controller from "../../utils/decorators/controller-decorator";
-import userRoutes from "./user-routes";
-
+import {UserRoute} from "./user-routes";
 
 
 @Controller({
     name: "user",
-    router: userRoutes,
+    router: UserRoute,
     path: "/user",
 })
 export default class UserController {

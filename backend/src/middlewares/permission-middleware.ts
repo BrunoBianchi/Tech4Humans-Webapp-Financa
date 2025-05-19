@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
-export default ():RequestHandler=>{
-     return (req,res,next)=>{
-        res.send("Permission Denied");
-     }
-}
+const auth: RequestHandler = (req, res, next) => {
+    res.send("Permission Denied");
+};
+
+export default auth;

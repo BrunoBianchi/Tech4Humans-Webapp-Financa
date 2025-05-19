@@ -1,9 +1,9 @@
-import { RequestHandler, Router } from "express";
+import { RequestHandler } from "express";
 import { ControllerClass } from "../class/controller-class";
 
 function Controller(params: {
   name?: string;
-  router: Router;
+  router: any;
   path: string;
   permissions?:Array<RequestHandler>
 }):any {

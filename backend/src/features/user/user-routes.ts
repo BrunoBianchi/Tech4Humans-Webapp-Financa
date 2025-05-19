@@ -1,12 +1,35 @@
-import { Router } from "express";
-
-const userRoutes:Router = Router();
-
-userRoutes.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Welcome to the User API",
-    status: 200,
-  });
-});
-
-export default userRoutes;
+import { Get } from "../../utils/decorators/router/get-decorator";
+import { Post } from "../../utils/decorators/router/post-decorator";
+import { Router } from "../../utils/decorators/router/router-decorator";
+@Router()
+export class UserRoute {
+  @Post({
+    path: "/",
+    params: [
+      {
+        name: "id",
+        type: "string",
+        required: true,
+      },
+      {
+        name: "name",
+        type: "string",
+        required: true,
+      },
+      {
+        name: "age",
+        type: "number",
+        required: false,
+      }
+    ],
+  })
+  public getIndex(params: any) {
+    return JSON.stringify(params);
+  }
+  @Get({
+    path: "/user2",
+  })
+  public get2Index() {
+    return "a23";
+  }
+}
