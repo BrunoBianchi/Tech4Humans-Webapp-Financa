@@ -16,11 +16,6 @@ export class UserRoute {
         type: "string",
         required: true,
       },
-      {
-        name: "age",
-        type: "number",
-        required: false,
-      }
     ],
   })
   public getIndex(params: any) {
