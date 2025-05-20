@@ -5,8 +5,8 @@ import { Card } from "./Card-entity";
 import { Transaction } from "./Transaction-entity";
 @Entity()
 export class Account {
-  @PrimaryColumn("varchar", { length: 10 })
-  account_id: string = uid(10);
+  @PrimaryColumn("varchar", { length: 15 })
+  account_id: string = `ACC_${uid(10)}`;
 
   @Column()
   bank!: string;

@@ -7,7 +7,8 @@ export const createAccount = async(account:Account,user:string)=> {
         const newAccount = accountRepository.create(account)
         await accountRepository.save(newAccount)
         return newAccount
-    }catch {
+    }catch(err:any) {
+        console.log(err)
         throw new Error("Account already exists")
     }
 }

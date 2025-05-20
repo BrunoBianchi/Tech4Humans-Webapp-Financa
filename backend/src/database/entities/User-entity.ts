@@ -12,8 +12,8 @@ import { uid } from "uid";
 import { Account } from "./Account-entity";
 @Entity()
 export class User {
-  @PrimaryColumn("varchar", { length: 10 })
-  user_id: string = uid(10);
+  @PrimaryColumn("varchar", { length: 15 })
+  user_id: string = `USER_${uid(10)}`;
 
   @Column()
   name!: string;

@@ -3,8 +3,8 @@ import { uid } from "uid";
 import { Account } from "./Account-entity";
 @Entity()
 export class Card {
-  @PrimaryColumn("varchar", { length: 10 })
-  card_id: string = uid(10);
+  @PrimaryColumn("varchar", { length: 15 })
+  card_id: string = `CARD_${uid(10)}`;
 
   @Column()
   card_number!: string;

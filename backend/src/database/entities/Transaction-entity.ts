@@ -9,8 +9,8 @@ import { uid } from "uid";
 import { Account } from "./Account-entity";
 @Entity()
 export class Transaction {
-  @PrimaryColumn("varchar", { length: 10 })
-  transaction_id: string = uid(10);
+  @PrimaryColumn("varchar", { length: 18 })
+  transaction_id: string = `TRANSAC_${uid(10)}`;
 
   @Column()
   date!: Date;
