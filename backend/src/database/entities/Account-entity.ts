@@ -3,6 +3,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { uid } from "uid";
@@ -10,11 +11,15 @@ import { User } from "./User-entity";
 import { Card } from "./Card-entity";
 @Entity()
 export class Account {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryColumn("varchar", { length: 10 })
+  account_id: string = uid(10);
 
   @Column()
-  account_uid: string = uid(10);
+  bank!: string;
+
+  @Column()
+  type!: string;
+
 
   @Column()
   amount: number = 0;

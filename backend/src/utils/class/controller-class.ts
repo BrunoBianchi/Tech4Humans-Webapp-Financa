@@ -122,7 +122,7 @@ export class ControllerClass {
                 );
                 res.status(200).json(result);
               } catch (err) {
-                res.status(400).json("Bad Request");
+                res.status(400).json({ message: "Bad Request" });
               }
             }
           );
@@ -136,7 +136,7 @@ export class ControllerClass {
       });
 
     r.use((req: Request, res: Response) => {
-      res.status(404).send("404 Not Found !");
+      res.status(404).send({ message: "Page not found !" });
     });
 
     this.router = r;

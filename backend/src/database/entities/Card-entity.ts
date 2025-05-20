@@ -1,13 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { uid } from "uid";
 import { Account } from "./Account-entity";
 @Entity()
 export class Card {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column()
-  card_uid: string = uid(10);
+  @PrimaryColumn("varchar", { length: 10 })
+  card_id: string = uid(10);
 
   @Column()
   card_number!: string;

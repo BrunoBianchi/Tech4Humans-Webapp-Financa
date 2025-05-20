@@ -1,8 +1,9 @@
 import { Card } from "./card-types";
 export type Account = {
-    account_uid:string;
+    account_id:string;
     amount:number;
-    user_uid:string;
+    bank:string;
+    user:string;
     cards: Card[];
     
 }

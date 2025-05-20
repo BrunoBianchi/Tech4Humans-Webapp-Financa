@@ -5,17 +5,15 @@ import {
   BeforeInsert,
   BeforeUpdate,
   OneToMany,
+  PrimaryColumn,
 } from "typeorm";
 import bcrypt from "bcrypt";
 import { uid } from "uid";
 import { Account } from "./Account-entity";
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column()
-  user_uid: string = uid(10);
+  @PrimaryColumn("varchar", { length: 10 })
+  user_id: string = uid(10);
 
   @Column()
   name!: string;
