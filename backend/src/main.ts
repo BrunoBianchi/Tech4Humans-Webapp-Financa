@@ -3,11 +3,10 @@ import * as dotenv from "dotenv";
 import featuresController from "./features/features-controller";
 import "reflect-metadata";
 import { AppDataSource } from "./database/configuration/data-source";
-
 dotenv.config();
 
 AppDataSource.initialize()
-  .then(() => {
+  .then(async () => {
     const server = express();
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));

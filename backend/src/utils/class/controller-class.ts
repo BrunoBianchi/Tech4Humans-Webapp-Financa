@@ -45,7 +45,7 @@ export class ControllerClass {
         if (route && route.method && route.path) {
           const method = route.method as keyof Router;
           
-          (r[method] as Function)(route.path, (req: Request, res: Response) => {
+          (r[method] as Function)(route.path, async (req: Request, res: Response) => {
             let routeParams: any = {};
             
             if (route.params && route.params.length > 0) {
@@ -58,21 +58,19 @@ export class ControllerClass {
               const object = route.params && route.params.length > 0
                 ? z.object(routeParams).parse(req.body)
                 : {};
-                
-              const result = route.function.call(params.router, object);
-              res.status(200).json(result);
+              const result = await route.function.call(params.router, object)
+              res.status(200).json(result)
             } catch (err) {
-              console.error("Erro processando rota:", err);
               res.status(400).json("Bad Request");
             }
           });
           
-          console.log(`Registrada rota ${method.toUpperCase()} ${params.path}${route.path}`);
+          console.log(`⚡ Method ${method.toUpperCase()} ${params.path}${route.path} registered`);
         }
       });
 
     r.use((req: Request, res: Response) => {
-      res.status(404).send("Not Found");
+      res.status(404).send("404 Not Found");
     });
     
     this.router = r;
