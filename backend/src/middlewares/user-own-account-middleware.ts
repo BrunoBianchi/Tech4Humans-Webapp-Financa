@@ -14,7 +14,6 @@ export const isUserOwner: RequestHandler = async (
       ? next()
       : res.status(403).json({ message: "Forbidden" });
   } catch (err) {
-    console.log(err);
     res.status(403).json({ message: "Forbidden" });
   }
 };

@@ -3,7 +3,6 @@ import z from "zod";
 import { jwt_verify } from "../utils/services/jwt/jwt-verify-service";
 import { User } from "../utils/types/user-type";
 import { getUser } from "../utils/services/user/get-user-service";
-import { jwt_decrypt } from "../utils/services/jwt/jwt-decrypt-service";
 declare global {
   namespace Express {
     interface Request {
@@ -26,7 +25,7 @@ const auth: RequestHandler = async (
     } else {
       const { password, ...userWithoutPassword } = payload;
 
-      const user = (await getUser(userWithoutPassword as User)) as User;
+      const user = (await getUser(userWithoutPassword.email as string)) as User;
       if (!user) res.status(401).json({ message: "Unauthorized" });
       req.user = user;
       next();

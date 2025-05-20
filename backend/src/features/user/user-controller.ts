@@ -3,7 +3,7 @@ import { UserRoute } from "./user-routes";
 
 @Controller({
     name: "user",
-    router: UserRoute,
+    routes: [UserRoute],
     path: "/user",
 })
 export default class UserController {

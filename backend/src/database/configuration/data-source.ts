@@ -4,6 +4,7 @@ dotenv.config();
 import { User } from "../entities/User-entity";
 import { Account } from "../entities/Account-entity";
 import { Card } from "../entities/Card-entity";
+import { Transaction } from "../entities/Transaction-entity";
 export const AppDataSource = new DataSource({
   type: "postgres", 
   host: process.env.POSTGRES_HOST || "localhost",
@@ -13,6 +14,6 @@ export const AppDataSource = new DataSource({
   database: process.env.POSTGRES_DB || "postgres",
   synchronize: true, 
   logging: process.env.POSTGRES_LOGS === "true" ? true : false,
-  entities: [User,Account,Card],
+  entities: [User,Account,Card,Transaction],
   migrations: ["../migrations/*.ts"],
 });

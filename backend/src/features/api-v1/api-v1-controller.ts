@@ -1,13 +1,15 @@
 import Controller from "../../utils/decorators/controller-decorator";
 import auth from "../../middlewares/permission-middleware";
-import { ApiV1Routes } from "./api-v1-routes";
+import {AccountRoute} from "./routes/account-route";
+import { TransactionRoute } from "./routes/transactions-route";
 
 @Controller({
     name: "api-v1",
-    router: ApiV1Routes,
+    routes: [AccountRoute,TransactionRoute],
     path: "/api/v1",
     permissions: [auth],
 })
+
 export default class ApiV1Controller  {
 
 }

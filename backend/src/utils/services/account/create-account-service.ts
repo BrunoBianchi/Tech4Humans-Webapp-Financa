@@ -5,10 +5,9 @@ export const createAccount = async(account:Account,user:string)=> {
         const accountRepository = AppDataSource.getRepository("Account")
         account.user = user;
         const newAccount = accountRepository.create(account)
-        console.log(account)
         await accountRepository.save(newAccount)
         return newAccount
-    }catch(err) {
+    }catch {
         throw new Error("Account already exists")
     }
 }
