@@ -10,6 +10,7 @@ export const isUserOwner: RequestHandler = async (
   try {
     const accountUID = z.string().parse(req.params.id);
     const account = await findAccountByUser(accountUID);
+
     account.user.user_id === req.user?.user_id
       ? next()
       : res.status(403).json({ message: "Forbidden" });

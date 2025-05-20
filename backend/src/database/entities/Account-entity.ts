@@ -3,6 +3,10 @@ import { uid } from "uid";
 import { User } from "./User-entity";
 import { Card } from "./Card-entity";
 import { Transaction } from "./Transaction-entity";
+enum AccountType {
+  POUP = "poupanca",
+  CORR = "corrente",
+}
 @Entity()
 export class Account {
   @PrimaryColumn("varchar", { length: 15 })
@@ -11,7 +15,7 @@ export class Account {
   @Column()
   bank!: string;
 
-  @Column()
+  @Column({ type: "enum", enum: AccountType })
   type!: string;
 
   @Column()

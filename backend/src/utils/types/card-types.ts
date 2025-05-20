@@ -1,5 +1,5 @@
 export type Card = {
-    card_uid: string;
+    id: string;
     card_number: string;
     card_type: string;
     account: string;
