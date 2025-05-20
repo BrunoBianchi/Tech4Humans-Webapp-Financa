@@ -5,7 +5,7 @@ export const userExists = async (user: User) => {
     const userRepository = AppDataSource.getRepository("User");
     const userData = await userRepository.findOneBy({ email: user.email });
     return userData?true:false;
-  } catch (err) {
+  } catch {
     throw new Error("User not found !");
   }
 };

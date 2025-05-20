@@ -9,7 +9,7 @@ export const createUser = async (user: User) => {
     const newUser = userRepository.create(user);
     await userRepository.save(newUser);
     return await jwt_sign(user, "1h");
-  } catch (err) {
+  } catch  {
     
     throw new Error("User already exists");
   }

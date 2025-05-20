@@ -3,45 +3,43 @@ import { Post } from "../../utils/decorators/router/post-decorator";
 import { Router } from "../../utils/decorators/router/router-decorator";
 import { User } from "../../utils/types/user-type";
 import { createUser } from "../../utils/services/user/create-user-service";
-
+import auth from "../../middlewares/permission-middleware";
+import { Request } from "express";
 @Router()
 export class UserRoute {
   @Post({
     path: "/",
+
     params: [
       {
         name: "name",
         type: "string",
-        required: true,
+ 
       },
       {
         name: "email",
         type: "string",
-        required: true,
       },
       {
         name: "password",
         type: "string",
-        required: true,
       },
     ],
   })
   public async createUserDB(user: User) {
-   return {
-    authorization: await createUser(user),
-    expiration: "1h",
-    user:{
-      name: user.name,
-      email: user.email,
-    }
-   }
-
+    const {password, ...userWithoutPassword } = user;
+    return {
+      authorization: await createUser(user),
+      expiration: "1h",
+      user: userWithoutPassword,
+    };
   }
 
   @Get({
-    path: "/user2",
+    path: "/@",
+    permissions: [auth],
   })
-  public get2Index() {
-    return "a23";
+  public getMeUser(_:any,req:Request) {
+    return req.user;
   }
 }

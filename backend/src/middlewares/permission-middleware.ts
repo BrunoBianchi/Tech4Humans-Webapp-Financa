@@ -1,11 +1,11 @@
 import { RequestHandler } from "express";
 import z from "zod";
 import { jwt_verify } from "../utils/services/jwt/jwt-verify-service";
-
+import { User } from "../utils/types/user-type";
 declare global {
   namespace Express {
     interface Request {
-      user?: any;
+      user?: User;
     }
   }
 }
@@ -20,11 +20,12 @@ const auth: RequestHandler = async (req, res, next) => {
     if (!payload) {
       res.status(401).json({ message: "Unauthorized" });
     } else {
-      req.user = payload;
+      const { password, ...userWithoutPassword } = payload;
+      req.user = userWithoutPassword as User;
       next();
-    }
-  } catch (err: any) {
-    res.status(401).send(err.toString());
+    } 
+}   catch (err: unknown) {
+    res.status(401).send(String(err));
   }
 };
 

@@ -1,7 +1,7 @@
 export class RouterClass {
-  private routes: any;
+  private routes:unknown;
   
-  constructor(routes: any) {
+  constructor(routes: unknown) {
     this.routes = routes;
   }
   

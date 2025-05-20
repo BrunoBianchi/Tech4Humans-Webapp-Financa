@@ -5,83 +5,145 @@ import {
   Request,
   Response,
 } from "express";
-import z from "zod";
+import z, { ZodTypeAny } from "zod";
+
+type Param = {
+  name: string;
+  type: keyof typeof z;
+  header?: boolean;
+};
+
+type RouteDefinition = {
+  method: keyof Router;
+  path: string;
+  permissions?: RequestHandler[];
+  params?: Param[];
+  header?: boolean;
+  function: (object: any, req: Request, res: Response) => Promise<any>;
+};
+
+type ControllerClassParams = {
+  router: object | (new () => object);
+  path: string;
+  name?: string;
+  permissions?: Array<RequestHandler>;
+};
 
 export class ControllerClass {
-  constructor(params: {
-    router: any;
-    path: string;
-    name?: string;
-    permissions?: Array<RequestHandler>;
-  }) {
+  private router: Router;
+  private name?: string;
+  private path: string;
+
+  constructor(params: ControllerClassParams) {
     const r = Router();
-    
-    r.use(params.permissions || [(req: Request, res: Response, next: NextFunction) => {
-      return next();
-    }]);
+
+    r.use(
+      params.permissions || [
+        (req: Request, res: Response, next: NextFunction) => {
+          return next();
+        },
+      ]
+    );
 
     if (!params.router) {
-      throw new Error("Router não fornecido ao controlador");
+      throw new Error("Router is not a controller");
     }
 
-    if (typeof params.router === 'function') {
-      params.router = new params.router();
+    let routerInstance: object;
+    if (typeof params.router === "function" && isConstructable(params.router)) {
+      routerInstance = new (params.router as new () => object)();
+    } else {
+      routerInstance = params.router;
     }
-    
-    const prototype = params.router.constructor?.prototype || params.router.__proto__;
-    
+
+    function isConstructable(fn: any): fn is new () => object {
+      try {
+        new new Proxy(fn, { construct: () => ({}) })();
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    const prototype =
+      (routerInstance as any).constructor?.prototype ||
+      (routerInstance as any).__proto__;
+
     if (!prototype) {
-      throw new Error("Não foi possível acessar o protótipo do router");
+      throw new Error("Can't find prototype");
     }
-    
+
     const propertyNames = Object.getOwnPropertyNames(prototype);
-    
+
     propertyNames
-      .filter(key => key !== 'constructor')
+      .filter((key) => key !== "constructor")
       .forEach((methodName: string) => {
-        const descriptor = Object.getOwnPropertyDescriptor(prototype, methodName);
-        const route = descriptor?.value;
-        
+        const descriptor = Object.getOwnPropertyDescriptor(
+          prototype,
+          methodName
+        );
+        const route = descriptor?.value as RouteDefinition;
         if (route && route.method && route.path) {
           const method = route.method as keyof Router;
-          
-          (r[method] as Function)(route.path, async (req: Request, res: Response) => {
-            let routeParams: any = {};
-            
-            if (route.params && route.params.length > 0) {
-              route.params.forEach((param: any) => {
-                routeParams[param.name] = (z as any)[param.type]();
-              });
+
+          (r[method] as Function)(
+            route.path,
+            route.permissions,
+            async (req: Request, res: Response) => {
+              let routeParams: Record<string, ZodTypeAny> = {};
+
+              if (route.params && route.params.length > 0) {
+                route.params.forEach((param: Param) => {
+                  routeParams[param.name] = (z as any)[param.type]();
+                });
+              }
+              try {
+                const shouldParseParams =
+                  route.header === true ||
+                  (route.params?.some(
+                    (param: Param) => param.header === true
+                  ) ??
+                    false);
+                const object =
+                  route.params && route.params.length > 0
+                    ? z
+                        .object(routeParams)
+                        .parse(
+                          shouldParseParams
+                            ? { ...req.body, ...req.params }
+                            : req.body
+                        )
+                    : {};
+                const result = await route.function.call(
+                  routerInstance,
+                  object,
+                  req,
+                  res
+                );
+                res.status(200).json(result);
+              } catch (err) {
+                res.status(400).json("Bad Request");
+              }
             }
-            
-            try {
-              const object = route.params && route.params.length > 0
-                ? z.object(routeParams).parse(req.body)
-                : {};
-              const result = await route.function.call(params.router, object)
-              res.status(200).json(result)
-            } catch (err) {
-              res.status(400).json("Bad Request");
-            }
-          });
-          
-          console.log(`⚡ Method ${method.toUpperCase()} ${params.path}${route.path} registered`);
+          );
+
+          console.log(
+            `⚡ Method ${method.toUpperCase()} ${params.path}${
+              route.path
+            } registered`
+          );
         }
       });
 
     r.use((req: Request, res: Response) => {
-      res.status(404).send("404 Not Found");
+      res.status(404).send("404 Not Found !");
     });
-    
+
     this.router = r;
     this.name = params.name;
     this.path = params.path;
   }
-  
-  private router!: Router;
-  private name?: string;
-  private path!: string;
-  
+
   public getRouter() {
     return {
       router: this.router,

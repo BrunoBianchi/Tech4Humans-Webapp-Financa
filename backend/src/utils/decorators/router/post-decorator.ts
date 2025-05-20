@@ -1,12 +1,14 @@
+import { RequestHandler } from "express";
+
 type param = {
   name: string;
   type: string;
-  required?: boolean;
+  header?: boolean;
 };
 
-export function Post(params: { path: string; params?: Array<param> }): MethodDecorator {
+export function Post(params: {permissions?:Array<RequestHandler>, path: string; params?: Array<param>}): MethodDecorator {
   return function (
-    target: Object,
+    target: object,
     propertyKey: string | symbol,
     descriptor: PropertyDescriptor
   ) {
@@ -16,7 +18,8 @@ export function Post(params: { path: string; params?: Array<param> }): MethodDec
       function: originalMethod,
       method: "post",
       path: params.path,
-      params: params.params
+      params: params.params,
+      permissions:  params.permissions || [],
     }, target, propertyKey);
     
     descriptor.value = {
@@ -24,6 +27,7 @@ export function Post(params: { path: string; params?: Array<param> }): MethodDec
       method: "post",
       path: params.path,
       params: params.params,
+      permissions:  params.permissions || [],
     };
     
     return descriptor;

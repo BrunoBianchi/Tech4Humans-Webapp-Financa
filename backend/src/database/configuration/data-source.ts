@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import { User } from "../entities/User-entity";
 import { Account } from "../entities/Account-entity";
+import { Card } from "../entities/Card-entity";
 export const AppDataSource = new DataSource({
   type: "postgres", 
   host: process.env.POSTGRES_HOST || "localhost",
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource({
   password: process.env.POSTGRES_PASSWORD || "postgres",
   database: process.env.POSTGRES_DB || "postgres",
   synchronize: true, 
-  logging: process.env.POSTGRES_LOGS as any ,
-  entities: [User,Account],
+  logging: process.env.POSTGRES_LOGS === "true" ? true : false,
+  entities: [User,Account,Card],
   migrations: ["../migrations/*.ts"],
 });

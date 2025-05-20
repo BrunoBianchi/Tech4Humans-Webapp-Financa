@@ -1,4 +1,3 @@
-import { Get } from "../../utils/decorators/router/get-decorator";
 import { Post } from "../../utils/decorators/router/post-decorator";
 import { Router } from "../../utils/decorators/router/router-decorator";
 @Router()
@@ -9,12 +8,10 @@ export  class ApiV1Routes {
       {
         name:"Bank",
         type:"string",
-        required:true
       },
       {
         name:"Type",
         type:"string",
-        required:true
       }
     ]
   })
