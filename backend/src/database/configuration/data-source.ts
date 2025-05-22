@@ -5,6 +5,10 @@ import { User } from "../entities/User-entity";
 import { Account } from "../entities/Account-entity";
 import { Card } from "../entities/Card-entity";
 import { Transaction } from "../entities/Transaction-entity";
+import { Contact } from "../entities/Contact-entity";
+import { Payment } from "../entities/Payment.entity";
+import { Investiment } from "../entities/Investment-entity";
+import { Notification } from "../entities/Notification-entity";
 export const AppDataSource = new DataSource({
   type: "postgres", 
   host: process.env.POSTGRES_HOST || "localhost",
@@ -14,6 +18,6 @@ export const AppDataSource = new DataSource({
   database: process.env.POSTGRES_DB || "postgres",
   synchronize: true, 
   logging: process.env.POSTGRES_LOGS === "true" ? true : false,
-  entities: [User,Account,Card,Transaction],
+  entities: [User,Account,Card,Transaction,Contact,Payment,Investiment,Notification],
   migrations: ["../migrations/*.ts"],
 });

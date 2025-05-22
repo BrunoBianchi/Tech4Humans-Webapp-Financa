@@ -1,6 +1,5 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
   BeforeUpdate,
@@ -10,6 +9,7 @@ import {
 import bcrypt from "bcrypt";
 import { uid } from "uid";
 import { Account } from "./Account-entity";
+import { Notification } from "./Notification-entity";
 @Entity()
 export class User {
   @PrimaryColumn("varchar", { length: 15 })
@@ -33,4 +33,7 @@ export class User {
 
   @OneToMany(() => Account, (account) => account.user)
   accounts!: Account[];
+
+  @OneToMany(()=>Notification, (notification) => notification.user)
+  notifications!: Notification[];
 }

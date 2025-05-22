@@ -1,8 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, In, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { uid } from "uid";
 import { User } from "./User-entity";
 import { Card } from "./Card-entity";
 import { Transaction } from "./Transaction-entity";
+import { Contact } from "./Contact-entity";
+import { Investiment } from "./Investment-entity";
 enum AccountType {
   POUP = "poupanca",
   CORR = "corrente",
@@ -24,6 +26,9 @@ export class Account {
   @ManyToOne(() => User, (user) => user.accounts)
   user!: User;
 
+  @Column()
+  orcamento!: number;
+
   @OneToMany(() => Card, (card) => card.account)
   cards!: Card[];
 
@@ -32,4 +37,10 @@ export class Account {
 
   @OneToMany(() => Transaction, (tx) => tx.destinationAccount)
   incomingTransactions!: Transaction[];
+
+  @OneToMany(() => Contact, (contact) => contact.account)
+  contacts!: Contact[];
+
+  @OneToMany(()=>Investiment, (investment) => investment.account)
+  investments!: Investiment[];
 }

@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { uid } from "uid";
 import { Account } from "./Account-entity";
+import { Payment } from "./Payment.entity";
 enum CardType {
   DEBIT = "debito",
   CREDIT = "credito",
@@ -19,4 +20,7 @@ export class Card {
 
   @ManyToOne(() => Account, (account) => account.cards)
   account!: Account;
+
+  @OneToMany(() =>Payment, (payment) => payment.card)
+  payments!: Payment[];
 }
