@@ -3,6 +3,9 @@ import { getAccountById } from "../account/get-account-uid-service";
 import { Transaction } from "../../../database/entities/Transaction-entity";
 import { updateAccount } from "../account/update-account-service";
 import { Account } from "../../types/account-type";
+import { createNotification } from "../notification/create-notification-service";
+import { findAccountByUser } from "../account/find-account-owned-by-user-service";
+import { User } from "../../types/user-type";
 export const createTransaction = async (source: {
   id: string;
   amount: number;
@@ -11,8 +14,10 @@ export const createTransaction = async (source: {
 }) => {
   try {
     const transactionRepository = AppDataSource.getRepository("Transaction");
-    const sourceAccount: Account = (await getAccountById(source.id)) as Account;
-    const destinationAccount: Account = (await getAccountById(
+    const sourceAccount: Account = (await findAccountByUser(
+      source.id
+    )) as Account;
+    const destinationAccount: Account = (await findAccountByUser(
       source.destination
     )) as Account;
     if (sourceAccount.balance - source.amount < 0)
@@ -29,6 +34,13 @@ export const createTransaction = async (source: {
     destinationAccount.balance += source.amount;
     await updateAccount(sourceAccount.account_id, sourceAccount);
     await updateAccount(destinationAccount.account_id, destinationAccount);
+    await createNotification(
+      (destinationAccount.user! as User).user_id,
+      `Você recebeu R$ ${source.amount} de ${
+        (sourceAccount.user! as User).name
+      } as ${new Date()}`,
+      `Transação recebida de  ${(sourceAccount.user! as User).name}`
+    );
     return transaction;
   } catch (err: any) {
     throw new Error(err.toString());

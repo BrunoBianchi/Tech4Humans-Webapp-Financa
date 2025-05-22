@@ -1,18 +1,30 @@
-import { Column, Entity, ManyToOne,  PrimaryColumn } from "typeorm";
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+} from "typeorm";
 import { uid } from "uid";
 import { User } from "./User-entity";
 
 @Entity()
 export class Notification {
-    @PrimaryColumn("varchar", { length: 16 })
-    notification_id: string = `NOTIF_${uid(10)}`;
+  @PrimaryColumn("varchar", { length: 16 })
+  notification_id: string = `NOTIF_${uid(10)}`;
 
-    @Column()
-    description!:string;
+  @Column()
+  title!: string;
 
-    @Column()
-    date!: Date;
+  @Column()
+  description!: string;
 
-    @ManyToOne(()=>User ,(user)=>user.notifications)
-    user!: User;
+  @Column()
+  date!: Date;
+  @BeforeInsert()
+  setDate() {
+    this.date = new Date();
+  }
+  @ManyToOne(() => User, (user) => user.notifications)
+  user!: User;
 }

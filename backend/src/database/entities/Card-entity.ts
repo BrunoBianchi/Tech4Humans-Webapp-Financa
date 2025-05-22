@@ -2,10 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { uid } from "uid";
 import { Account } from "./Account-entity";
 import { Payment } from "./Payment.entity";
-enum CardType {
-  DEBIT = "debito",
-  CREDIT = "credito",
-}
+import { CardEnum } from "../../utils/enums/card-enum";
 
 @Entity()
 export class Card {
@@ -15,7 +12,7 @@ export class Card {
   @Column()
   card_number!: string;
 
-  @Column({ type: "enum", enum: CardType })
+  @Column({ type: "enum", enum: CardEnum })
   card_type!: string;
 
   @ManyToOne(() => Account, (account) => account.cards)

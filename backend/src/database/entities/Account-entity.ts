@@ -26,8 +26,9 @@ export class Account {
   @ManyToOne(() => User, (user) => user.accounts)
   user!: User;
 
-  @Column()
-  orcamento!: number;
+  @Column({nullable: true})
+
+  orcamento?: number;
 
   @OneToMany(() => Card, (card) => card.account)
   cards!: Card[];

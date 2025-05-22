@@ -1,11 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { uid } from "uid";
 import { Card } from "./Card-entity";
-
-enum PaymentType { 
-  unique = "unico",
-  recurring = "recorrente",
-}
+import { PaymentEnum } from "../../utils/enums/payment-enum";
 @Entity()
 export class Payment {
   @PrimaryColumn("varchar", { length: 14 })
@@ -23,7 +19,7 @@ export class Payment {
   @Column()
   who!: string;
 
-  @Column({ type: "enum", enum: PaymentType })
+  @Column({ type: "enum", enum: PaymentEnum })
   type!: string;
 
   @ManyToOne(() => Card, (card) => card.payments)

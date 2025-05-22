@@ -1,7 +1,7 @@
 import { isUserOwner } from "../../../middlewares/user-own-account-middleware";
 import { Post } from "../../../utils/decorators/router/post-decorator";
 import { Router } from "../../../utils/decorators/router/router-decorator";
-import { createTransaction } from "../../../utils/services/transaction/create-transaction";
+import { createTransaction } from "../../../utils/services/transaction/create-transaction-service";
 
 @Router()
 export class TransactionRoute {

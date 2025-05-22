@@ -10,7 +10,7 @@ export class Contact {
     name!: string;
 
     @Column()
-    account_id!: string;
+    destination_account_id!: string;
 
     @ManyToOne(()=>Account,(account)=>account.contacts)
     account!: Account;

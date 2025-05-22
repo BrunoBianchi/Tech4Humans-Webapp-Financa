@@ -44,7 +44,7 @@ export class UserRoute {
     permissions: [auth],
   })
 
-  public getMeUserRoute(_:any,req:Request) {
+  public getMeUserRoute(_:unknown,req:Request) {
     return req.user;
   }
 

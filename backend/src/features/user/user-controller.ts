@@ -6,6 +6,7 @@ import { UserRoute } from "./user-routes";
     routes: [UserRoute],
     path: "/user",
 })
+
 export default class UserController {
 
 }
