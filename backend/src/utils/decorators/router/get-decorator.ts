@@ -6,11 +6,15 @@ type param = {
   header?: boolean;
 };
 
-export function Get(params: { permissions?:Array<RequestHandler>,path: string; params?: Array<param>}): MethodDecorator {
+export function Get(params: {
+  permissions?: Array<RequestHandler>;
+  path: string;
+  params?: Array<param>;
+}): MethodDecorator {
   return function (
     target: object,
     propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
     descriptor.value = {
@@ -20,7 +24,7 @@ export function Get(params: { permissions?:Array<RequestHandler>,path: string; p
       params: params.params || [],
       permissions: params.permissions || [],
     };
-    
+
     return descriptor;
   };
 }

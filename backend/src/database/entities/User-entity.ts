@@ -34,6 +34,6 @@ export class User {
   @OneToMany(() => Account, (account) => account.user)
   accounts!: Account[];
 
-  @OneToMany(()=>Notification, (notification) => notification.user)
+  @OneToMany(() => Notification, (notification) => notification.user)
   notifications!: Notification[];
 }

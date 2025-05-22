@@ -1,4 +1,4 @@
-import { Column, Entity, In, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { uid } from "uid";
 import { User } from "./User-entity";
 import { Card } from "./Card-entity";
@@ -26,8 +26,7 @@ export class Account {
   @ManyToOne(() => User, (user) => user.accounts)
   user!: User;
 
-  @Column({nullable: true})
-
+  @Column({ nullable: true })
   orcamento?: number;
 
   @OneToMany(() => Card, (card) => card.account)
@@ -42,6 +41,6 @@ export class Account {
   @OneToMany(() => Contact, (contact) => contact.account)
   contacts!: Contact[];
 
-  @OneToMany(()=>Investiment, (investment) => investment.account)
+  @OneToMany(() => Investiment, (investment) => investment.account)
   investments!: Investiment[];
 }

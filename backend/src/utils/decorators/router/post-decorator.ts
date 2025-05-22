@@ -6,30 +6,39 @@ type param = {
   header?: boolean;
 };
 
-export function Post(params: {permissions?:Array<RequestHandler>, path: string; params?: Array<param>}): MethodDecorator {
+export function Post(params: {
+  permissions?: Array<RequestHandler>;
+  path: string;
+  params?: Array<param>;
+}): MethodDecorator {
   return function (
     target: object,
     propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
-    
-    Reflect.defineMetadata('route:post', {
-      function: originalMethod,
-      method: "post",
-      path: params.path,
-      params: params.params,
-      permissions:  params.permissions || [],
-    }, target, propertyKey);
-    
+
+    Reflect.defineMetadata(
+      "route:post",
+      {
+        function: originalMethod,
+        method: "post",
+        path: params.path,
+        params: params.params,
+        permissions: params.permissions || [],
+      },
+      target,
+      propertyKey,
+    );
+
     descriptor.value = {
       function: originalMethod,
       method: "post",
       path: params.path,
       params: params.params,
-      permissions:  params.permissions || [],
+      permissions: params.permissions || [],
     };
-    
+
     return descriptor;
   };
 }

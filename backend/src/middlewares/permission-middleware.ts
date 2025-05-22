@@ -4,6 +4,7 @@ import { jwt_verify } from "../utils/services/jwt/jwt-verify-service";
 import { User } from "../utils/types/user-type";
 import { getUser } from "../utils/services/user/get-user-service";
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: User;
@@ -14,7 +15,7 @@ declare global {
 const auth: RequestHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const Authorization =
@@ -23,14 +24,13 @@ const auth: RequestHandler = async (
     if (!payload) {
       res.status(401).json({ message: "Unauthorized" });
     } else {
-      const { password, ...userWithoutPassword } = payload;
-
-      const user = (await getUser(userWithoutPassword.email as string)) as User;
+      const { email } = payload;
+      const user = (await getUser(email as string)) as User;
       if (!user) res.status(401).json({ message: "Unauthorized" });
       req.user = user;
       next();
     }
-  } catch (err: unknown) {
+  } catch {
     res.status(401).json({ message: "Unauthorized" });
   }
 };

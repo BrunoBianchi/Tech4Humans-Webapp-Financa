@@ -29,23 +29,17 @@ export class TransactionRoute {
     ],
     permissions: [isUserOwner],
   })
-  public async createTransactionRoute(
-    params: {
-      id: string;
-      amount: number;
-      description: string;
-      destination: string;
-    },
-    _: Request
-  ) {
-    return await createTransaction(
-      {
-        id: params.id,
-        amount: params.amount,
-        description: params.description,
-        destination: params.destination
-      },
-     
-    );
+  public async createTransactionRoute(params: {
+    id: string;
+    amount: number;
+    description: string;
+    destination: string;
+  }) {
+    return await createTransaction({
+      id: params.id,
+      amount: params.amount,
+      description: params.description,
+      destination: params.destination,
+    });
   }
 }

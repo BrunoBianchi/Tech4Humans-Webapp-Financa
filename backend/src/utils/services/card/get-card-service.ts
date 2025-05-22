@@ -13,7 +13,7 @@ export const getCard = async (card_id: string, account_id: string) => {
     if (cardData.account.account_id !== account.account_id)
       throw new Error("Card not found");
     return cardData;
-  } catch (err) {
+  } catch {
     throw new Error("Card not found");
   }
 };

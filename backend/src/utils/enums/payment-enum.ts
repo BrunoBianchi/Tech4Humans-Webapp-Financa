@@ -1,4 +1,4 @@
-export enum PaymentEnum { 
+export enum PaymentEnum {
   unique = "unico",
   recurring = "recorrente",
 }

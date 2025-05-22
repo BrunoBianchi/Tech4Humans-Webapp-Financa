@@ -40,10 +40,14 @@ export class ControllerClass {
     r.use(
       params.permissions || [
         (req: Request, res: Response, next: NextFunction) => next(),
-      ]
+      ],
     );
 
-    if (!params.routes || !Array.isArray(params.routes) || params.routes.length === 0) {
+    if (
+      !params.routes ||
+      !Array.isArray(params.routes) ||
+      params.routes.length === 0
+    ) {
       throw new Error("No routes provided");
     }
 
@@ -64,7 +68,7 @@ export class ControllerClass {
         .forEach((methodName: string) => {
           const descriptor = Object.getOwnPropertyDescriptor(
             prototype,
-            methodName
+            methodName,
           );
           const route = descriptor?.value as RouteDefinition;
           if (route && route.method && route.path) {
@@ -74,7 +78,7 @@ export class ControllerClass {
               route.path,
               route.permissions,
               async (req: Request, res: Response) => {
-                let routeParams: Record<string, ZodTypeAny> = {};
+                const routeParams: Record<string, ZodTypeAny> = {};
 
                 if (route.params && route.params.length > 0) {
                   route.params.forEach((param: Param) => {
@@ -85,8 +89,9 @@ export class ControllerClass {
                   const shouldParseParams =
                     route.header === true ||
                     (route.params?.some(
-                      (param: Param) => param.header === true
-                    ) ?? false);
+                      (param: Param) => param.header === true,
+                    ) ??
+                      false);
                   const object =
                     route.params && route.params.length > 0
                       ? z
@@ -94,32 +99,30 @@ export class ControllerClass {
                           .parse(
                             shouldParseParams
                               ? { ...req.body, ...req.params }
-                              : req.body
+                              : req.body,
                           )
                       : {};
                   const result = await route.function.call(
                     routerInstance,
                     object,
                     req,
-                    res
+                    res,
                   );
                   res.status(200).json(result);
                 } catch (err: any) {
-                  res
-                    .status(400)
-                    .json({
-                      message: err.toString().includes("\n")
-                        ? "Bad Request"
-                        : err.toString(),
-                    });
+                  res.status(400).json({
+                    message: err.toString().includes("\n")
+                      ? "Bad Request"
+                      : err.toString(),
+                  });
                 }
-              }
+              },
             );
 
             console.log(
               `⚡ Method ${method.toUpperCase()} ${params.path}${
                 route.path
-              } registered`
+              } registered`,
             );
           }
         });

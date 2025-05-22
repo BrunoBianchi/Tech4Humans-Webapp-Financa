@@ -1,5 +1,4 @@
 import { AppDataSource } from "../../../database/configuration/data-source";
-import { getAccountById } from "../account/get-account-uid-service";
 import { Transaction } from "../../../database/entities/Transaction-entity";
 import { updateAccount } from "../account/update-account-service";
 import { Account } from "../../types/account-type";
@@ -15,10 +14,10 @@ export const createTransaction = async (source: {
   try {
     const transactionRepository = AppDataSource.getRepository("Transaction");
     const sourceAccount: Account = (await findAccountByUser(
-      source.id
+      source.id,
     )) as Account;
     const destinationAccount: Account = (await findAccountByUser(
-      source.destination
+      source.destination,
     )) as Account;
     if (sourceAccount.balance - source.amount < 0)
       throw new Error("Insufficient funds");
@@ -39,7 +38,7 @@ export const createTransaction = async (source: {
       `Você recebeu R$ ${source.amount} de ${
         (sourceAccount.user! as User).name
       } as ${new Date()}`,
-      `Transação recebida de  ${(sourceAccount.user! as User).name}`
+      `Transação recebida de  ${(sourceAccount.user! as User).name}`,
     );
     return transaction;
   } catch (err: any) {

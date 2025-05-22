@@ -11,12 +11,11 @@ export const createUser = async (user: User) => {
     await userRepository.save(newUser);
     await createNotification(
       newUser.user_id,
-       "Você já pode começar a usar o TechFinance",
-       "Bem vindo ao TechFinance",
-  )
+      "Você já pode começar a usar o TechFinance",
+      "Bem vindo ao TechFinance",
+    );
     return await jwt_sign(user, "7d");
-  } catch  {
-    
+  } catch {
     throw new Error("User already exists");
   }
 };

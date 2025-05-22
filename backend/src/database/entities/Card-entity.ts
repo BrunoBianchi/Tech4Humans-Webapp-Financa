@@ -18,6 +18,6 @@ export class Card {
   @ManyToOne(() => Account, (account) => account.cards)
   account!: Account;
 
-  @OneToMany(() =>Payment, (payment) => payment.card)
+  @OneToMany(() => Payment, (payment) => payment.card)
   payments!: Payment[];
 }

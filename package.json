@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/css": "^0.8.1",
+    "@eslint/js": "^9.27.0",
+    "@eslint/json": "^0.12.0",
+    "@eslint/markdown": "^6.4.0",
+    "eslint": "^9.27.0",
+    "globals": "^16.1.0",
+    "husky": "^9.1.7",
+    "prettier": "3.5.3",
+    "typescript-eslint": "^8.32.1"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "check": "eslint . --ext .ts",
+    "check:fix": "eslint . --ext .ts --fix",
+    "prettier": "pnpm exec prettier . --write"
+  }
+}

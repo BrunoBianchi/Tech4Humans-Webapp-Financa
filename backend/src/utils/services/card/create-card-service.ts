@@ -7,7 +7,7 @@ export const createCard = async (card: Card) => {
     const newCard = cardrepository.create(card);
     await cardrepository.save(newCard);
     return newCard;
-  } catch  {
+  } catch {
     return new Error("Card already exists");
   }
 };
