@@ -61,5 +61,4 @@ export class AccountRoute {
   public async deleteAccountRoute(params: { id: string }) {
     return await deleteAccount(params.id);
   }
-
 }

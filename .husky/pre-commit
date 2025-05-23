@@ -1,0 +1,6 @@
+echo 'Running some tests before commit!'
+pnpm run prettier || {
+    echo 'Tests failed, aborting commit!'
+    exit 1
+}
+echo 'Done'

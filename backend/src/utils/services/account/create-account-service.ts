@@ -9,6 +9,6 @@ export const createAccount = async (account: Account, user: string) => {
     await accountRepository.save(newAccount);
     return newAccount;
   } catch {
-    throw new ApiError(400,"Account already exists!")
+    throw new ApiError(400, "Account already exists!");
   }
 };

@@ -41,7 +41,7 @@ export class ControllerClass {
     r.use(
       params.permissions || [
         (req: Request, res: Response, next: NextFunction) => next(),
-      ]
+      ],
     );
 
     if (
@@ -69,7 +69,7 @@ export class ControllerClass {
         .forEach((methodName: string) => {
           const descriptor = Object.getOwnPropertyDescriptor(
             prototype,
-            methodName
+            methodName,
           );
           const route = descriptor?.value as RouteDefinition;
           if (route && route.method && route.path) {
@@ -90,7 +90,7 @@ export class ControllerClass {
                   const shouldParseParams =
                     route.header === true ||
                     (route.params?.some(
-                      (param: Param) => param.header === true
+                      (param: Param) => param.header === true,
                     ) ??
                       false);
                   const object =
@@ -100,26 +100,26 @@ export class ControllerClass {
                           .parse(
                             shouldParseParams
                               ? { ...req.body, ...req.params }
-                              : req.body
+                              : req.body,
                           )
                       : {};
                   const result = await route.function.call(
                     routerInstance,
                     object,
                     req,
-                    res
+                    res,
                   );
                   res.status(200).json(result);
                 } catch (err: any) {
                   next(err);
                 }
-              }
+              },
             );
 
             console.log(
               `⚡ Method ${method.toUpperCase()} ${params.path}${
                 route.path
-              } registered`
+              } registered`,
             );
           }
         });

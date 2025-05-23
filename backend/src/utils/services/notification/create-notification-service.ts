@@ -4,7 +4,7 @@ import { ApiError } from "../../class/errors-class";
 export const createNotification = async (
   user_id: string,
   description: string,
-  title: string
+  title: string,
 ) => {
   const notificationRepository = AppDataSource.getRepository("Notification");
   const notification = notificationRepository.create({

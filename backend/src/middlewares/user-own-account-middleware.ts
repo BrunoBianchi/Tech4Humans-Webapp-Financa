@@ -8,14 +8,12 @@ export const isUserOwner: RequestHandler = async (
   res: Response,
   next: NextFunction,
 ) => {
+  const accountUID = z.string().parse(req.params.id);
+  const account = await findAccountByUser(accountUID);
 
-    const accountUID = z.string().parse(req.params.id);
-    const account = await findAccountByUser(accountUID);
-
-    if (account.user.user_id === req.user?.user_id) {
-      next();
-    } else {
-      throw new ApiError(401, "User not authorized to access this account");
-    }
-
+  if (account.user.user_id === req.user?.user_id) {
+    next();
+  } else {
+    throw new ApiError(401, "User not authorized to access this account");
+  }
 };

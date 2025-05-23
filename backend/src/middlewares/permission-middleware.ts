@@ -16,7 +16,7 @@ declare global {
 const auth: RequestHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const Authorization =

@@ -66,20 +66,18 @@ export class UserRoute {
     return await loginUser(params.email, params.password);
   }
 
-    @Get({
+  @Get({
     path: "/notification/:id",
-    params:[
+    params: [
       {
         name: "id",
         type: "string",
         header: true,
       },
     ],
-    permissions:[auth]
+    permissions: [auth],
   })
-public async getNotificationRoute(params: { id: string }) { 
+  public async getNotificationRoute(params: { id: string }) {
     return await getNotification(params.id);
-}
-
-
+  }
 }
