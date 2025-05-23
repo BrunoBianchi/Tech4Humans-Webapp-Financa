@@ -1,15 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
-import { uid } from "uid";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { Account } from "./Account-entity";
 import {
   InvestimentoBrasil,
   RentabilidadeMensalAproximada,
 } from "../../utils/enums/investment-enum";
+import { BaseEntity } from "../baseEntity/base-entity";
 
 @Entity()
-export class Investiment {
-  @PrimaryColumn("varchar", { length: 16 })
-  investment_id: string = `INVES_${uid(10)}`;
+export class Investiment extends BaseEntity {
 
   @Column({ type: "enum", enum: InvestimentoBrasil })
   investment_type!: string;

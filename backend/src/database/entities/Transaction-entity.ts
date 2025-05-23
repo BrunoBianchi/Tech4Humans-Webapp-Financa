@@ -3,14 +3,13 @@ import {
   Column,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+
 } from "typeorm";
-import { uid } from "uid";
 import { Account } from "./Account-entity";
+import { BaseEntity } from "../baseEntity/base-entity";
 @Entity()
-export class Transaction {
-  @PrimaryColumn("varchar", { length: 18 })
-  transaction_id: string = `TRANSAC_${uid(10)}`;
+export class Transaction extends BaseEntity {
+
 
   @Column()
   date!: Date;

@@ -4,16 +4,13 @@ import {
   BeforeInsert,
   BeforeUpdate,
   OneToMany,
-  PrimaryColumn,
 } from "typeorm";
 import bcrypt from "bcrypt";
-import { uid } from "uid";
 import { Account } from "./Account-entity";
 import { Notification } from "./Notification-entity";
+import { BaseEntity } from "../baseEntity/base-entity";
 @Entity()
-export class User {
-  @PrimaryColumn("varchar", { length: 15 })
-  user_id: string = `USER_${uid(10)}`;
+export class User extends BaseEntity {
 
   @Column()
   name!: string;

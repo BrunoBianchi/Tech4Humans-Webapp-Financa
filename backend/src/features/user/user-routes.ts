@@ -6,8 +6,7 @@ import { createUser } from "../../utils/services/user/create-user-service";
 import auth from "../../middlewares/permission-middleware";
 import { loginUser } from "../../utils/services/user/login-user-service";
 import { Request } from "express";
-import { getNotification } from "../../utils/services/notification/get-notification-service";
-
+import { notificationService } from "../../utils/services/notification/notification-service";
 @Router()
 export class UserRoute {
   @Post({
@@ -32,7 +31,7 @@ export class UserRoute {
     const data = {
       name: user.name,
       email: user.email,
-      user_id: user.user_id,
+      user_id: user.id,
     };
     return {
       authorization: await createUser(user),
@@ -78,6 +77,6 @@ export class UserRoute {
     permissions: [auth],
   })
   public async getNotificationRoute(params: { id: string }) {
-    return await getNotification(params.id);
+    return await notificationService.getById(params.id);
   }
 }

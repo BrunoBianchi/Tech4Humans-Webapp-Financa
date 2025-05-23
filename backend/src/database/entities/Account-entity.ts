@@ -1,19 +1,13 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { uid } from "uid";
+import { Column, Entity, ManyToOne, OneToMany} from "typeorm";
 import { User } from "./User-entity";
 import { Card } from "./Card-entity";
 import { Transaction } from "./Transaction-entity";
 import { Contact } from "./Contact-entity";
 import { Investiment } from "./Investment-entity";
-enum AccountType {
-  POUP = "poupanca",
-  CORR = "corrente",
-}
+import { BaseEntity } from "../baseEntity/base-entity";
+import { AccountType } from "../../utils/enums/account-enum";
 @Entity()
-export class Account {
-  @PrimaryColumn("varchar", { length: 15 })
-  account_id: string = `ACC_${uid(10)}`;
-
+export class Account extends BaseEntity {
   @Column()
   bank!: string;
 

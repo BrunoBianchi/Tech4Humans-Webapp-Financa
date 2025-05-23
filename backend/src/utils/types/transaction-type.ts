@@ -1,6 +1,10 @@
+import { Account } from "./account-type";
+
 export type transaction = {
-  transaction_id: string;
+  id: string;
   date: Date;
   amount: number;
   description: string;
+  sourceAccount:Account;
+  destinationAccount: Account;
 };

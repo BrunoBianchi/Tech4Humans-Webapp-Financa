@@ -1,10 +1,8 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
-import { uid } from "uid";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { Account } from "./Account-entity";
+import { BaseEntity } from "../baseEntity/base-entity";
 @Entity()
-export class Contact {
-  @PrimaryColumn("varchar", { length: 19 })
-  contact_id: string = `CONTACT_${uid(10)}`;
+export class Contact extends BaseEntity {
 
   @Column()
   name!: string;

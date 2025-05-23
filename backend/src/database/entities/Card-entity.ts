@@ -1,13 +1,11 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { uid } from "uid";
+import { Column, Entity, ManyToOne, OneToMany} from "typeorm";
 import { Account } from "./Account-entity";
 import { Payment } from "./Payment.entity";
 import { CardEnum } from "../../utils/enums/card-enum";
+import { BaseEntity } from "../baseEntity/base-entity";
 
 @Entity()
-export class Card {
-  @PrimaryColumn("varchar", { length: 15 })
-  card_id: string = `CARD_${uid(10)}`;
+export class Card extends BaseEntity {
 
   @Column()
   card_number!: string;

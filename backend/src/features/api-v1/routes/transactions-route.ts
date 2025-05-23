@@ -1,15 +1,15 @@
 import { isUserOwner } from "../../../middlewares/user-own-account-middleware";
 import { Post } from "../../../utils/decorators/router/post-decorator";
 import { Router } from "../../../utils/decorators/router/router-decorator";
-import { createTransaction } from "../../../utils/services/transaction/create-transaction-service";
-
+import { transactionService } from "../../../utils/services/transaction/transaction-service";
+import { transaction } from "../../../utils/types/transaction-type";
 @Router()
 export class TransactionRoute {
   @Post({
-    path: "/transaction/:id/:destination",
+    path: "/transaction/:account_id/:destination",
     params: [
       {
-        name: "id",
+        name: "account_id",
         type: "string",
         header: true,
       },
@@ -30,16 +30,30 @@ export class TransactionRoute {
     permissions: [isUserOwner],
   })
   public async createTransactionRoute(params: {
-    id: string;
+    account_id: string;
     amount: number;
     description: string;
     destination: string;
   }) {
-    return await createTransaction({
-      id: params.id,
-      amount: params.amount,
-      description: params.description,
-      destination: params.destination,
-    });
+    const transaction: Omit<
+      transaction,
+      "sourceAccount" | "destinationAccount"
+    > = await transactionService.create(
+      {
+        amount: params.amount,
+        description: params.description,
+        date: new Date(),
+      } as transaction,
+      [
+        { name: "sourceAccount", id: params.account_id },
+        { name: "destinationAccount", id: params.destination },
+      ],
+    );
+    return {
+      id: transaction.id,
+      amount: transaction.amount,
+      description: transaction.description,
+      date: transaction.date,
+    };
   }
 }

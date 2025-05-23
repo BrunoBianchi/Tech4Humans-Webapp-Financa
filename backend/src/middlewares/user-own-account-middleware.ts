@@ -1,19 +1,22 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { findAccountByUser } from "../utils/services/account/find-account-owned-by-user-service";
 import z from "zod";
 import { ApiError } from "../utils/class/errors-class";
-
+import { accountService } from "../utils/services/account/account-service";
+import { Account } from "../utils/types/account-type";
 export const isUserOwner: RequestHandler = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const accountUID = z.string().parse(req.params.id);
-  const account = await findAccountByUser(accountUID);
+  const accountUID = z.string().parse(req.params.account_id);
 
-  if (account.user.user_id === req.user?.user_id) {
-    next();
+  const account = (await accountService.getById(accountUID, [
+    "user",
+  ])) as Account;
+  if (!account) throw new ApiError(404, "Account not found !");
+  if (account.user!.id !== req.user!.id) {
+    throw new ApiError(403, "You are not authorized to access this account !");
   } else {
-    throw new ApiError(401, "User not authorized to access this account");
+    next();
   }
 };

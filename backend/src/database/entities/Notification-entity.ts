@@ -3,15 +3,12 @@ import {
   Column,
   Entity,
   ManyToOne,
-  PrimaryColumn,
 } from "typeorm";
-import { uid } from "uid";
 import { User } from "./User-entity";
+import { BaseEntity } from "../baseEntity/base-entity";
 
 @Entity()
-export class Notification {
-  @PrimaryColumn("varchar", { length: 16 })
-  notification_id: string = `NOTIF_${uid(10)}`;
+export class Notification extends BaseEntity {
 
   @Column()
   title!: string;

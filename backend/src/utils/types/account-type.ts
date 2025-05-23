@@ -1,8 +1,9 @@
 import { User } from "./user-type";
 
 export type Account = {
-  account_id: string;
+  id: string;
   balance: number;
   bank: string;
-  user?: User | string;
+  user?: User;
+  user_id:string;
 };

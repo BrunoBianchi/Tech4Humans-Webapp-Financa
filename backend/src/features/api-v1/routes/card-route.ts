@@ -2,14 +2,12 @@ import { isUserOwner } from "../../../middlewares/user-own-account-middleware";
 import { Delete } from "../../../utils/decorators/router/delete-decorator";
 import { Post } from "../../../utils/decorators/router/post-decorator";
 import { Router } from "../../../utils/decorators/router/router-decorator";
-import { createCard } from "../../../utils/services/card/create-card-service";
-import { deleteCard } from "../../../utils/services/card/delete-card-service";
 import { Card } from "../../../utils/types/card-types";
-
+import { cardService } from "../../../utils/services/card/card-service";
 @Router()
 export class cardRouter {
   @Post({
-    path: "/account/:id/card",
+    path: "/account/:account_id/card",
     params: [
       {
         name: "card_number",
@@ -20,22 +18,32 @@ export class cardRouter {
         type: "string",
       },
       {
-        name: "id",
+        name: "account_id",
         type: "string",
         header: true,
       },
     ],
     permissions: [isUserOwner],
   })
-  public async createCardRoute(params: Card) {
-    return await createCard(params);
+  public async createCardRoute(params: { card_number: string; card_type: string; account_id: string }) {
+
+    const { card_number, card_type, account_id } = params;
+    return await cardService.create(
+      { card_number, card_type } as Card,
+      [
+        {
+          name: "account",
+          id: account_id,
+        },
+      ]
+    );
   }
   @Delete({
-    path: "/account/:id/card/:card_id",
+    path: "/account/:account_id/card/:card_id",
     permissions: [isUserOwner],
     params: [
       {
-        name: "id",
+        name: "account_id",
         type: "string",
         header: true,
       },
@@ -46,7 +54,7 @@ export class cardRouter {
       },
     ],
   })
-  public async deleteCardRoute(params: { card_id: string; id: string }) {
-    return await deleteCard(params.card_id, params.id);
+  public async deleteCardRoute(params: { card_id: string; account_id: string }) {
+    return await cardService.delete(params.card_id, params. account_id,['account']);
   }
 }

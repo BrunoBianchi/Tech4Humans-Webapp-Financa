@@ -23,16 +23,16 @@ const auth: RequestHandler = async (
       z.string().parse(req.headers.authorization).split("Bearer ")[1] || null;
     const { payload } = await jwt_verify(Authorization || "");
     if (!payload) {
-      throw new ApiError(401, "User unauthorized !");
+      throw new ApiError(401, "User Unauthorized !");
     } else {
       const { email } = payload;
       const user = (await getUser(email as string)) as User;
-      if (!user) throw new ApiError(401, "User unauthorized !");
+      if (!user) throw new ApiError(401, "User Unauthorized !");
       req.user = user;
       next();
     }
   } catch {
-    throw new ApiError(401, "User unauthorized !");
+    throw new ApiError(401, "User Unauthorized !");
   }
 };
 

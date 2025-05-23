@@ -1,6 +1,9 @@
+import { User } from "./user-type";
+
 export type NotificationType = {
-  notification_id: string;
+  id?: string;
   description: string;
   date: Date;
   title: string;
+  user?:User;
 };
