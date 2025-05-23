@@ -1,8 +1,10 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { uid } from "uid";
 import { Account } from "./Account-entity";
-import { InvestimentoBrasil,RentabilidadeMensalAproximada } from "../../utils/enums/investment-enum";
-
+import {
+  InvestimentoBrasil,
+  RentabilidadeMensalAproximada,
+} from "../../utils/enums/investment-enum";
 
 @Entity()
 export class Investiment {

@@ -6,6 +6,7 @@ import {
   Response,
 } from "express";
 import z, { ZodTypeAny } from "zod";
+import { ApiError } from "./errors-class";
 
 type Param = {
   name: string;
@@ -43,7 +44,11 @@ export class ControllerClass {
       ]
     );
 
-    if (!params.routes || !Array.isArray(params.routes) || params.routes.length === 0) {
+    if (
+      !params.routes ||
+      !Array.isArray(params.routes) ||
+      params.routes.length === 0
+    ) {
       throw new Error("No routes provided");
     }
 
@@ -73,8 +78,8 @@ export class ControllerClass {
             (r[method] as Function)(
               route.path,
               route.permissions,
-              async (req: Request, res: Response) => {
-                let routeParams: Record<string, ZodTypeAny> = {};
+              async (req: Request, res: Response, next: NextFunction) => {
+                const routeParams: Record<string, ZodTypeAny> = {};
 
                 if (route.params && route.params.length > 0) {
                   route.params.forEach((param: Param) => {
@@ -86,7 +91,8 @@ export class ControllerClass {
                     route.header === true ||
                     (route.params?.some(
                       (param: Param) => param.header === true
-                    ) ?? false);
+                    ) ??
+                      false);
                   const object =
                     route.params && route.params.length > 0
                       ? z
@@ -105,13 +111,7 @@ export class ControllerClass {
                   );
                   res.status(200).json(result);
                 } catch (err: any) {
-                  res
-                    .status(400)
-                    .json({
-                      message: err.toString().includes("\n")
-                        ? "Bad Request"
-                        : err.toString(),
-                    });
+                  next(err);
                 }
               }
             );
@@ -124,9 +124,8 @@ export class ControllerClass {
           }
         });
     });
-
-    r.use((req: Request, res: Response) => {
-      res.status(404).send({ message: "Page not found !" });
+    r.use(() => {
+      throw new ApiError(404, "Page not found!");
     });
 
     this.router = r;

@@ -14,17 +14,17 @@ export class ContactRoute {
         header: true,
       },
       {
-        name:"contact_name",
-        type:"string",
+        name: "contact_name",
+        type: "string",
       },
       {
-        name:"contact_account_id",
-        type:"string",
-      }
+        name: "contact_account_id",
+        type: "string",
+      },
     ],
     permissions: [isUserOwner],
   })
-  public async createContactRoute(params: { id: string }, _: unknown) {
+  public async createContactRoute(params: { id: string }) {
     return {
       message: "Contact created",
       params,
@@ -47,7 +47,7 @@ export class ContactRoute {
       },
     ],
   })
-  public async deleteContactRoute(params: { id: string }, _: unknown) {
+  public async deleteContactRoute() {
     return {
       message: "Contact deleted",
     };

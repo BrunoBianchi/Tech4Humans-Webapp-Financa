@@ -1,14 +1,14 @@
 import { AppDataSource } from "../../../database/configuration/data-source";
+import { ApiError } from "../../class/errors-class";
 
 export const deleteAccount = async (account: string) => {
-  try {
+
     const accountRepository = AppDataSource.getRepository("Account");
     const accountData = await accountRepository.delete({
       account_id: account,
     });
-    if (!accountData) throw new Error("Account not found");
+    if (!accountData) throw new ApiError(404, "Couldn't find this Account !");
+    
     return "Account deleted successfully !";
-  } catch {
-    throw new Error("Account not found");
-  }
+
 };

@@ -27,7 +27,7 @@ export class cardRouter {
     ],
     permissions: [isUserOwner],
   })
-  public async createCardRoute(params: Card, _: Request) {
+  public async createCardRoute(params: Card) {
     return await createCard(params);
   }
   @Delete({
@@ -46,13 +46,7 @@ export class cardRouter {
       },
     ],
   })
-  public async deleteCardRoute(
-    params: {
-      card_id: string;
-      id: string;
-    },
-    _: Request
-  ) {
+  public async deleteCardRoute(params: { card_id: string; id: string }) {
     return await deleteCard(params.card_id, params.id);
   }
 }

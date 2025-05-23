@@ -1,10 +1,10 @@
 export class RouterClass {
-  private routes:unknown;
-  
+  private routes: unknown;
+
   constructor(routes: unknown) {
     this.routes = routes;
   }
-  
+
   public getRoutes() {
     return this.routes;
   }

@@ -1,18 +1,18 @@
 import { AppDataSource } from "../../../database/configuration/data-source";
-import { getAccountById } from "../account/get-account-uid-service";
 import { Transaction } from "../../../database/entities/Transaction-entity";
 import { updateAccount } from "../account/update-account-service";
 import { Account } from "../../types/account-type";
 import { createNotification } from "../notification/create-notification-service";
 import { findAccountByUser } from "../account/find-account-owned-by-user-service";
 import { User } from "../../types/user-type";
+import { ApiError } from "../../class/errors-class";
 export const createTransaction = async (source: {
   id: string;
   amount: number;
   description: string;
   destination: string;
 }) => {
-  try {
+
     const transactionRepository = AppDataSource.getRepository("Transaction");
     const sourceAccount: Account = (await findAccountByUser(
       source.id
@@ -21,8 +21,9 @@ export const createTransaction = async (source: {
       source.destination
     )) as Account;
     if (sourceAccount.balance - source.amount < 0)
-      throw new Error("Insufficient funds");
-    if (source.amount <= 0) throw new Error("Invalid amount");
+      throw new ApiError(400, "Insufficient funds !");
+    if (source.amount <= 0) throw new ApiError(400, "Invalid amount !");
+
     const transaction: Transaction = (await transactionRepository.create({
       sourceAccount: sourceAccount.account_id,
       destinationAccount: destinationAccount.account_id,
@@ -38,11 +39,9 @@ export const createTransaction = async (source: {
       (destinationAccount.user! as User).user_id,
       `Você recebeu R$ ${source.amount} de ${
         (sourceAccount.user! as User).name
-      } as ${new Date()}`,
+      }`,
       `Transação recebida de  ${(sourceAccount.user! as User).name}`
     );
     return transaction;
-  } catch (err: any) {
-    throw new Error(err.toString());
-  }
+
 };

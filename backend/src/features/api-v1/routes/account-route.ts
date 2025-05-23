@@ -11,7 +11,6 @@ import { deleteAccount } from "../../../utils/services/account/delete-account";
 
 @Router()
 export class AccountRoute {
-
   @Post({
     path: "/account",
     params: [
@@ -29,7 +28,6 @@ export class AccountRoute {
       },
     ],
   })
-  
   public async createNewAccountRoute(Account: Account, req: Request) {
     return await createAccount(Account, req.user!.user_id);
   }
@@ -45,8 +43,7 @@ export class AccountRoute {
     ],
     permissions: [isUserOwner],
   })
-
-  public async getAccountRoute(params: { id: string }, _: Request) {
+  public async getAccountRoute(params: { id: string }) {
     return await getAccountById(params.id);
   }
 
@@ -61,8 +58,8 @@ export class AccountRoute {
       },
     ],
   })
-
-  public async deleteAccountRoute(params: { id: string }, _: Request) {
+  public async deleteAccountRoute(params: { id: string }) {
     return await deleteAccount(params.id);
   }
+
 }
