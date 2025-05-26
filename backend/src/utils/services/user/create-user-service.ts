@@ -16,12 +16,11 @@ export const createUser = async (user: User) => {
       title: `Seja bem vindo ao TechFinance`,
     } as NotificationType,
     [
-    {
-      name: "user",
-      id: newUser.id,
-    }
-    ]
-
+      {
+        name: "user",
+        id: newUser.id,
+      },
+    ],
   );
   return await jwt_sign(user, "7d");
 };

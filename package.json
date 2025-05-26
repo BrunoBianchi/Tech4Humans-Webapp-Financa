@@ -17,5 +17,9 @@
     "check": "eslint . --ext .ts",
     "check:fix": "eslint . --ext .ts --fix",
     "prettier": "pnpm exec prettier . --write"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2"
   }
 }

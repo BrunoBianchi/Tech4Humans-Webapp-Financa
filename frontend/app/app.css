@@ -1,16 +1,89 @@
 @import "tailwindcss";
+@import "flowbite";
 
-@theme {
-  --font-sans:
-    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+body {
+  @apply bg-finance-bg;
 }
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+@theme {
+  --color-finance-primary: #453ee3;
+  --color-finance-primary-dark: #3a34bf;
+  --color-finance-primary-light: #4b43fa;
+  --color-finance-bg: #eff1f3;
+  
+  /* Novos degradês para a home */
+  --color-gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --color-gradient-blue: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --color-gradient-teal: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --color-gradient-orange: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --color-gradient-green: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  --color-gradient-dark: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  --color-gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+
+
+/* Classes utilitárias para os degradês */
+.bg-gradient-purple {
+  background: var(--color-gradient-purple);
+}
+
+.bg-gradient-blue {
+  background: var(--color-gradient-blue);
+}
+
+.bg-gradient-teal {
+  background: var(--color-gradient-teal);
+}
+
+.bg-gradient-orange {
+  background: var(--color-gradient-orange);
+}
+
+.bg-gradient-green {
+  background: var(--color-gradient-green);
+}
+
+.bg-gradient-dark {
+  background: var(--color-gradient-dark);
+}
+
+.bg-gradient-gold {
+  background: var(--color-gradient-gold);
+}
+
+/* Efeitos de hover para degradês */
+.hover-gradient-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-gradient-scale:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.text-gradient-primary {
+  background: linear-gradient(90deg, #453ee3 0%, rgb(46, 43, 94) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(90deg, #4b43fa 0%, #3a34bf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #453ee3 0%, #4b43fa 100%);
+  color: #fff;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.btn-gradient:hover {
+  box-shadow: 0 8px 32px 0 rgba(69,62,227,0.15);
+  transform: translateY(-2px) scale(1.03);
 }

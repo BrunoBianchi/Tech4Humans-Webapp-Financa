@@ -5,12 +5,19 @@ import "reflect-metadata";
 import { AppDataSource } from "./database/configuration/data-source";
 import { errorHandler } from "./middlewares/error-handler-middleware";
 import { ApiError } from "./utils/class/errors-class";
+import  cors from "cors";
 
 dotenv.config();
 
 AppDataSource.initialize()
   .then(async () => {
     const server = express();
+server.use(cors({
+  origin: 'http://localhost:5173', // Your frontend URL
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }));
     server.use(featuresController);

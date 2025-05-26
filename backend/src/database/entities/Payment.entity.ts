@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne} from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { Card } from "./Card-entity";
 import { PaymentEnum } from "../../utils/enums/payment-enum";
 import { BaseEntity } from "../baseEntity/base-entity";

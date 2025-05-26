@@ -9,7 +9,10 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-
+import NavbarComponent from "./components/shared/navbar-component";
+import { useEffect, useState } from "react";
+import FooterComponent from "./components/shared/footer-component";
+import { AuthProvider } from "./contexts/auth/auth-context";
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -23,19 +26,55 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [user,setUser] = useState<any | null>(null);
+  const getUser = ()=>{
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return null;
+    }else {
+      fetch(`http://localhost:5000/user/@me`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        method: "GET"
+      })
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error("Failed to fetch user");
+        })
+        .then(response => {
+          setUser(response);
+        })
+        .catch(error => {
+          console.error('Error fetching user:', error);
+          setUser(null);
+        });
+    }
+  }
+
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
         <Meta />
         <Links />
       </head>
       <body>
-        {children}
+        <AuthProvider>
+          <NavbarComponent />
+          {children}
+          <FooterComponent />
+        </AuthProvider>
         <ScrollRestoration />
         <Scripts />
+        <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
       </body>
     </html>
   );

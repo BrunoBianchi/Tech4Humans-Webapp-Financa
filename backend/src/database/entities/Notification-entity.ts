@@ -1,15 +1,9 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  ManyToOne,
-} from "typeorm";
+import { BeforeInsert, Column, Entity, ManyToOne } from "typeorm";
 import { User } from "./User-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
 
 @Entity()
 export class Notification extends BaseEntity {
-
   @Column()
   title!: string;
 

@@ -3,7 +3,6 @@ import { Account } from "./Account-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
 @Entity()
 export class Contact extends BaseEntity {
-
   @Column()
   name!: string;
 

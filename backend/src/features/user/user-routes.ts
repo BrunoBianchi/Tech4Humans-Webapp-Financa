@@ -41,7 +41,7 @@ export class UserRoute {
   }
 
   @Get({
-    path: "/@",
+    path: "/@me",
     permissions: [auth],
   })
   public getMeUserRoute(_: unknown, req: Request) {

@@ -5,5 +5,5 @@ export type NotificationType = {
   description: string;
   date: Date;
   title: string;
-  user?:User;
+  user?: User;
 };

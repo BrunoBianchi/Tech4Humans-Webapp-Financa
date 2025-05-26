@@ -5,6 +5,6 @@ export type transaction = {
   date: Date;
   amount: number;
   description: string;
-  sourceAccount:Account;
+  sourceAccount: Account;
   destinationAccount: Account;
 };

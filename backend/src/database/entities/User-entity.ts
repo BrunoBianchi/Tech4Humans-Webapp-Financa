@@ -1,24 +1,20 @@
-import {
-  Entity,
-  Column,
-  BeforeInsert,
-  BeforeUpdate,
-  OneToMany,
-} from "typeorm";
+import { Entity, Column, BeforeInsert, BeforeUpdate, OneToMany } from "typeorm";
 import bcrypt from "bcrypt";
 import { Account } from "./Account-entity";
 import { Notification } from "./Notification-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
+import {  IsEmail, Length } from "class-validator";
 @Entity()
 export class User extends BaseEntity {
-
   @Column()
   name!: string;
 
   @Column()
+  @IsEmail()
   email!: string;
 
   @Column()
+
   password!: string;
 
   @BeforeInsert()

@@ -9,10 +9,13 @@ export abstract class BaseService<T extends ObjectLiteral> {
     );
   }
 
-  public async getById(id: string,relations?:string[]): Promise<T | ApiError> {
+  public async getById(
+    id: string,
+    relations?: string[],
+  ): Promise<T | ApiError> {
     const object = await this.repository.findOne({
       where: { id } as any,
-      relations
+      relations,
     });
     if (!object)
       throw new ApiError(
@@ -22,24 +25,44 @@ export abstract class BaseService<T extends ObjectLiteral> {
     return object;
   }
 
-  public async create(object: T,relations?:[{
-    name:string,
-    id:string
-  }]): Promise<T> {
-    const relArray =relations? await Promise.all(relations.map(async (relation) => {
-      const relation_repository = AppDataSource.getRepository(relation.name);
-      return { [relation.name]: await relation_repository.findOneBy({ id: relation.id }) };
-    })) : [];
+  public async create(
+    object: T,
+    relations?: [
+      {
+        name: string;
+        id: string;
+      },
+    ],
+  ): Promise<T> {
+    const relArray = relations
+      ? await Promise.all(
+          relations.map(async (relation) => {
+            const relation_repository = AppDataSource.getRepository(
+              relation.name,
+            );
+            return {
+              [relation.name]: await relation_repository.findOneBy({
+                id: relation.id,
+              }),
+            };
+          }),
+        )
+      : [];
     const rel = Object.assign({}, ...relArray);
     const newObject = this.repository.create({ ...object, ...rel });
     const savedObject = await this.repository.save(newObject);
     return Array.isArray(savedObject) ? savedObject[0] : savedObject;
   }
 
-  public async delete(id: string,account?:string,relations?:string[]): Promise<T | ApiError> {
+  public async delete(
+    id: string,
+    account?: string,
+    relations?: string[],
+  ): Promise<T | ApiError> {
     try {
-      const object = await this.getById(id,relations) as T;
-      if(object.account.id !== account) throw new ApiError(403, "You are not allowed to delete this object");
+      const object = (await this.getById(id, relations)) as T;
+      if (object.account.id !== account)
+        throw new ApiError(403, "You are not allowed to delete this object");
       await this.repository.remove(object as T);
       return object;
     } catch (err: any) {
@@ -47,17 +70,17 @@ export abstract class BaseService<T extends ObjectLiteral> {
     }
   }
 
-    public async update(id: string, object: T): Promise<T | ApiError> {
-        try {
-        const oldObject = await this.getById(id);
-        const updatedObject = this.repository.merge(oldObject as T, object);
-        return await this.repository.save(updatedObject);
-        } catch (err: any) {
-        throw new ApiError(404, err.toString());
-        }
+  public async update(id: string, object: T): Promise<T | ApiError> {
+    try {
+      const oldObject = await this.getById(id);
+      const updatedObject = this.repository.merge(oldObject as T, object);
+      return await this.repository.save(updatedObject);
+    } catch (err: any) {
+      throw new ApiError(404, err.toString());
     }
+  }
 
-    public async getAll():Promise<T[] | ApiError> { 
-        return this.repository.find() as Promise<T[] | ApiError>;
-    }
+  public async getAll(): Promise<T[] | ApiError> {
+    return this.repository.find() as Promise<T[] | ApiError>;
+  }
 }

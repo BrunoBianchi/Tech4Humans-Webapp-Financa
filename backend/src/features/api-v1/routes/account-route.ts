@@ -26,7 +26,11 @@ export class AccountRoute {
     ],
   })
   public async createNewAccountRoute(Account: Account, req: Request) {
-    return await accountService.create(Account,[{name:"user",id:req.user!.id}]);
+    const account: Account = await accountService.create(Account, [
+      { name: "user", id: req.user!.id },
+    ]);
+    const { user, ...accountWithoutUser } = account as Account;
+    return accountWithoutUser;
   }
 
   @Get({
@@ -41,8 +45,8 @@ export class AccountRoute {
     permissions: [isUserOwner],
   })
   public async getAccountRoute(params: { id: string }) {
-    return await accountService.getById(params.id)
- }
+    return await accountService.getById(params.id);
+  }
 
   @Delete({
     path: "/account/:account_id",

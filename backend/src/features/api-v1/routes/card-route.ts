@@ -25,18 +25,18 @@ export class cardRouter {
     ],
     permissions: [isUserOwner],
   })
-  public async createCardRoute(params: { card_number: string; card_type: string; account_id: string }) {
-
+  public async createCardRoute(params: {
+    card_number: string;
+    card_type: string;
+    account_id: string;
+  }) {
     const { card_number, card_type, account_id } = params;
-    return await cardService.create(
-      { card_number, card_type } as Card,
-      [
-        {
-          name: "account",
-          id: account_id,
-        },
-      ]
-    );
+    return await cardService.create({ card_number, card_type } as Card, [
+      {
+        name: "account",
+        id: account_id,
+      },
+    ]);
   }
   @Delete({
     path: "/account/:account_id/card/:card_id",
@@ -54,7 +54,12 @@ export class cardRouter {
       },
     ],
   })
-  public async deleteCardRoute(params: { card_id: string; account_id: string }) {
-    return await cardService.delete(params.card_id, params. account_id,['account']);
+  public async deleteCardRoute(params: {
+    card_id: string;
+    account_id: string;
+  }) {
+    return await cardService.delete(params.card_id, params.account_id, [
+      "account",
+    ]);
   }
 }
