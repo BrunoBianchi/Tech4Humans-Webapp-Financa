@@ -1,18 +1,18 @@
 // src/app/layouts/DashboardLayout.tsx
-import React from 'react'
-import { useAuth } from '@/app/contexts/auth/auth-context'
-import { Navigate, Outlet } from 'react-router'
-import SideBarComponent from '@/app/components/shared/sidebar-component'
+import React from "react";
+import { useAuth } from "@/app/contexts/auth/auth-context";
+import { Navigate, Outlet } from "react-router";
+import SideBarComponent from "@/app/components/shared/sidebar-component";
 
 export default function DashboardLayout() {
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuth();
 
   if (loading) {
-    return null
+    return null;
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" replace />;
   }
 
   return (
@@ -25,5 +25,5 @@ export default function DashboardLayout() {
         </main>
       </div>
     </div>
-  )
+  );
 }

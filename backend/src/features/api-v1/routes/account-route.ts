@@ -62,4 +62,19 @@ export class AccountRoute {
   public async deleteAccountRoute(params: { id: string }) {
     return await accountService.delete(params.id);
   }
+
+  @Get({
+    path: "/accounts",
+  })
+  public async getAllAccountsRoute(_:any,req: Request) {
+  return await accountService.getAllWithJoin(
+    "user", 
+    req.user!.id, 
+    [
+      'cards', 
+      'investments', 
+      'contacts',
+    ]
+  );
+  }
 }

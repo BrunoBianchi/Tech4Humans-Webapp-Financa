@@ -80,7 +80,31 @@ export abstract class BaseService<T extends ObjectLiteral> {
     }
   }
 
-  public async getAll(): Promise<T[] | ApiError> {
-    return this.repository.find() as Promise<T[] | ApiError>;
+  public async getAll(
+    key: string,
+    id: string,
+    relations?: string[],
+  ): Promise<T[] | ApiError> {
+    return this.repository.find({
+      where: { [key]: { id } } as any,
+      relations,
+    }) as Promise<T[] | ApiError>;
+  }
+  public async getAllWithJoin(
+    key: string,
+    id: string,
+    joins?: string[],
+  ): Promise<T[] | ApiError> {
+    const queryBuilder = this.repository.createQueryBuilder("entity");
+
+    queryBuilder.where(`entity.${key} = :id`, { id });
+
+    if (joins) {
+      joins.forEach((join) => {
+        queryBuilder.leftJoinAndSelect(`entity.${join}`, join);
+      });
+    }
+
+    return await queryBuilder.getMany();
   }
 }

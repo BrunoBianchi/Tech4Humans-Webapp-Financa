@@ -1,5 +1,4 @@
 // src/app/components/shared/SideBarComponent.tsx
-import React from 'react'
 
 export default function SideBarComponent() {
   return (
@@ -99,8 +98,6 @@ export default function SideBarComponent() {
       >
         <i className="fa-solid fa-layer-group hover:text-finance-primary-dark w-5 h-5"></i>
       </a>
-
-
     </aside>
-  )
+  );
 }

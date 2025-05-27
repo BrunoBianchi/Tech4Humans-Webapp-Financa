@@ -2,7 +2,7 @@ import { useAuth } from "@/app/contexts/auth/auth-context";
 import { useState } from "react";
 
 const Navbar = () => {
-  const { user, logout,loading } = useAuth();
+  const { user, logout, loading } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [blogMenuOpen, setBlogMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
