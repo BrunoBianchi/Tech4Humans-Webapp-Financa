@@ -47,11 +47,10 @@ export default function Home() {
       <section className="relative py-24 px-6">
         <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 min-h-[400px]">
           <div className="flex-1 space-y-14 text-left md:text-left">
-              <span className="text-[15px] bg-finance-primary-light text-white font-bold py-1 px-3 rounded-full inline-block mb-8   ">
-               liberte-se das correntes financeiras
-              </span>
+            <span className="text-[15px] bg-finance-primary-light text-white font-bold py-1 px-3 rounded-full inline-block mb-8   ">
+              liberte-se das correntes financeiras
+            </span>
 
-        
             <h1 className="text-5xl  font-extrabold leading-tight ">
               Sua{" "}
               <span className="font-bold text-finance-primary-dark">

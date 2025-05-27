@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { Account } from "./Account-entity";
 import { Notification } from "./Notification-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
-import {  IsEmail, Length } from "class-validator";
+import { IsEmail, Length } from "class-validator";
 @Entity()
 export class User extends BaseEntity {
   @Column()
@@ -14,7 +14,6 @@ export class User extends BaseEntity {
   email!: string;
 
   @Column()
-
   password!: string;
 
   @BeforeInsert()

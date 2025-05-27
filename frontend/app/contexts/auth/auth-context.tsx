@@ -1,5 +1,11 @@
 // app/contexts/auth-context.tsx
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 
 interface User {
   id: string;
@@ -33,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       const response = await fetch("http://localhost:5000/user/@me", {
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
@@ -43,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem("token");
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.error("Auth check failed:", error);
       localStorage.removeItem("token");
     } finally {
       setLoading(false);
@@ -54,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const response = await fetch("http://localhost:5000/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {

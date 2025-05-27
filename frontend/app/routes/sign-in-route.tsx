@@ -16,13 +16,13 @@ export default function SignUpPage() {
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
             Bem-vindo ao TechFinance
           </h2>
-          <p className="text-gray-500 mb-8">
-            Crie sua conta para começar
-          </p>
+          <p className="text-gray-500 mb-8">Crie sua conta para começar</p>
 
-          <form className="space-y-6" >
+          <form className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nome
+              </label>
               <input
                 type="text"
                 placeholder="Seu nome"
@@ -31,7 +31,9 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
               <input
                 type="email"
                 placeholder="Seu email"
@@ -40,7 +42,9 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Senha
+              </label>
               <input
                 type="password"
                 placeholder="Crie uma senha"

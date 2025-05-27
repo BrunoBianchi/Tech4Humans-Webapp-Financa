@@ -26,55 +26,30 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-
-
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [user,setUser] = useState<any | null>(null);
-  const getUser = ()=>{
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return null;
-    }else {
-      fetch(`http://localhost:5000/user/@me`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
-        method: "GET"
-      })
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw new Error("Failed to fetch user");
-        })
-        .then(response => {
-          setUser(response);
-        })
-        .catch(error => {
-          console.error('Error fetching user:', error);
-          setUser(null);
-        });
-    }
-  }
-
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
         <Meta />
         <Links />
+        <link
+          rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"
+        />
       </head>
       <body>
         <AuthProvider>
-          <NavbarComponent />
-          {children}
-          <FooterComponent />
+          <div className="flex flex-col min-h-screen">
+            <NavbarComponent />
+
+            <div className="flex-1">{children}</div>
+
+            <FooterComponent />
+          </div>
         </AuthProvider>
+
         <ScrollRestoration />
         <Scripts />
-        <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
       </body>
     </html>
   );

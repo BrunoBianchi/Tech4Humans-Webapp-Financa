@@ -17,9 +17,9 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      navigate("/dashboard"); 
+      navigate("/dashboard");
     } catch (error) {
-        console.log(error)
+      console.log(error);
       setError("Email ou senha incorretos");
     } finally {
       setLoading(false);
@@ -50,7 +50,9 @@ export default function LoginPage() {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
@@ -62,7 +64,9 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Senha
+              </label>
               <input
                 type="password"
                 value={password}

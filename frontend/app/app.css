@@ -10,8 +10,7 @@ body {
   --color-finance-primary-dark: #3a34bf;
   --color-finance-primary-light: #4b43fa;
   --color-finance-bg: #eff1f3;
-  
-  /* Novos degradês para a home */
+
   --color-gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --color-gradient-blue: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --color-gradient-teal: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -21,9 +20,6 @@ body {
   --color-gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
 }
 
-
-
-/* Classes utilitárias para os degradês */
 .bg-gradient-purple {
   background: var(--color-gradient-purple);
 }
@@ -52,9 +48,10 @@ body {
   background: var(--color-gradient-gold);
 }
 
-/* Efeitos de hover para degradês */
 .hover-gradient-scale {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .hover-gradient-scale:hover {
@@ -81,9 +78,21 @@ body {
 .btn-gradient {
   background: linear-gradient(90deg, #453ee3 0%, #4b43fa 100%);
   color: #fff;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 .btn-gradient:hover {
-  box-shadow: 0 8px 32px 0 rgba(69,62,227,0.15);
+  box-shadow: 0 8px 32px 0 rgba(69, 62, 227, 0.15);
   transform: translateY(-2px) scale(1.03);
+}
+@keyframes wave {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-wave {
+  background-size: 200% 200%;
+  animation: wave 5s ease infinite;
 }

@@ -12,13 +12,19 @@ export abstract class BaseEntity {
   setCreatedAt() {
     this.created_at = new Date();
   }
-  @BeforeInsert() 
+  @BeforeInsert()
   async verifyEntity() {
     const errors = await validate(this, { forbidUnknownValues: false });
     if (errors.length > 0) {
-      throw new ApiError(400, "Validation failed!", errors.map((err: any) => {
-        return Object.values(err.constraints).join(", ");
-      }).join("; "));
+      throw new ApiError(
+        400,
+        "Validation failed!",
+        errors
+          .map((err: any) => {
+            return Object.values(err.constraints).join(", ");
+          })
+          .join("; "),
+      );
     }
   }
 }
