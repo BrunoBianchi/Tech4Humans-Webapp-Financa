@@ -1,4 +1,3 @@
-// app/contexts/auth-context.tsx
 import {
   createContext,
   useContext,
@@ -6,6 +5,8 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
+
+import {useCookies} from "react-cookie";
 
 interface User {
   id: string;
@@ -25,13 +26,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
   const checkAuthStatus = async () => {
-    const token = localStorage.getItem("token");
+    const token = cookies.token;
     if (!token) {
       setLoading(false);
       return;
@@ -41,16 +42,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await fetch("http://localhost:5000/user/@me", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+      
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
       } else {
-        localStorage.removeItem("token");
+       removeCookie("token");
       }
     } catch (error) {
       console.error("Auth check failed:", error);
-      localStorage.removeItem("token");
+      removeCookie("token");
     } finally {
       setLoading(false);
     }
@@ -66,14 +67,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!response.ok) {
       throw new Error("Login failed");
     }
-
     const data = await response.json();
-    localStorage.setItem("token", data.authorization);
+    const hours = parseInt(data.expiration.split('h')[0], 10) || 1;
+    setCookie("token", data.authorization, { 
+      path: "/",
+      expires: new Date(Date.now() + hours * 60 * 60 * hours * 1000), 
+      secure: false, 
+      sameSite: 'lax'
+    });
     setUser(data.user);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    removeCookie("token");
     setUser(null);
   };
 

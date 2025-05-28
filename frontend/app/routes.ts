@@ -15,7 +15,6 @@ export default [
       index("routes/dashboard/dashboard-home-route.tsx"),
       ...prefix("contas", [
         layout("routes/dashboard/dashboard-account-layout.tsx", [
-          index("routes/dashboard/accounts/dashboard-account-home-route.tsx"),
           route(":id", "routes/dashboard/accounts/dashboard-account-route.tsx"),
         ]),
       ]),

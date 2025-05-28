@@ -10,9 +10,9 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import NavbarComponent from "./components/shared/navbar-component";
-import { useEffect, useState } from "react";
 import FooterComponent from "./components/shared/footer-component";
 import { AuthProvider } from "./contexts/auth/auth-context";
+import { CookiesProvider } from "react-cookie";
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -28,8 +28,9 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="br">
       <head>
+        <meta charSet="utf-8" />
         <Meta />
         <Links />
         <link
@@ -38,17 +39,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body>
-        <AuthProvider>
-          <div className="flex flex-col min-h-screen">
-            <NavbarComponent />
+        <CookiesProvider>
+          <AuthProvider>
+            <div className="flex flex-col min-h-screen">
+              <NavbarComponent />
 
-            <div className="flex-1">{children}</div>
+              <div className="flex-1">{children}</div>
 
-            <FooterComponent />
-          </div>
-        </AuthProvider>
-
+              <FooterComponent />
+            </div>
+          </AuthProvider>
+        </CookiesProvider>
         <ScrollRestoration />
+
         <Scripts />
       </body>
     </html>

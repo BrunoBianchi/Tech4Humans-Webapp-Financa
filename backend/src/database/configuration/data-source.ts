@@ -9,6 +9,7 @@ import { Contact } from "../entities/Contact-entity";
 import { Payment } from "../entities/Payment.entity";
 import { Investiment } from "../entities/Investment-entity";
 import { Notification } from "../entities/Notification-entity";
+import { Bugedts } from "../entities/Bugedts-entity";
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: process.env.POSTGRES_HOST || "localhost",
@@ -27,6 +28,7 @@ export const AppDataSource = new DataSource({
     Payment,
     Investiment,
     Notification,
+    Bugedts
   ],
   migrations: ["../migrations/*.ts"],
 });

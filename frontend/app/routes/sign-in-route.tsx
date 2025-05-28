@@ -2,16 +2,14 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#eff1f3] px-4">
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 bg-white shadow-xl rounded-2xl overflow-hidden">
-        {/* Imagem à esquerda */}
         <div className="hidden md:flex items-center justify-center bg-[#eff1f3] p-10">
           <img
-            src="./login-sigin.svg" // Substitua pela URL ou caminho da imagem que deseja usar
+            src="./login-sigin.svg" 
             alt="Ilustração de cadastro"
             className="w-full max-w-md"
           />
         </div>
 
-        {/* Formulário à direita */}
         <div className="flex flex-col justify-center p-10">
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
             Bem-vindo ao TechFinance

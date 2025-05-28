@@ -6,7 +6,7 @@ export default function SideBarComponent() {
       className="
         hidden lg:flex flex-col items-center
         fixed left-4 top-1/4
-        h-1/2 w-16
+         w-16
         bg-white bg-opacity-70
         rounded-4xl
         py-4
@@ -85,19 +85,6 @@ export default function SideBarComponent() {
         <i className="fa-solid fa-users hover:text-finance-primary-dark w-5 h-5"></i>
       </a>
 
-      <a
-        href="/dashboard/contas"
-        title="Contas"
-        className="
-          flex items-center justify-center
-          w-10 h-10
-          
-          rounded-lg
-          transition
-        "
-      >
-        <i className="fa-solid fa-layer-group hover:text-finance-primary-dark w-5 h-5"></i>
-      </a>
     </aside>
   );
 }

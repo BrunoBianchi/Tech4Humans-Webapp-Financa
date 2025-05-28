@@ -4,7 +4,7 @@ import { ApiError } from "./errors-class";
 export abstract class BaseService<T extends ObjectLiteral> {
   protected repository!: Repository<T>;
   constructor() {
-    this.repository = AppDataSource.getTreeRepository(
+    this.repository = AppDataSource.getRepository(
       this.constructor.name.split("Service")[0],
     );
   }
@@ -80,31 +80,23 @@ export abstract class BaseService<T extends ObjectLiteral> {
     }
   }
 
-  public async getAll(
-    key: string,
-    id: string,
-    relations?: string[],
-  ): Promise<T[] | ApiError> {
-    return this.repository.find({
-      where: { [key]: { id } } as any,
-      relations,
-    }) as Promise<T[] | ApiError>;
-  }
   public async getAllWithJoin(
     key: string,
     id: string,
     joins?: string[],
   ): Promise<T[] | ApiError> {
-    const queryBuilder = this.repository.createQueryBuilder("entity");
-
-    queryBuilder.where(`entity.${key} = :id`, { id });
-
-    if (joins) {
-      joins.forEach((join) => {
-        queryBuilder.leftJoinAndSelect(`entity.${join}`, join);
+    try {
+      const whereCondition = key === "user" ? { user: { id } } : { [key]: { id } };
+      
+      const result = await this.repository.find({
+        where: whereCondition as any,
+        relations: joins || [],
       });
-    }
 
-    return await queryBuilder.getMany();
+      return result;
+    } catch (error) {
+      console.error("Query error:", error);
+      throw new ApiError(500, `Error fetching data: ${error}`);
+    }
   }
 }

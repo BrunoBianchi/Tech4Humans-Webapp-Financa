@@ -21,7 +21,7 @@ export class AccountRoute {
       },
       {
         name: "balance",
-        type: "number",
+        type: "string",
       },
     ],
   })
@@ -66,15 +66,15 @@ export class AccountRoute {
   @Get({
     path: "/accounts",
   })
-  public async getAllAccountsRoute(_:any,req: Request) {
-  return await accountService.getAllWithJoin(
-    "user", 
-    req.user!.id, 
-    [
-      'cards', 
-      'investments', 
-      'contacts',
-    ]
-  );
+  public async getAllAccountsRoute(_: any, req: Request) {
+  const result = await accountService.getAllWithJoin("user", req.user!.id, [
+    "cards",
+    "investments", 
+    "contacts",
+    "incomingTransactions",
+    "outgoingTransactions"
+  ]);
+
+  return result;
   }
 }

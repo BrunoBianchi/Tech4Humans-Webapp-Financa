@@ -212,7 +212,7 @@ const Navbar = () => {
               href="/login"
               className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-900 hover:cursor-pointer"
             >
-              Começe agora
+              Comece agora
             </a>
           )}
         </div>

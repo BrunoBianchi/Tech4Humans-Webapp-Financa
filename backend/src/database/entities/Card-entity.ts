@@ -9,6 +9,9 @@ export class Card extends BaseEntity {
   @Column()
   card_number!: string;
 
+  @Column()
+  name!:string;
+
   @Column({ type: "enum", enum: CardEnum })
   card_type!: string;
 

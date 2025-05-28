@@ -18,6 +18,10 @@ export class cardRouter {
         type: "string",
       },
       {
+        name: "name",
+        type: "string",
+      },
+      {
         name: "account_id",
         type: "string",
         header: true,
@@ -27,11 +31,12 @@ export class cardRouter {
   })
   public async createCardRoute(params: {
     card_number: string;
+    name:string;
     card_type: string;
     account_id: string;
   }) {
-    const { card_number, card_type, account_id } = params;
-    return await cardService.create({ card_number, card_type } as Card, [
+    const { card_number,name, card_type, account_id } = params;
+    return await cardService.create({ card_number,name, card_type } as Card, [
       {
         name: "account",
         id: account_id,

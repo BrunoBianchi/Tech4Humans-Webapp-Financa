@@ -1,14 +1,13 @@
 import { useState } from "react";
 
 export default function AccountCard({
-  loading=false,
+  loading = false,
   accountName = "Conta Empresarial",
   iban = "ES34 5666 6789 8765 3245 1111",
-  type="corrente",
+  type = "corrente",
   linkedCards = 2,
   balance = "R$ 140.347,00 ",
   onClick = () => {},
-
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   if (loading) {
@@ -27,7 +26,10 @@ export default function AccountCard({
     );
   }
   return (
-    <div onClick={onClick} className="hover:cursor-pointer mt-10 relative w-[30%] max-w-sm rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+    <div
+      onClick={onClick}
+      className="hover:cursor-pointer mt-10 relative w-[30%] max-w-sm rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300"
+    >
       <div className="p-5">
         <div className="flex justify-between items-start">
           <div className="flex gap-3">
@@ -38,7 +40,9 @@ export default function AccountCard({
               <h3 className="text-base font-semibold text-gray-800">
                 {accountName}
               </h3>
-              <p className="text-xs text-gray-500">{iban} | {type}</p>
+              <p className="text-xs text-gray-500">
+                {iban} | {type}
+              </p>
               <p className="text-xs text-gray-500">
                 {linkedCards} cartões vinculados
               </p>

@@ -3,6 +3,7 @@ import React from "react";
 import { useAuth } from "@/app/contexts/auth/auth-context";
 import { Navigate, Outlet } from "react-router";
 import SideBarComponent from "@/app/components/shared/sidebar-component";
+import { AccountProvider } from "../contexts/account-context.tsx/account-context";
 
 export default function DashboardLayout() {
   const { user, loading } = useAuth();
@@ -20,8 +21,10 @@ export default function DashboardLayout() {
       <div className="flex pt-16">
         <SideBarComponent />
 
-        <main className="flex-2 ml-55 p-6">
-          <Outlet />
+        <main className="flex-2  p-6">
+          <AccountProvider>
+            <Outlet />
+          </AccountProvider>
         </main>
       </div>
     </div>
