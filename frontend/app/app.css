@@ -35,7 +35,11 @@ body {
 }
 .account-icon {
   @apply w-10 h-10 rounded-lg flex items-center justify-center;
-  background: linear-gradient(135deg, var(--color-finance-primary) 0%, var(--color-finance-primary-light) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-finance-primary) 0%,
+    var(--color-finance-primary-light) 100%
+  );
 }
 .account-icon svg {
   @apply w-5 h-5 text-white;
@@ -51,9 +55,15 @@ body {
 }
 
 .btn-gradient {
-  background: linear-gradient(90deg, var(--color-finance-primary) 0%, var(--color-finance-primary-light) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-finance-primary) 0%,
+    var(--color-finance-primary-light) 100%
+  );
   color: #fff;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 .btn-gradient:hover {
   box-shadow: 0 8px 32px rgba(69, 62, 227, 0.15);

@@ -4,7 +4,7 @@ export default function SignUpPage() {
       <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 bg-white shadow-xl rounded-2xl overflow-hidden">
         <div className="hidden md:flex items-center justify-center bg-[#eff1f3] p-10">
           <img
-            src="./login-sigin.svg" 
+            src="./login-sigin.svg"
             alt="Ilustração de cadastro"
             className="w-full max-w-md"
           />

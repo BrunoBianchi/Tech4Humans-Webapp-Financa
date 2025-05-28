@@ -28,16 +28,15 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addAccount = (account: Account) => {
-    accountService.create(account, cookies.token).then(acc=>{
-       setAccounts((prev) => [...prev, acc]);
-    })
-  
+    accountService.create(account, cookies.token).then((acc) => {
+      setAccounts((prev) => [...prev, acc]);
+    });
   };
 
   const removeAccount = (id: string) => {
-    accountService.delete(id, cookies.token).then(acc=>{
+    accountService.delete(id, cookies.token).then((acc) => {
       setAccounts((prev) => prev.filter((acc) => acc.id !== id));
-    })
+    });
   };
 
   const checkAccountStatus = async () => {
@@ -49,14 +48,14 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   };
 
-  const getAccountById =  (id: string) => { 
+  const getAccountById = (id: string) => {
     setLoading(true);
     return accounts.find((account) => account.id === id) || null;
-  }
+  };
 
   return (
     <AccountContext.Provider
-      value={{ accounts, addAccount, removeAccount, loading,getAccountById }}
+      value={{ accounts, addAccount, removeAccount, loading, getAccountById }}
     >
       {children}
     </AccountContext.Provider>

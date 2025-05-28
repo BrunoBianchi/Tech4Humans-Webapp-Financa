@@ -1,8 +1,9 @@
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Account } from "./Account-entity";
 import { Payment } from "./Payment.entity";
 import { CardEnum } from "../../utils/enums/card-enum";
 import { BaseEntity } from "../baseEntity/base-entity";
+import { Budgets } from "./Bugedts-entity";
 
 @Entity()
 export class Card extends BaseEntity {
@@ -10,7 +11,10 @@ export class Card extends BaseEntity {
   card_number!: string;
 
   @Column()
-  name!:string;
+  name!: string;
+
+  @Column()
+  limit: number = 10000;
 
   @Column({ type: "enum", enum: CardEnum })
   card_type!: string;
@@ -20,4 +24,7 @@ export class Card extends BaseEntity {
 
   @OneToMany(() => Payment, (payment) => payment.card)
   payments!: Payment[];
+
+  @ManyToMany(()=> Budgets, (budgets) => budgets.cards)
+  budgets!: Budgets[];
 }

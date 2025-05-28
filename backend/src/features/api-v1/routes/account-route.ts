@@ -67,14 +67,14 @@ export class AccountRoute {
     path: "/accounts",
   })
   public async getAllAccountsRoute(_: any, req: Request) {
-  const result = await accountService.getAllWithJoin("user", req.user!.id, [
-    "cards",
-    "investments", 
-    "contacts",
-    "incomingTransactions",
-    "outgoingTransactions"
-  ]);
+    const result = await accountService.getAllWithJoin("user", req.user!.id, [
+      "cards",
+      "investments",
+      "contacts",
+      "incomingTransactions",
+      "outgoingTransactions",
+    ]);
 
-  return result;
+    return result;
   }
 }

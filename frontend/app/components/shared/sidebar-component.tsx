@@ -84,7 +84,6 @@ export default function SideBarComponent() {
       >
         <i className="fa-solid fa-users hover:text-finance-primary-dark w-5 h-5"></i>
       </a>
-
     </aside>
   );
 }
