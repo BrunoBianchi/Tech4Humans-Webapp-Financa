@@ -4,8 +4,8 @@ import type { budget } from "./budget-type";
 export type Card = {
   id?: string;
   card_number: string;
-  card_type: "credito"|"debito";
+  card_type: "credito" | "debito";
   account?: Account;
-  budgets?:string;
+  budgets?: string;
   limit: number;
-}
+};

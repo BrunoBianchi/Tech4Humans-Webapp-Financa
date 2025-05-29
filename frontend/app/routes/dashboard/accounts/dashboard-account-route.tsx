@@ -1,5 +1,5 @@
-import { useAccountContext } from "@/app/contexts/account-context/account-context"; 
-import type { Account } from "@/app/types/account-type"; 
+import { useAccountContext } from "@/app/contexts/account-context/account-context";
+import type { Account } from "@/app/types/account-type";
 import { useParams } from "react-router";
 import { useState } from "react";
 import CreateCardModal from "@/app/components/shared/modals/create-card-modal";
@@ -120,7 +120,10 @@ export default function AccountMainRoute() {
     <div className="page-container py-6 md:py-8">
       <header className="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
         <h1 className="text-3xl md:text-[32px] font-bold text-gray-800">
-          Banco digital <span className=" text-[var(--color-finance-primary)]">{account.bank}</span>
+          Banco digital{" "}
+          <span className=" text-[var(--color-finance-primary)]">
+            {account.bank}
+          </span>
         </h1>
         <div className="flex items-center space-x-2.5">
           <button className="py-2.5 px-5 text-sm border border-gray-300/80 rounded-full hover:bg-gray-100/60 hover:border-gray-400/70 flex items-center space-x-2 text-gray-700 bg-white shadow-sm transition-all duration-150">

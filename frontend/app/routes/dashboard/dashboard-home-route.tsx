@@ -139,7 +139,8 @@ export default function HomeRoute() {
           </div>
 
           <p className="text-3xl lg:text-4xl font-bold text-gray-800 mb-6">
-            <small className="text-gray-500 font-medium text-2xl">R$ </small>{formatCurrency(totalBalance)}
+            <small className="text-gray-500 font-medium text-2xl">R$ </small>
+            {formatCurrency(totalBalance)}
           </p>
 
           <div className="mt-6">
@@ -177,7 +178,7 @@ export default function HomeRoute() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-base font-semibold text-gray-800 truncate">
-                         R$ {formatCurrency(Number(account.balance) || 0)}
+                          R$ {formatCurrency(Number(account.balance) || 0)}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
                           {account.bank} |{" "}

@@ -42,18 +42,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ToastProvider>
-        <CookiesProvider>
-          <AuthProvider>
-            <div className="flex flex-col min-h-screen">
-              <NavbarComponent />
+          <CookiesProvider>
+            <AuthProvider>
+              <div className="flex flex-col min-h-screen">
+                <NavbarComponent />
 
-              <div className="flex-1">{children}</div>
+                <div className="flex-1">{children}</div>
 
-              <FooterComponent />
-            </div>
-            <ToastContainer />
-          </AuthProvider>
-        </CookiesProvider>
+                <FooterComponent />
+              </div>
+              <ToastContainer />
+            </AuthProvider>
+          </CookiesProvider>
         </ToastProvider>
         <ScrollRestoration />
 

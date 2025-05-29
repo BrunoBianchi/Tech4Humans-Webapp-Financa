@@ -86,8 +86,8 @@ export default function CreateAccountModal({
                   onChange={(e) => setBank(e.target.value)}
                   placeholder="Nome do banco"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
-                  required                
-                  />
+                  required
+                />
               </div>
 
               <div>
@@ -98,7 +98,7 @@ export default function CreateAccountModal({
                   value={type}
                   onChange={(e) => setType(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
-                 required   
+                  required
                 >
                   <option value="">Selecione o tipo</option>
                   <option value="corrente">Conta Corrente</option>
@@ -116,7 +116,7 @@ export default function CreateAccountModal({
                   onChange={(e) => setBalance(e.target.value)}
                   placeholder="0,00"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
-                 required   
+                  required
                 />
               </div>
 

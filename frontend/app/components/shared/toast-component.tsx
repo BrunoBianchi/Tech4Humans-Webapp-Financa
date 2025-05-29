@@ -1,6 +1,5 @@
 import { useToast } from "@/app/contexts/toast-context/toast-context";
 
-
 export default function ToastContainer() {
   const { toasts, removeToast } = useToast();
   return (
@@ -12,8 +11,8 @@ export default function ToastContainer() {
             toast.type === "error"
               ? "bg-red-500"
               : toast.type === "success"
-              ? "bg-green-500"
-              : "bg-blue-500"
+                ? "bg-green-500"
+                : "bg-blue-500"
           }`}
           onClick={() => removeToast(toast.id)}
         >

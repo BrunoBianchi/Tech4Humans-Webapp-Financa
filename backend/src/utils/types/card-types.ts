@@ -7,6 +7,6 @@ export type Card = {
   card_number: string;
   card_type: CardEnum;
   account: Account;
-  budgets?:budget[];
+  budgets?: budget[];
   limit: number;
 };

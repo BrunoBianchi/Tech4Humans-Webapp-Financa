@@ -4,7 +4,7 @@ export type Account = {
   balance: number;
   bank: string;
   type: string;
-  cards?:any[]
+  cards?: any[];
   user?: User;
   user_id?: string;
 };

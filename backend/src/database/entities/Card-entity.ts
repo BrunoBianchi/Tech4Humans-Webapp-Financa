@@ -11,8 +11,7 @@ export class Card extends BaseEntity {
   @Column()
   card_number!: string;
 
-
-  @Column({default:10000})
+  @Column({ default: 10000 })
   @IsPositive()
   limit!: number;
 
@@ -24,5 +23,4 @@ export class Card extends BaseEntity {
 
   @OneToMany(() => Payment, (payment) => payment.card)
   payments!: Payment[];
-
 }

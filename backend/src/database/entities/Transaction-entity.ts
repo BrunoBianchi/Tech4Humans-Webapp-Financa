@@ -22,7 +22,7 @@ export class Transaction extends BaseEntity {
   @ManyToOne(() => Account, { nullable: false })
   sourceAccount!: Account;
 
-  @Column({default: "pending"})
+  @Column({ default: "pending" })
   status!: string;
 
   @ManyToOne(() => Account, { nullable: false })

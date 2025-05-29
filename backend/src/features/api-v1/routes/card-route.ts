@@ -33,11 +33,11 @@ export class cardRouter {
   public async createCardRoute(params: {
     card_number: string;
     card_type: string;
-    limit:number;
+    limit: number;
     account_id: string;
   }) {
-    const { card_number,limit, card_type, account_id } = params;
-    return await cardService.create({ card_number, card_type,limit } as Card, [
+    const { card_number, limit, card_type, account_id } = params;
+    return await cardService.create({ card_number, card_type, limit } as Card, [
       {
         name: "account",
         id: account_id,
@@ -70,17 +70,17 @@ export class cardRouter {
   }
 
   @Get({
-    path:'/account/:account_id/cards',
-    params:[
+    path: "/account/:account_id/cards",
+    params: [
       {
         name: "account_id",
         type: "string",
         header: true,
-      }
+      },
     ],
     permissions: [isUserOwner],
   })
   public async getCardsRoute(params: { account_id: string }) {
-    return await cardService.getAllWithJoin("account",params.account_id);
+    return await cardService.getAllWithJoin("account", params.account_id);
   }
 }

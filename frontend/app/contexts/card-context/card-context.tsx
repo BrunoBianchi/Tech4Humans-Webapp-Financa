@@ -13,8 +13,8 @@ import { useToast } from "../toast-context/toast-context";
 
 type CardContextType = {
   cards: Card[];
-  addCard: (card:Card,account_id:string) => void;
-  removeCard: (card_id: string,account_id:string) => void;
+  addCard: (card: Card, account_id: string) => void;
+  removeCard: (card_id: string, account_id: string) => void;
   loading: boolean;
   getCardById: (id: string) => Card | null;
 };
@@ -22,7 +22,7 @@ type CardContextType = {
 const CardContext = createContext<CardContextType | undefined>(undefined);
 
 export const CardProvider = ({ children }: { children: ReactNode }) => {
-    const { addToast } = useToast();
+  const { addToast } = useToast();
 
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,38 +32,46 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
     checkCardStatus();
   }, []);
 
-  const addCard = (card:Card,account_id:string) => {
-   cardService.create(card, cookies.token,account_id).then((card:Card) => {
-      setCards((prev) => [...prev, card]);
-    }).catch((error)=>{
+  const addCard = (card: Card, account_id: string) => {
+    cardService
+      .create(card, cookies.token, account_id)
+      .then((card: Card) => {
+        setCards((prev) => [...prev, card]);
+      })
+      .catch((error) => {
         addToast(error.message, "error");
-    }).then(()=>{
-      addToast("Cartao adicionado com sucesso!" , "success");
-    })
+      })
+      .then(() => {
+        addToast("Cartao adicionado com sucesso!", "success");
+      });
   };
 
-  const removeCard = (card_id: string,account_id:string) => {
-    cardService.delete(account_id,card_id, cookies.token).then(() => {
-      setCards((prev) => prev.filter((card:Card) => card.id !== card_id));
-    }).then(()=>{
-        addToast("Cartao removido com sucesso!" , "success");
-    }).catch((error)=>{
+  const removeCard = (card_id: string, account_id: string) => {
+    cardService
+      .delete(account_id, card_id, cookies.token)
+      .then(() => {
+        setCards((prev) => prev.filter((card: Card) => card.id !== card_id));
+      })
+      .then(() => {
+        addToast("Cartao removido com sucesso!", "success");
+      })
+      .catch((error) => {
         addToast(error.message, "error");
-    });
+      });
   };
 
   const checkCardStatus = async () => {
     setLoading(true);
     const token = cookies.token;
 
-    const data = await cardService.getAll(token,params.id || "");
+    const data = await cardService.getAll(token, params.id || "");
     setCards(data);
     setLoading(false);
   };
 
   const getCardById = (id: string) => {
     setLoading(true);
-    return cards.find((card:Card) =>card.id === id) || null;
+    return cards.find((card: Card) => card.id === id) || null;
   };
 
   return (

@@ -8,14 +8,13 @@ export class Budgets extends BaseEntity {
   @Column()
   name!: string;
 
-
   @Column()
   @IsPositive()
   value!: number;
 
-  @Column({default:0})
+  @Column({ default: 0 })
   amount!: number;
-  
+
   @OneToMany(() => Category, (category) => category.budget)
   categories!: Category[];
 }
