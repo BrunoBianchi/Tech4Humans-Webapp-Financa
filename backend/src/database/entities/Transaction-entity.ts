@@ -2,6 +2,7 @@ import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { Account } from "./Account-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
 import { Category } from "./Category-entity";
+import { IsPositive } from "class-validator";
 @Entity()
 export class Transaction extends BaseEntity {
   @Column()
@@ -12,6 +13,7 @@ export class Transaction extends BaseEntity {
   }
 
   @Column()
+  @IsPositive()
   amount!: number;
 
   @Column()
@@ -19,13 +21,13 @@ export class Transaction extends BaseEntity {
 
   @ManyToOne(() => Account, { nullable: false })
   sourceAccount!: Account;
-  
-  @Column()
-  status: string = "pending";
+
+  @Column({default: "pending"})
+  status!: string;
 
   @ManyToOne(() => Account, { nullable: false })
   destinationAccount!: Account;
 
   @ManyToOne(() => Category, (category) => category.transaction)
-  categorie!: Category;
+  category!: Category;
 }

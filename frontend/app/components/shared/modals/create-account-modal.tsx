@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useAccountContext } from "@/app/contexts/account-context.tsx/account-context";
+import { useAccountContext } from "@/app/contexts/account-context/account-context";
 interface CreateAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,6 +14,7 @@ export default function CreateAccountModal({
   const [type, setType] = useState("");
   const [balance, setBalance] = useState("");
   const { addAccount } = useAccountContext();
+
   if (!isOpen) return null;
 
   function handleSubmit(e: React.FormEvent) {
@@ -21,7 +22,7 @@ export default function CreateAccountModal({
     addAccount({
       bank: bank,
       type: type,
-      balance: balance,
+      balance: Number(balance),
     });
   }
 
@@ -85,7 +86,8 @@ export default function CreateAccountModal({
                   onChange={(e) => setBank(e.target.value)}
                   placeholder="Nome do banco"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
-                />
+                  required                
+                  />
               </div>
 
               <div>
@@ -96,6 +98,7 @@ export default function CreateAccountModal({
                   value={type}
                   onChange={(e) => setType(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
+                 required   
                 >
                   <option value="">Selecione o tipo</option>
                   <option value="corrente">Conta Corrente</option>
@@ -108,29 +111,21 @@ export default function CreateAccountModal({
                   Saldo Inicial
                 </label>
                 <input
-                  type="string"
+                  type="number"
                   value={balance}
                   onChange={(e) => setBalance(e.target.value)}
                   placeholder="0,00"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
+                 required   
                 />
               </div>
 
-              <div className="flex gap-3 mt-6">
-                <button
-                  onClick={onClose}
-                  type="button"
-                  className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-finance-primary focus:z-10 focus:ring-4 focus:ring-gray-100"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="text-white bg-finance-primary hover:bg-finance-primary-dark focus:ring-4 focus:outline-none focus:ring-finance-primary font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                >
-                  Adicionar Conta
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="w-[70%] text-white bg-finance-primary hover:bg-finance-primary-dark focus:ring-4 focus:outline-none focus:ring-finance-primary font-medium rounded-lg text-sm  items-center px-5 py-2.5 text-center"
+              >
+                Adicionar Conta
+              </button>
             </form>
           </div>
         </div>

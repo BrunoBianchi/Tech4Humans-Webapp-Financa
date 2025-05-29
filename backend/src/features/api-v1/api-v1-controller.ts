@@ -8,7 +8,13 @@ import { BudgetsRoute } from "./routes/budgets-route";
 
 @Controller({
   name: "api-v1",
-  routes: [AccountRoute, TransactionRoute, cardRouter, ContactRoute,BudgetsRoute],
+  routes: [
+    AccountRoute,
+    TransactionRoute,
+    cardRouter,
+    ContactRoute,
+    BudgetsRoute,
+  ],
   path: "/api/v1",
   permissions: [auth],
 })

@@ -5,7 +5,13 @@
 body {
   @apply bg-finance-bg;
 }
-
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
 @theme {
   --color-finance-primary: #453ee3;
   --color-finance-primary-dark: #3a34bf;

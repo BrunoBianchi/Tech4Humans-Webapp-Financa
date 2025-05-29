@@ -13,6 +13,8 @@ import NavbarComponent from "./components/shared/navbar-component";
 import FooterComponent from "./components/shared/footer-component";
 import { AuthProvider } from "./contexts/auth/auth-context";
 import { CookiesProvider } from "react-cookie";
+import { ToastProvider } from "./contexts/toast-context/toast-context";
+import ToastContainer from "./components/shared/toast-component";
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -39,6 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body>
+        <ToastProvider>
         <CookiesProvider>
           <AuthProvider>
             <div className="flex flex-col min-h-screen">
@@ -48,8 +51,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
               <FooterComponent />
             </div>
+            <ToastContainer />
           </AuthProvider>
         </CookiesProvider>
+        </ToastProvider>
         <ScrollRestoration />
 
         <Scripts />

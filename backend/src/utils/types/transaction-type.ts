@@ -4,7 +4,7 @@ export type transaction = {
   id: string;
   date: Date;
   amount: number;
-  status:string;
+  status: string;
   description: string;
   sourceAccount: Account;
   destinationAccount: Account;

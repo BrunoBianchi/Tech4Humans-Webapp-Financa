@@ -21,7 +21,7 @@ export class AccountRoute {
       },
       {
         name: "balance",
-        type: "string",
+        type: "number",
       },
     ],
   })

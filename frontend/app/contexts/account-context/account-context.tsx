@@ -8,7 +8,7 @@ import React, {
 import { useCookies } from "react-cookie";
 import { accountService } from "@/app/services/account-service";
 import type { Account } from "@/app/types/account-type";
-
+import { useToast } from "../toast-context/toast-context";
 type AccountContextType = {
   accounts: Account[];
   addAccount: (account: Account) => void;
@@ -20,6 +20,8 @@ type AccountContextType = {
 const AccountContext = createContext<AccountContextType | undefined>(undefined);
 
 export const AccountProvider = ({ children }: { children: ReactNode }) => {
+    const {addToast} = useToast();
+
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
   const [cookies] = useCookies(["token"]);
@@ -30,13 +32,21 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   const addAccount = (account: Account) => {
     accountService.create(account, cookies.token).then((acc) => {
       setAccounts((prev) => [...prev, acc]);
-    });
+    }).then(()=>{
+      addToast("Conta adicionada com sucesso!", "success");
+    }).catch((error)=>{
+      addToast(error.message, "error");
+    })
   };
 
   const removeAccount = (id: string) => {
     accountService.delete(id, cookies.token).then((acc) => {
       setAccounts((prev) => prev.filter((acc) => acc.id !== id));
-    });
+    }).then(()=>{
+      addToast("Conta removida com sucesso!", "success");
+    }).catch((error)=>{
+      addToast(error.message, "error");
+    })
   };
 
   const checkAccountStatus = async () => {
@@ -49,7 +59,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getAccountById = (id: string) => {
-    setLoading(true);
     return accounts.find((account) => account.id === id) || null;
   };
 

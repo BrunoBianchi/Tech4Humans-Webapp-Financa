@@ -29,5 +29,4 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications!: Notification[];
-
 }

@@ -4,9 +4,7 @@ import { ApiError } from "./errors-class";
 export abstract class BaseService<T extends ObjectLiteral> {
   protected repository!: Repository<T>;
   constructor() {
-    console.log(this.constructor.name.split("Service")[0])
     this.repository = AppDataSource.getRepository(
-      
       this.constructor.name.split("Service")[0],
     );
   }
@@ -29,12 +27,10 @@ export abstract class BaseService<T extends ObjectLiteral> {
 
   public async create(
     object: T,
-    relations?: Array<
-      {
-        name: string;
-        id: string;
-      }
-    >,
+    relations?: Array<{
+      name: string;
+      id: string;
+    }>,
   ): Promise<T> {
     const relArray = relations
       ? await Promise.all(
