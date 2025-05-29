@@ -30,8 +30,8 @@ export default function SideBarComponent() {
       </a>
 
       <a
-        href="/orcamentos"
-        title="Orçamentos"
+        href="/dashboard/categorias"
+        title="Categorias"
         className="
           flex items-center justify-center
           w-10 h-10
@@ -40,7 +40,7 @@ export default function SideBarComponent() {
           transition
         "
       >
-        <i className="fa-regular fa-pig hover:text-finance-primary-dark w-5 h-5"></i>
+        <i className="fa-solid fa-symbols hover:text-finance-primary-dark w-5 h-5"></i>
       </a>
 
       <a

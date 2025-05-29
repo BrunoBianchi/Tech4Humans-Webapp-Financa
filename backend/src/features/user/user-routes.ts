@@ -35,7 +35,7 @@ export class UserRoute {
     };
     return {
       authorization: await createUser(user),
-      expiration: "1h",
+      expiration: "7h",
       user: data,
     };
   }

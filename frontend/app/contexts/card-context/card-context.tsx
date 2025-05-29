@@ -86,7 +86,7 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
 export const useCardContext = () => {
   const context = useContext(CardContext);
   if (!context) {
-    throw new Error("useAccountContext must be used within an AccountProvider");
+    throw new Error("useCardContext must be used within an CardProvider");
   }
   return context;
 };

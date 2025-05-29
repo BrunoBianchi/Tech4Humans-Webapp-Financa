@@ -1,36 +1,40 @@
-import { useCardContext } from "@/app/contexts/card-context/card-context";
+import { useAccountContext } from "@/app/contexts/account-context/account-context";
+import { useTransactionContext } from "@/app/contexts/transaction-context/transaction-context";
 import { useState } from "react";
 import { useParams } from "react-router";
 
-interface CreateCardModalProps {
+interface CreateTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function CreateCardModal({
+export default function CreateTransactionModal({
   isOpen,
   onClose,
-}: CreateCardModalProps) {
-  const [n_cartao, setn_cartao] = useState("");
-  const [type, setType] = useState("");
-  const [limit, setLimit] = useState("");
-  const { addCard } = useCardContext();
+}: CreateTransactionModalProps) {
+  const [n_conta, setn_conta] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [quantia, setQuantia] = useState("");
   const params = useParams<{ id: string }>();
+  const { addTransaction } = useTransactionContext();
   if (!isOpen) return null;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    addCard(
+    addTransaction(
       {
-        card_number: n_cartao,
-        card_type: type as "credito" | "debito",
-        limit: Number(limit),
+        amount: Number(quantia),
+        category: categoria,
+        description: descricao,
+        sourceAccount: params.id || "",
+        destinationAccount: n_conta,
+        type:tipo,
       },
-      params.id || "0",
+      params.id || "",
+      n_conta,
     );
-    setn_cartao("");
-    setType("");
-    setLimit("");
   }
 
   return (
@@ -79,98 +83,81 @@ export default function CreateCardModal({
             </svg>
 
             <h3 className="mb-5 text-lg font-normal text-gray-700">
-              Adicionar Novo Cartão
+              Transacao
             </h3>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                Numero do Cartão
-              </label>
-              <div className="relative">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                  Conta de destino
+                </label>
                 <input
-                  type="number"
-                  value={n_cartao}
-                  onChange={(e) => setn_cartao(e.target.value)}
-                  autoComplete="cc-number"
-                  inputMode="numeric"
-                  className="bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary block w-full  "
-                  placeholder="4242 4242 4242 4242"
-                  pattern="^4[0-9]{12}(?:[0-9]{3})?$"
+                  type="string"
+                  value={n_conta}
+                  min={1}
+                  onChange={(e) => setn_conta(e.target.value)}
+                  placeholder="ACCOUNT_..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
                 />
-                <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                  {(() => {
-                    const cardNumber = n_cartao || "";
-                    const firstDigit = cardNumber.charAt(0);
-                    const firstTwoDigits = cardNumber.substring(0, 2);
-                    const firstFourDigits = cardNumber.substring(0, 4);
-
-                    if (firstDigit === "4") {
-                      return (
-                        <i className="fa-brands fa-cc-visa text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else if (
-                      firstDigit === "5" ||
-                      (parseInt(firstFourDigits) >= 2221 &&
-                        parseInt(firstFourDigits) <= 2720)
-                    ) {
-                      return (
-                        <i className="fa-brands fa-cc-mastercard text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else if (
-                      firstTwoDigits === "34" ||
-                      firstTwoDigits === "37"
-                    ) {
-                      return (
-                        <i className="fa-brands fa-cc-amex text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else if (firstDigit === "6") {
-                      return (
-                        <i className="fa-brands fa-cc-discover text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else {
-                      return (
-                        <i className="fa-solid fa-credit-card text-3xl text-finance-primary-dark"></i>
-                      );
-                    }
-                  })()}
-                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Tipo de Cartão
+                  Categoria
                 </label>
                 <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
+                  value={categoria}
+                  onChange={(e) => setCategoria(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
+                >
+                  <option value="">Selecione a Categoria</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                  Tipo
+                </label>
+                <select
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
                 >
-                  <option value="">Selecione o tipo</option>
-                  <option value="debito">Debito</option>
+                  <option value="">Selecione O Tipo</option>
                   <option value="credito">Credito</option>
+                  <option value="debito">Debito</option>
                 </select>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Limite do Cartão
+                  Valor da Transacao
                 </label>
                 <input
                   type="number"
-                  value={limit}
+                  value={quantia}
                   min={1}
-                  onChange={(e) => setLimit(e.target.value)}
+                  onChange={(e) => setQuantia(e.target.value)}
                   placeholder="0,00"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                  Descricao
+                </label>
+                <textarea
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  placeholder="Descricao"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                 />
               </div>
-
               <button
                 type="submit"
                 className="w-[70%] text-center text-white bg-finance-primary hover:bg-finance-primary-dark focus:ring-4 focus:outline-none focus:ring-finance-primary font-medium rounded-lg text-sm items-center px-5 py-2.5"
               >
-                Adicionar Conta
+                Realizar Transacao
               </button>
             </form>
           </div>

@@ -6,48 +6,11 @@ import CreateCardModal from "@/app/components/shared/modals/create-card-modal";
 import { useModal } from "@/app/hooks/modal-controller-hook";
 import { useAuth } from "@/app/contexts/auth/auth-context";
 import { useCardContext } from "@/app/contexts/card-context/card-context";
-const recentContacts = [
-  { name: "Anna", color: "bg-pink-400" },
-  { name: "Jhon", color: "bg-blue-400" },
-  { name: "Arror", color: "bg-green-400" },
-  { name: "Della", color: "bg-yellow-400" },
-  { name: "Carlyn", color: "bg-indigo-400" },
-];
-
-const transactionHistoryData = [
-  {
-    name: "Theresa Webb",
-    id: "39635",
-    status: "Completed",
-    date: "October 31, 2017",
-    amount: "$15,182.32",
-    type: "income",
-  },
-  {
-    name: "Dianne Russell",
-    id: "97174",
-    status: "Pending",
-    date: "April 28, 2016",
-    amount: "$10,075.14",
-    type: "income",
-  },
-  {
-    name: "Guy Hawkins",
-    id: "22739",
-    status: "Pending",
-    date: "May 9, 2014",
-    amount: "-$41,013.11",
-    type: "expense",
-  },
-  {
-    name: "Annette Black",
-    id: "43178",
-    status: "Completed",
-    date: "November 7, 2017",
-    amount: "$7,239.85",
-    type: "income",
-  },
-];
+import CreateTransactionModal from "@/app/components/shared/modals/create-transaction-modal";
+import { useTransactionContext } from "@/app/contexts/transaction-context/transaction-context";
+import type { Transaction } from "@/app/types/transaction-type";
+import { useContactContext } from "@/app/contexts/contact-context/contact-context";
+import CreateContactModal from "@/app/components/shared/modals/create-contact-modal";
 
 const mockBudgetsData = [
   {
@@ -82,6 +45,8 @@ const mockBudgetsData = [
 export default function AccountMainRoute() {
   const { getAccountById } = useAccountContext();
   const { user } = useAuth();
+  const { transactions } = useTransactionContext();
+  const {contacts} = useContactContext();
   const { isOpen, openModal, closeModal } = useModal();
   const params = useParams<{ id: string }>();
   const { cards, removeCard } = useCardContext();
@@ -258,22 +223,22 @@ export default function AccountMainRoute() {
               className={`mt-6 grid ${cards.length > 0 ? "grid-cols-2" : ""} gap-3`}
             >
               <button
-                onClick={openModal}
-                className="btn-gradient w-full py-3 px-3 text-sm font-medium rounded-lg flex items-center justify-center space-x-1.5 animate-wave"
+                onClick={() => openModal("createCard")}
+                className="hover:cursor-pointer btn-gradient w-full py-3 px-3 text-sm font-medium rounded-lg flex items-center justify-center space-x-1.5 animate-wave"
               >
                 <i className="fa-solid fa-plus text-xs"></i>
                 <span>Adicionar Cartão</span>
               </button>
               <CreateCardModal
-                isOpen={isOpen}
-                onClose={closeModal}
+                isOpen={isOpen("createCard")}
+                onClose={() => closeModal("createCard")}
               ></CreateCardModal>
               {cards.length > 0 ? (
                 <button
                   onClick={() => {
                     removeCard(selectedCard.id || "", account.id || "0");
                   }}
-                  className="w-full py-3 px-3 text-sm font-medium text-red-600 bg-red-100 rounded-lg hover:bg-red-200/70 transition-colors duration-150 flex items-center justify-center space-x-1.5"
+                  className="hover:cursor-pointer w-full py-3 px-3 text-sm font-medium text-red-600 bg-red-100 rounded-lg hover:bg-red-200/70 transition-colors duration-150 flex items-center justify-center space-x-1.5"
                 >
                   <i className="fa-solid fa-trash-alt text-xs"></i>
                   <span>Remover Cartão</span>
@@ -373,10 +338,17 @@ export default function AccountMainRoute() {
               })}
             </p>
             <div className="grid sm:grid-cols-3 gap-2.5">
-              <button className="btn-gradient col-span-full sm:col-span-1 py-3 px-4 text-sm font-medium rounded-lg flex items-center justify-center space-x-2 animate-wave">
+              <button
+                onClick={() => openModal("createTransaction")}
+                className="hover:cursor-pointer btn-gradient col-span-full sm:col-span-1 py-3 px-4 text-sm font-medium rounded-lg flex items-center justify-center space-x-2 animate-wave"
+              >
                 <i className="fa-solid fa-paper-plane text-xs"></i>
                 <span>Enviar</span>
               </button>
+              <CreateTransactionModal
+                isOpen={isOpen("createTransaction")}
+                onClose={() => closeModal("createTransaction")}
+              ></CreateTransactionModal>
               <button className="py-3 px-4 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200/70 transition-colors duration-150 flex items-center justify-center space-x-2">
                 <i className="fa-solid fa-arrow-down-to-bracket text-xs"></i>
                 <span>Requisitar</span>
@@ -399,19 +371,20 @@ export default function AccountMainRoute() {
               </a>
             </div>
             <div className="flex items-center space-x-3.5 overflow-x-auto pb-2 -mx-1 px-1">
-              <button
+              <button onClick={() => openModal("contactModal")}
                 aria-label="Add new contact"
                 className=" hover:cursor-pointer -mt-[13px] flex-shrink-0 flex flex-col items-center justify-center w-16 h-16 bg-slate-100 hover:bg-slate-200/70 rounded-full text-[var(--color-finance-primary)] transition-all duration-150 group"
               >
                 <i className="fa-solid fa-plus text-xl transition-transform duration-150 group-hover:scale-110"></i>
               </button>
-              {recentContacts.map((contact) => (
+              <CreateContactModal isOpen={isOpen("contactModal")} onClose={()=>closeModal("contactModal")}></CreateContactModal>
+              {contacts.length > 0 ? (contacts.slice(0,4).map((contact) => (
                 <div
                   key={contact.name}
                   className="flex-shrink-0 text-center w-16"
                 >
                   <div
-                    className={`w-14 h-14 mx-auto rounded-full ${contact.color} flex items-center justify-center text-white font-semibold text-xl mb-1.5 shadow-md ring-2 ring-white/80`}
+                    className={`hover:cursor-pointer hover:bg-finance-purple-dark w-14 h-14 mx-auto rounded-full bg-finance-purple flex items-center justify-center text-white font-semibold text-xl mb-1.5 shadow-md ring-2 ring-white/80`}
                   >
                     {contact.name.substring(0, 1)}
                   </div>
@@ -419,7 +392,24 @@ export default function AccountMainRoute() {
                     {contact.name}
                   </span>
                 </div>
-              ))}
+              ))) : ( 
+                <div className="text-center text-gray-500 py-10 mx-auto">
+                  <i className="fa-solid fa-address-book text-4xl mb-3"></i>
+                  <p className="text-sm">Nenhum contato cadastrado.</p>
+                </div>
+              )}
+              {contacts.length >4 ?(
+                <div className="flex-shrink-0 text-center w-16">
+                  <div className="w-14 h-14 mx-auto rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-semibold text-xl mb-1.5 shadow-md ring-2 ring-white/80">
+                    +{contacts.length - 4}
+                  </div>
+                  <span className="text-xs text-gray-600/90 truncate w-full block">
+                    Mais contatos
+                  </span>
+                </div>
+              ):(
+                <></>
+              )}
             </div>
           </div>
 
@@ -432,7 +422,7 @@ export default function AccountMainRoute() {
                 <i className="fa-solid fa-ellipsis text-base"></i>
               </button>
             </div>
-            <div className="overflow-x-auto h-[470px]">
+            <div className="overflow-x-auto h-[auto]">
               <table className="w-full text-sm text-left">
                 <thead className="text-xs text-gray-500/80 uppercase sr-only md:not-sr-only">
                   <tr>
@@ -457,54 +447,76 @@ export default function AccountMainRoute() {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactionHistoryData.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="border-b border-gray-200/60 last:border-b-0 hover:bg-gray-50/50 transition-colors duration-100"
-                    >
-                      <td className="py-4 px-2 whitespace-nowrap">
-                        <div className="flex items-center space-x-3">
-                          <div
-                            className={`flex-shrink-0 w-9 h-9 rounded-lg ${item.status === "Completed" ? "bg-green-100" : "bg-yellow-100"} flex items-center justify-center`}
-                          >
-                            {item.status === "Completed" ? (
-                              <i className="fa-solid fa-check text-green-600"></i>
-                            ) : (
-                              <i className="fa-solid fa-hourglass-half text-yellow-600"></i>
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-semibold text-gray-800">
-                              {item.name}
-                            </div>
-                            <div className="text-xs text-gray-500/90">
-                              ID: {item.id}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-2 whitespace-nowrap text-center">
-                        <span
-                          className={`px-2.5 py-1 inline-block text-xs leading-tight font-semibold rounded-md ${
-                            item.status === "Completed"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-yellow-100 text-yellow-700"
-                          }`}
-                        >
-                          {item.status}
-                        </span>
-                      </td>
-                      <td className="py-4 px-2 whitespace-nowrap text-gray-600/90">
-                        {item.date}
-                      </td>
-                      <td
-                        className={`py-4 px-2 whitespace-nowrap font-semibold text-right ${item.type === "income" ? "text-green-600" : "text-red-600"}`}
+                  {transactions.length > 0 ? (
+                    transactions.map((item: Transaction) => (
+                      <tr
+                        key={item.id}
+                        className="border-b border-gray-200/60 last:border-b-0 hover:bg-gray-50/50 transition-colors duration-100"
                       >
-                        {item.amount.startsWith("-") ? "" : "+"}
-                        {item.amount.replace("$-", "-$")}
-                      </td>
-                    </tr>
-                  ))}
+                        <td className="py-4 px-2 whitespace-nowrap">
+                          <div className="flex items-center space-x-3">
+                            <div
+                              className={`flex-shrink-0 w-13 h-13 rounded-lg ${item.status === "completed" ? "bg-green-100" : "bg-yellow-100"} flex items-center justify-center`}
+                            >
+                              {item.status === "completed" ? (
+                                <i className="fa-solid fa-check text-green-600"></i>
+                              ) : (
+                                <i className="fa-solid fa-hourglass-half text-yellow-600"></i>
+                              )}
+                            </div>
+                            <div>
+                              <div className="font-semibold text-gray-800">
+                                {(item.sourceAccount as any).id === account.id
+                                  ? (item.destinationAccount as any).id
+                                  : (item.sourceAccount as any).id}
+                              </div>
+                              <div className="text-xs text-gray-500/90">
+                                ID: {item.id}
+                              </div>
+                              <div className="text-xs text-gray-500/90 mt-0.5">
+                                Tipo:{" "}
+                                <span className="capitalize">
+                                  {item.type ? item.type : "Desconhecido"}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-2 whitespace-nowrap text-center">
+                          <span
+                            className={`px-2.5 py-1 inline-block text-xs leading-tight font-semibold rounded-md ${
+                              item.status === "Completed"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="py-4 px-2 whitespace-nowrap text-gray-600/90">
+                          {item.date
+                            ? new Date(item.date).toLocaleDateString("pt-BR", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              })
+                            : "N/A"}
+                        </td>
+                        <td
+                          className={`py-4 px-2 whitespace-nowrap font-semibold text-right ${(item.sourceAccount as any).id !== account.id ? "text-green-600" : "text-red-600"}`}
+                        >
+                          {(item.destinationAccount as any).id === account.id
+                            ? `+ R$ ${Number(item.amount).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                            : `- R$ ${Number(item.amount).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-500 py-10">
+                      <i className="fa-solid fa-right-left text-4xl mb-3"></i>
+                      <p className="text-sm">Nenhuma transacao cadastrada.</p>
+                    </div>
+                  )}
                 </tbody>
               </table>
             </div>

@@ -84,11 +84,21 @@ export abstract class BaseService<T extends ObjectLiteral> {
     joins?: string[],
   ): Promise<T[] | ApiError> {
     try {
-      const whereCondition =
-        key === "user" ? { user: { id } } : { [key]: { id } };
+      let whereCondition: any;
+
+      if (key === "transaction") {
+        whereCondition = [
+          { sourceAccount: { id } },
+          { destinationAccount: { id } }
+        ];
+      } else if (key === "user") {
+        whereCondition = { user: { id } };
+      } else {
+        whereCondition = { [key]: { id } };
+      }
 
       const result = await this.repository.find({
-        where: whereCondition as any,
+        where: whereCondition,
         relations: joins || [],
       });
 

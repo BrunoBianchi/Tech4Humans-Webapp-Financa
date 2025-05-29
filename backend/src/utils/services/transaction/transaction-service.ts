@@ -2,7 +2,6 @@ import { BaseService } from "../../class/base-service-class";
 import { ApiError } from "../../class/errors-class";
 import { Account } from "../../types/account-type";
 import { transaction } from "../../types/transaction-type";
-import { User } from "../../types/user-type";
 import { accountService } from "../account/account-service";
 import { notificationService } from "../notification/notification-service";
 class TransactionService extends BaseService<transaction> {

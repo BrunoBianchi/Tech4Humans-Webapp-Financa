@@ -3,6 +3,7 @@ import { Account } from "./Account-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
 import { Category } from "./Category-entity";
 import { IsPositive } from "class-validator";
+import { CardEnum } from "../../utils/enums/card-enum";
 @Entity()
 export class Transaction extends BaseEntity {
   @Column()
@@ -12,15 +13,18 @@ export class Transaction extends BaseEntity {
     this.date = new Date();
   }
 
-  @Column()
+  @Column({nullable: false})
   @IsPositive()
   amount!: number;
 
-  @Column()
+  @Column({nullable:true})
   description?: string;
 
   @ManyToOne(() => Account, { nullable: false })
   sourceAccount!: Account;
+
+  @Column({ type: "enum", enum: CardEnum,nullable:false })
+  type!:string
 
   @Column({ default: "pending" })
   status!: string;
@@ -28,6 +32,6 @@ export class Transaction extends BaseEntity {
   @ManyToOne(() => Account, { nullable: false })
   destinationAccount!: Account;
 
-  @ManyToOne(() => Category, (category) => category.transaction)
+  @ManyToOne(() => Category, (category) => category.transaction,{nullable:true})
   category!: Category;
 }

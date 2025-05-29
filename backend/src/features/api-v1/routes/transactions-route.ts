@@ -1,4 +1,5 @@
 import { isUserOwner } from "../../../middlewares/user-own-account-middleware";
+import { Get } from "../../../utils/decorators/router/get-decorator";
 import { Post } from "../../../utils/decorators/router/post-decorator";
 import { Router } from "../../../utils/decorators/router/router-decorator";
 import { transactionService } from "../../../utils/services/transaction/transaction-service";
@@ -23,6 +24,10 @@ export class TransactionRoute {
         type: "number",
       },
       {
+        name:"type",
+        type: "string",
+      },
+      {
         name: "description",
         type: "string",
       },
@@ -32,6 +37,7 @@ export class TransactionRoute {
   public async createTransactionRoute(params: {
     account_id: string;
     amount: number;
+    type:string;
     description: string;
     destination: string;
   }) {
@@ -42,6 +48,7 @@ export class TransactionRoute {
       {
         amount: params.amount,
         description: params.description,
+        type:params.type,
         date: new Date(),
       } as transaction,
       [
@@ -55,5 +62,22 @@ export class TransactionRoute {
       description: transaction.description,
       date: transaction.date,
     };
+  }
+
+  @Get({
+    path:`/account/:account_id/transactions`,
+    params:[
+      {
+        name: "account_id",
+        type: "string",
+        header: true,
+      }
+    ],
+    permissions: [isUserOwner],
+  })
+  public async getTransactionsByAccountRoute(params: {
+    account_id: string;
+  }) {
+    return await transactionService.getAllWithJoin("transaction",params.account_id,["sourceAccount","destinationAccount"]);
   }
 }

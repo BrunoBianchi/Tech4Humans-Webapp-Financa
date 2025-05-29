@@ -209,13 +209,13 @@ export default function HomeRoute() {
               )}
             </div>
             <button
-              onClick={openModal}
+              onClick={() => openModal("createAccount")}
               className="w-full mt-3 py-2.5 px-4 btn-gradient rounded-lg text-sm font-medium text-white"
             >
               <i className="fa-solid fa-plus mr-1.5"></i>
               Adicionar Conta
             </button>
-            <CreateAccountModal isOpen={isOpen} onClose={closeModal} />
+            <CreateAccountModal isOpen={isOpen("createAccount")} onClose={() => closeModal("createAccount")} />
           </div>
         </div>
 
