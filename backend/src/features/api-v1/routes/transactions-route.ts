@@ -1,3 +1,4 @@
+import { Category } from "../../../database/entities/Category-entity";
 import { isUserOwner } from "../../../middlewares/user-own-account-middleware";
 import { Get } from "../../../utils/decorators/router/get-decorator";
 import { Post } from "../../../utils/decorators/router/post-decorator";
@@ -28,6 +29,10 @@ export class TransactionRoute {
         type: "string",
       },
       {
+        name:'category',
+        type:'string',
+      },
+      {
         name: "description",
         type: "string",
       },
@@ -38,8 +43,10 @@ export class TransactionRoute {
     account_id: string;
     amount: number;
     type: string;
+    category:string;
     description: string;
     destination: string;
+    
   }) {
     const transaction: Omit<
       transaction,
@@ -54,6 +61,7 @@ export class TransactionRoute {
       [
         { name: "sourceAccount", id: params.account_id },
         { name: "destinationAccount", id: params.destination },
+        {name:'category',id:params.category}
       ],
     );
     return {
@@ -61,6 +69,7 @@ export class TransactionRoute {
       amount: transaction.amount,
       description: transaction.description,
       date: transaction.date,
+      category:transaction.category.id,
     };
   }
 
@@ -79,7 +88,7 @@ export class TransactionRoute {
     return await transactionService.getAllWithJoin(
       "transaction",
       params.account_id,
-      ["sourceAccount", "destinationAccount"],
+      ["sourceAccount", "destinationAccount","category"],
     );
   }
 }

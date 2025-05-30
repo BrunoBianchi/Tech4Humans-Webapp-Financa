@@ -4,11 +4,11 @@ export function useModal() {
   const [openModals, setOpenModals] = useState<Set<string>>(new Set());
 
   const openModal = (modalId: string) => {
-    setOpenModals(prev => new Set(prev).add(modalId));
+    setOpenModals((prev) => new Set(prev).add(modalId));
   };
 
   const closeModal = (modalId: string) => {
-    setOpenModals(prev => {
+    setOpenModals((prev) => {
       const newSet = new Set(prev);
       newSet.delete(modalId);
       return newSet;
@@ -16,7 +16,7 @@ export function useModal() {
   };
 
   const toggleModal = (modalId: string) => {
-    setOpenModals(prev => {
+    setOpenModals((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(modalId)) {
         newSet.delete(modalId);

@@ -9,20 +9,16 @@ import { useCookies } from "react-cookie";
 import { type Contact } from "@/app/types/contact-type";
 import { ContactService } from "@/app/services/contact-service";
 import { useParams } from "react-router";
-import { useToast } from "../toast-context/toast-context";
+import { useToast } from "./toast-context";
 
 type ContactContextType = {
- contacts: Contact[];
-  addContact: (
-    Contact: Contact,
-  ) => void;
+  contacts: Contact[];
+  addContact: (Contact: Contact) => void;
   loading: boolean;
   getContactById: (id: string) => Contact | null;
 };
 
-const ContactContext = createContext<ContactContextType | undefined>(
-  undefined,
-);
+const ContactContext = createContext<ContactContextType | undefined>(undefined);
 
 export const ContactProvider = ({ children }: { children: ReactNode }) => {
   const { addToast } = useToast();
@@ -35,11 +31,8 @@ export const ContactProvider = ({ children }: { children: ReactNode }) => {
     checkContactStatus();
   }, []);
 
-  const addContact = (
-    Contact: Contact,
-  ) => {
-    ContactService
-      .create(Contact, cookies.token, params.id || "")
+  const addContact = (Contact: Contact) => {
+    ContactService.create(Contact, cookies.token, params.id || "")
       .then((Contact: Contact) => {
         setContacts((prev) => [...prev, Contact]);
       })
@@ -62,10 +55,7 @@ export const ContactProvider = ({ children }: { children: ReactNode }) => {
 
   const getContactById = (id: string) => {
     setLoading(true);
-    return (
-     contacts.find((Contact: Contact) => Contact.id === id) ||
-      null
-    );
+    return contacts.find((Contact: Contact) => Contact.id === id) || null;
   };
 
   return (

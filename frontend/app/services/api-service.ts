@@ -10,7 +10,7 @@ class ApiService {
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
-    token?: string, // <- token opcional
+    token?: string,
   ): Promise<T> {
     const config: RequestInit = {
       headers: {
@@ -22,15 +22,14 @@ class ApiService {
     };
 
     const response = await fetch(`${this.baseURL}${endpoint}`, config);
-
     if (!response.ok) {
       const error = await response
         .json()
         .catch(() => ({ message: "Network error" }));
       throw new Error(error.message || "Something went wrong");
+    } else {
+      return response.json();
     }
-
-    return response.json();
   }
 
   async get<T>(endpoint: string, token?: string): Promise<T> {

@@ -5,6 +5,8 @@ import { TransactionRoute } from "./routes/transactions-route";
 import { cardRouter } from "./routes/card-route";
 import { ContactRoute } from "./routes/contact-route";
 import { BudgetsRoute } from "./routes/budgets-route";
+import { AiRoute } from "./routes/ai-route";
+import { CategoryRoute } from "./routes/category-route";
 
 @Controller({
   name: "api-v1",
@@ -14,6 +16,8 @@ import { BudgetsRoute } from "./routes/budgets-route";
     cardRouter,
     ContactRoute,
     BudgetsRoute,
+    AiRoute,
+    CategoryRoute
   ],
   path: "/api/v1",
   permissions: [auth],

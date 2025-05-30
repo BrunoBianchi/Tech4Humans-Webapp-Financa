@@ -12,13 +12,28 @@ body {
     margin: 0;
   }
 }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease;
+}
 @theme {
   --color-finance-primary: #453ee3;
   --color-finance-primary-dark: #3a34bf;
   --color-finance-primary-light: #4b43fa;
   --color-finance-bg: #eff1f3;
-  --color-finance-purple :#803ee3;
-   --color-finance-purple-dark :#6d34c2;
+  --color-finance-purple: #803ee3;
+  --color-finance-purple-dark: #6d34c2;
+  --color-finance-out:#e3493e;
+  --color-finance-in:#3ee357;
   --color-gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --color-gradient-blue: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --color-gradient-teal: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useAccountContext } from "@/app/contexts/account-context/account-context";
+import { useAccountContext } from "@/app/contexts/account-context";
 interface CreateAccountModalProps {
   isOpen: boolean;
   onClose: () => void;

@@ -1,36 +1,48 @@
-import { useCardContext } from "@/app/contexts/card-context/card-context";
+import { useTransactionContext } from "@/app/contexts/transaction-context";
+import type { Category } from "@/app/types/category-type";
+import type { Contact } from "@/app/types/contact-type";
 import { useState } from "react";
 import { useParams } from "react-router";
+import SelectCategory from "../select-category";
 
-interface CreateCardModalProps {
+interface CreateFastTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  contact: Contact;
 }
 
-export default function CreateCardModal({
+export default function CreateFastTransactionModal({
   isOpen,
   onClose,
-}: CreateCardModalProps) {
-  const [n_cartao, setn_cartao] = useState("");
-  const [type, setType] = useState("");
-  const [limit, setLimit] = useState("");
-  const { addCard } = useCardContext();
+  contact,
+}: CreateFastTransactionModalProps) {
+  const [tipo, setTipo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [selectedTransactionCategory, setSelectedTransactionCategory] =
+    useState<Category | null>(null);
+  const [quantia, setQuantia] = useState("");
   const params = useParams<{ id: string }>();
+  const { addTransaction } = useTransactionContext();
   if (!isOpen) return null;
-
+  const handleCategoryUpdate = (category: Category | null) => {
+    setSelectedTransactionCategory(category);
+    console.log("Category selected in form:", category);
+  };
   function handleSubmit(e: React.FormEvent) {
+    console.log(contact);
     e.preventDefault();
-    addCard(
+    addTransaction(
       {
-        card_number: n_cartao,
-        card_type: type as "credito" | "debito",
-        limit: Number(limit),
+        amount: Number(quantia),
+        category: selectedTransactionCategory?.id,
+        description: descricao,
+        sourceAccount: params.id || "",
+        destinationAccount: contact.destination_account_id,
+        type: tipo,
       },
-      params.id || "0",
+      params.id || "",
+      contact.destination_account_id || "",
     );
-    setn_cartao("");
-    setType("");
-    setLimit("");
   }
 
   return (
@@ -79,98 +91,69 @@ export default function CreateCardModal({
             </svg>
 
             <h3 className="mb-5 text-lg font-normal text-gray-700">
-              Adicionar Novo Cartão
+              Transacao Rapida para {contact.name}
             </h3>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                Numero do Cartão
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={n_cartao}
-                  onChange={(e) => setn_cartao(e.target.value)}
-                  autoComplete="cc-number"
-                  inputMode="numeric"
-                  className="bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary block w-full  "
-                  placeholder="4242 4242 4242 4242"
-                  pattern="^4[0-9]{12}(?:[0-9]{3})?$"
-                  required
-                />
-                <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                  {(() => {
-                    const cardNumber = n_cartao || "";
-                    const firstDigit = cardNumber.charAt(0);
-                    const firstTwoDigits = cardNumber.substring(0, 2);
-                    const firstFourDigits = cardNumber.substring(0, 4);
+              <div>
 
-                    if (firstDigit === "4") {
-                      return (
-                        <i className="fa-brands fa-cc-visa text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else if (
-                      firstDigit === "5" ||
-                      (parseInt(firstFourDigits) >= 2221 &&
-                        parseInt(firstFourDigits) <= 2720)
-                    ) {
-                      return (
-                        <i className="fa-brands fa-cc-mastercard text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else if (
-                      firstTwoDigits === "34" ||
-                      firstTwoDigits === "37"
-                    ) {
-                      return (
-                        <i className="fa-brands fa-cc-amex text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else if (firstDigit === "6") {
-                      return (
-                        <i className="fa-brands fa-cc-discover text-3xl text-finance-primary-dark"></i>
-                      );
-                    } else {
-                      return (
-                        <i className="fa-solid fa-credit-card text-3xl text-finance-primary-dark"></i>
-                      );
-                    }
-                  })()}
-                </div>
+                <SelectCategory
+                  onCategorySelect={handleCategoryUpdate}
+                  label="Escolha a Categoria da Transação"
+                />
+                {selectedTransactionCategory && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    Categoria Atual: {selectedTransactionCategory.name} (ID:{" "}
+                    {selectedTransactionCategory.id})
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Tipo de Cartão
+                  Tipo
                 </label>
                 <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
                 >
                   <option value="">Selecione o tipo</option>
-                  <option value="debito">Debito</option>
                   <option value="credito">Credito</option>
+                  <option value="debito">Debito</option>
                 </select>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Limite do Cartão
+                  Valor da Transacao
                 </label>
                 <input
                   type="number"
-                  value={limit}
+                  value={quantia}
                   min={1}
-                  onChange={(e) => setLimit(e.target.value)}
+                  pattern="[1-9]+"
+                  onChange={(e) => setQuantia(e.target.value)}
                   placeholder="0,00"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                  Descricao
+                </label>
+                <textarea
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  placeholder="Descricao"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                 />
               </div>
-
               <button
                 type="submit"
                 className="w-[70%] text-center text-white bg-finance-primary hover:bg-finance-primary-dark focus:ring-4 focus:outline-none focus:ring-finance-primary font-medium rounded-lg text-sm items-center px-5 py-2.5"
               >
-                Adicionar Conta
+                Enviar para {contact.name}
               </button>
             </form>
           </div>

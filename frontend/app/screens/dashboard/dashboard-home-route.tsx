@@ -1,58 +1,35 @@
-import { useState } from "react";
-import { useAuth } from "@/app/contexts/auth/auth-context";
-import { useAccountContext } from "@/app/contexts/account-context/account-context";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/app/contexts/auth-context";
+import { useAccountContext } from "@/app/contexts/account-context";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import type { Direction } from "@mui/x-charts";
-import SmartAdviceCard from "@/app/components/shared/advice-ai-card";
+import SmartAdviceCard from "@/app/components/ui/advice-ai-card";
 import { useNavigate } from "react-router";
-import CreateAccountModal from "@/app/components/shared/modals/create-account-modal";
+import CreateAccountModal from "@/app/components/ui/modals/create-account-modal";
 import { useModal } from "@/app/hooks/modal-controller-hook";
 import type { Account } from "@/app/types/account-type";
-
+import FilterModal, {
+  type FilterOption,
+} from "@/app/components/ui/modals/filter-modal";
+import { useDynamicFilter } from "@/app/hooks/filter-hook";
+import { useAiInteraction } from "@/app/hooks/ai-hook";
+import { useCategories } from "@/app/contexts/select-context";
 export default function HomeRoute() {
   const { isOpen, openModal, closeModal } = useModal();
   const { user } = useAuth();
   const { accounts } = useAccountContext();
   const [showAllAccounts, setShowAllAccounts] = useState(false);
   const [search, setSearch] = useState("");
-
-  const filteredAccounts = accounts.filter(
-    (a: Account) =>
-      a.bank.toLowerCase().includes(search.toLowerCase()) ||
-      (a.type && a.type.toLowerCase().includes(search.toLowerCase())) ||
-      (a.id && a.id.toString().toLowerCase().includes(search.toLowerCase())),
-  );
-
-  const visibleAccounts = showAllAccounts
-    ? filteredAccounts
-    : filteredAccounts.slice(0, 3);
-  const remainingAccountsCount = filteredAccounts.length - 3;
-
-  const navigate = useNavigate();
-
-  const pieData = [
-    {
-      id: 0,
-      value: accounts.filter((a: Account) => a.type === "corrente").length,
-      label: "Corrente",
-      color: "#453ee3",
-    },
-    {
-      id: 1,
-      value: accounts.filter((a: Account) => a.type === "poupanca").length,
-      label: "Poupança",
-      color: "#fbbf24",
-    },
-  ];
-
+  const [accountFilterModalOpen, setAccountFilterModalOpen] = useState(false);
+  const {response, isLoading, error, sendMessage} =  useAiInteraction();
+  const {categories, addCategory} = useCategories();
   const incomingTransactions = accounts
     .flatMap((a: any) => a.incomingTransactions || [])
     .filter((t) => t.amount > 0);
   const outcomingTransactions = accounts
-    .flatMap((a: any) => a.outcomingTransactions || [])
+    .flatMap((a: any) => a.outgoingTransactions || [])
     .filter((t) => t.amount > 0);
-
   const totalIncoming = incomingTransactions.reduce(
     (acc, curr) => acc + curr.amount,
     0,
@@ -73,43 +50,164 @@ export default function HomeRoute() {
     });
   };
 
-  const exampleSpendingCategories = [
+  useEffect(() => {
+    accounts.map((account: Account) => { 
+      console.log(account)
+    })
+    let prompt = `Olá! Sou ${user?.name?.split(" ")[0] || 'um usuário'}. `;
+    if (accounts && accounts.length > 0) {
+      prompt += `Tenho ${accounts.length} conta(s) com um saldo total de R$ ${formatCurrency(totalBalance)}. `;
+      prompt += `Recentemente, tive R$ ${formatCurrency(totalIncoming)} em entradas e R$ ${formatCurrency(totalOutcoming)} em saídas. `;
+      prompt += `Aqui estão os detalhes das minhas contas: ${JSON.stringify(accounts.map(acc => ({ bank: acc.bank, type: acc.type, balance: acc.balance
+      })))}. `;
+      prompt += `Minhas transações recentes incluem: ${JSON.stringify(outcomingTransactions.map((transaction)=>{
+        return {
+          amount: transaction.amount,
+          description: transaction.description,
+          date: transaction.date,
+          category: transaction.category?.name || "Sem categoria",
+        };
+      }))}. `;
+    } else {
+      prompt += `Ainda não tenho contas cadastradas. `;
+    }
+    prompt += "Poderia me dar uma visão geral e um conselho financeiro baseado nesses dados?";
+    console.log(prompt)
+    if (user && accounts && accounts.length > 0 && !isLoading) { 
+        sendMessage(prompt);
+    }
+  }, [accounts, user, sendMessage, totalIncoming, totalOutcoming, totalBalance]); 
+
+  const searchedAccounts = accounts.filter(
+    (a: Account) =>
+      a.bank.toLowerCase().includes(search.toLowerCase()) ||
+      (a.type && a.type.toLowerCase().includes(search.toLowerCase())) ||
+      (a.id && a.id.toString().toLowerCase().includes(search.toLowerCase())),
+  );
+
+  const accountModalFilters: Record<
+    string,
+    (item: Account, filterKey: string, extra: any) => boolean
+  > = {
+    corrente: (a) => a.type?.toLowerCase() === "corrente",
+    poupanca: (a) => a.type?.toLowerCase() === "poupanca",
+  };
+
+  const {
+    data: filteredAndSortedAccounts,
+    setFilter: setAccountModalFilter,
+    filter: currentAccountModalFilter,
+    setSort: setAccountSort,
+    sort: currentAccountSort,
+  } = useDynamicFilter<Account>(
+    searchedAccounts,
+    accountModalFilters,
+    "all",
+    (account) => account.bank.toLowerCase(),
+  );
+
+  const accountFilterModalOptions: FilterOption[] = [
+    { label: "Todas as Contas", value: "all" },
+    { label: "Apenas Corrente", value: "corrente" },
+    { label: "Apenas Poupança", value: "poupanca" },
+    { label: "Ordenar por Banco (A-Z)", value: "az" },
+    { label: "Ordenar por Banco (Z-A)", value: "za" },
+  ];
+
+  const visibleAccounts = showAllAccounts
+    ? filteredAndSortedAccounts
+    : filteredAndSortedAccounts.slice(0, 3);
+  const remainingAccountsCount =
+    filteredAndSortedAccounts.length - visibleAccounts.length;
+
+  const navigate = useNavigate();
+  const pieData = [
     {
-      id: "cat1",
-      name: "Contas de Casa",
-      amount: Math.max(0, totalOutcoming * 0.45),
-      color: "bg-yellow-400",
+      id: 0,
+      value: accounts.filter((a: Account) => a.type === "corrente").length,
+      label: "Corrente",
+      color: "#453ee3",
     },
     {
-      id: "cat2",
-      name: "Alimentação",
-      amount: Math.max(0, totalOutcoming * 0.25),
-      color: "bg-sky-400",
-    },
-    {
-      id: "cat3",
-      name: "Transporte",
-      amount: Math.max(0, totalOutcoming * 0.15),
-      color: "bg-fuchsia-400",
+      id: 1,
+      value: accounts.filter((a: Account) => a.type === "poupanca").length,
+      label: "Poupança",
+      color: "#fbbf24",
     },
   ];
 
-  const sumExampleCategories = exampleSpendingCategories.reduce(
+  const availableColors = [
+    "bg-red-400",
+    "bg-orange-400",
+    "bg-amber-400",
+    "bg-lime-400",
+    "bg-green-400",
+    "bg-emerald-400",
+    "bg-teal-400",
+    "bg-cyan-400",
+    "bg-sky-400", // Existing example color
+    "bg-blue-400",
+    "bg-indigo-400",
+    "bg-violet-400",
+    "bg-purple-400",
+    "bg-fuchsia-400", // Existing example color
+    "bg-pink-400",
+    "bg-rose-400",
+    "bg-yellow-400", // Existing example color
+  ];
+
+  let colorIndex = 0;
+  const assignedColors = new Set();
+
+  const getNextColor = () => {
+    let attempts = 0;
+    while (attempts < availableColors.length) {
+      const color = availableColors[colorIndex % availableColors.length];
+      colorIndex++;
+      if (!assignedColors.has(color)) {
+        assignedColors.add(color);
+        return color;
+      }
+      attempts++;
+    }
+    // Fallback if all colors are used (should be rare with enough colors)
+    return availableColors[Math.floor(Math.random() * availableColors.length)];
+  };
+  
+  let displaySpendingCategories = categories
+  ? categories.map((cat) => {
+      const categoryTransactions = outcomingTransactions.filter(
+        (t) => t.category?.id === cat.id || t.category?.name === cat.name,
+      );
+      const amount = categoryTransactions.reduce(
+        (sum, t) => sum + t.amount,
+        0,
+      );
+      return {
+        id: cat.id || cat.name, // Assuming category has an id or unique name
+        name: cat.name,
+        amount: amount,
+        color: getNextColor(), // Assign a color
+      };
+    }).filter(item => item.amount > 0) // Filter out categories with no spending
+  : [];
+
+  const sumUserCategories = displaySpendingCategories.reduce(
     (sum, cat) => sum + cat.amount,
     0,
   );
 
-  let displaySpendingCategories = [...exampleSpendingCategories];
-
-  if (totalOutcoming > sumExampleCategories) {
+  if (totalOutcoming > sumUserCategories) {
     displaySpendingCategories.push({
-      id: "cat4",
+      id: "cat-outros",
       name: "Outros",
-      amount: totalOutcoming - sumExampleCategories,
-      color: "bg-slate-300",
+      amount: totalOutcoming - sumUserCategories,
+      color: "bg-slate-300", // Default color for "Outros"
     });
-  } else if (sumExampleCategories > totalOutcoming && totalOutcoming > 0) {
   }
+  // Sort by amount descending to show largest categories first
+  displaySpendingCategories.sort((a, b) => b.amount - a.amount);
+
 
   return (
     <div className="page-container py-6 md:py-8">
@@ -123,7 +221,7 @@ export default function HomeRoute() {
       </div>
 
       <div className="mb-6 md:mb-8">
-        <SmartAdviceCard />
+        <SmartAdviceCard response={response} isLoading={isLoading} error={error} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
@@ -156,11 +254,33 @@ export default function HomeRoute() {
                   onChange={(e) => setSearch(e.target.value)}
                   className="px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-finance-primary focus:border-finance-primary transition-all w-full flex-grow sm:w-44"
                 />
-                <button className="p-2 text-gray-500 hover:text-finance-primary hover:bg-gray-100 rounded-md transition-colors flex-shrink-0">
+                <button
+                  onClick={() => setAccountFilterModalOpen(true)}
+                  className="p-2 text-gray-500 hover:text-finance-primary hover:bg-gray-100 rounded-md transition-colors flex-shrink-0"
+                  aria-label="Filtrar contas"
+                >
                   <i className="fa-solid fa-filter"></i>
                 </button>
               </div>
             </div>
+
+            <FilterModal
+              isOpen={accountFilterModalOpen}
+              onClose={() => setAccountFilterModalOpen(false)}
+              title="Filtrar Contas"
+              options={accountFilterModalOptions}
+              selected={currentAccountSort || currentAccountModalFilter}
+              onSelect={(value) => {
+                if (value === "az" || value === "za") {
+                  setAccountModalFilter("all");
+                  setAccountSort(value as "az" | "za");
+                } else {
+                  setAccountSort(null);
+                  setAccountModalFilter(value);
+                }
+                setAccountFilterModalOpen(false);
+              }}
+            />
 
             <div className="space-y-3">
               {visibleAccounts.length > 0 ? (
@@ -193,11 +313,15 @@ export default function HomeRoute() {
                 ))
               ) : (
                 <p className="text-sm text-gray-500 py-3 text-center">
-                  Nenhuma conta encontrada.
+                  {search ||
+                  currentAccountModalFilter !== "all" ||
+                  currentAccountSort
+                    ? "Nenhuma conta encontrada para os filtros aplicados."
+                    : "Nenhuma conta cadastrada."}
                 </p>
               )}
 
-              {filteredAccounts.length > 3 && (
+              {filteredAndSortedAccounts.length > 3 && (
                 <button
                   onClick={() => setShowAllAccounts(!showAllAccounts)}
                   className="w-full mt-4 py-2.5 px-4 btn-gradient rounded-lg text-sm font-medium text-white"
@@ -215,7 +339,10 @@ export default function HomeRoute() {
               <i className="fa-solid fa-plus mr-1.5"></i>
               Adicionar Conta
             </button>
-            <CreateAccountModal isOpen={isOpen("createAccount")} onClose={() => closeModal("createAccount")} />
+            <CreateAccountModal
+              isOpen={isOpen("createAccount")}
+              onClose={() => closeModal("createAccount")}
+            />
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useContext,
   useEffect,
@@ -8,7 +8,7 @@ import React, {
 import { useCookies } from "react-cookie";
 import { accountService } from "@/app/services/account-service";
 import type { Account } from "@/app/types/account-type";
-import { useToast } from "../toast-context/toast-context";
+import { useToast } from "./toast-context";
 type AccountContextType = {
   accounts: Account[];
   addAccount: (account: Account) => void;

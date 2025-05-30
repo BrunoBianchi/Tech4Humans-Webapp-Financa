@@ -1,8 +1,10 @@
 import { BaseService } from "../../class/base-service-class";
 import { ApiError } from "../../class/errors-class";
 import { Account } from "../../types/account-type";
+import { CategoryType } from "../../types/category-type";
 import { transaction } from "../../types/transaction-type";
 import { accountService } from "../account/account-service";
+import { categoryService } from "../category/category-service";
 import { notificationService } from "../notification/notification-service";
 class TransactionService extends BaseService<transaction> {
   public async create(
@@ -15,8 +17,15 @@ class TransactionService extends BaseService<transaction> {
     const destinationAccount_id = relations?.find(
       (relation) => relation.name === "destinationAccount",
     );
-    if(sourceAccount_id?.id == destinationAccount_id?.id)
-      throw new ApiError(400, "Source and destination accounts cannot be the same!");
+    const categoryId = relations?.find( 
+      (relation) => relation.name === "category",
+    )
+    if (sourceAccount_id?.id == destinationAccount_id?.id)
+      throw new ApiError(
+        400,
+        "Source and destination accounts cannot be the same!",
+      );
+    let category = (await categoryService.getById(categoryId!.id) )as CategoryType
     let source = (await accountService.getById(sourceAccount_id?.id as string, [
       "user",
     ])) as Account;
@@ -27,12 +36,13 @@ class TransactionService extends BaseService<transaction> {
     if (source.balance - object.amount < 0)
       throw new ApiError(400, "Insufficient funds !");
     if (object.amount <= 0) throw new ApiError(400, "Invalid amount !");
-    const transaction = this.repository.create({
+    const newTransaction = this.repository.create({
       ...object,
-      sourceAccount: { ...source },
-      destinationAccount: { ...destination },
-    });
-    const savedTransaction = await this.repository.save(transaction);
+      sourceAccount: source,
+      destinationAccount: destination,
+      category: category
+    } as any);
+    const savedTransaction = await this.repository.save(newTransaction);
     source.balance -= object.amount;
     destination.balance += object.amount;
     await accountService.update(source.id, source);
@@ -50,7 +60,7 @@ class TransactionService extends BaseService<transaction> {
         },
       ],
     );
-    return savedTransaction;
+    return Array.isArray(savedTransaction) ? savedTransaction[0] : savedTransaction;
   }
 }
 

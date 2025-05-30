@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 import { cardService } from "@/app/services/card-service";
 import type { Card } from "@/app/types/card-type";
 import { useParams } from "react-router";
-import { useToast } from "../toast-context/toast-context";
+import { useToast } from "./toast-context";
 
 type CardContextType = {
   cards: Card[];

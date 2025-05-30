@@ -1,4 +1,4 @@
-import { useToast } from "@/app/contexts/toast-context/toast-context";
+import { useToast } from "@/app/contexts/toast-context";
 
 export default function ToastContainer() {
   const { toasts, removeToast } = useToast();

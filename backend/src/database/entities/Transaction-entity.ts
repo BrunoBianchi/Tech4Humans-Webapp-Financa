@@ -32,8 +32,6 @@ export class Transaction extends BaseEntity {
   @ManyToOne(() => Account, { nullable: false })
   destinationAccount!: Account;
 
-  @ManyToOne(() => Category, (category) => category.transaction, {
-    nullable: true,
-  })
-  category!: Category;
+  @ManyToOne(() => Category, (category) => category.transaction)
+  category!: Category | null;
 }

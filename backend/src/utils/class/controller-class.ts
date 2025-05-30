@@ -36,9 +36,9 @@ export class ControllerClass {
   private path: string;
 
   constructor(params: ControllerClassParams) {
-    const r = Router();
+    const router = Router();
 
-    r.use(
+    router.use(
       params.permissions || [
         (req: Request, res: Response, next: NextFunction) => next(),
       ],
@@ -75,7 +75,7 @@ export class ControllerClass {
           if (route && route.method && route.path) {
             const method = route.method as keyof Router;
 
-            (r[method] as Function)(
+            (router[method] as Function)(
               route.path,
               route.permissions,
               async (req: Request, res: Response, next: NextFunction) => {
@@ -124,11 +124,11 @@ export class ControllerClass {
           }
         });
     });
-    r.use(() => {
+    router.use(() => {
       throw new ApiError(404, "Page not found!");
     });
 
-    this.router = r;
+    this.router = router;
     this.name = params.name;
     this.path = params.path;
   }

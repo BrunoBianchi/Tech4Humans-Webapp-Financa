@@ -1,4 +1,4 @@
-import { useContactContext } from "@/app/contexts/contact-context/contact-context";
+import { useContactContext } from "@/app/contexts/contact-context";
 import type { Contact } from "@/app/types/contact-type";
 import { useState } from "react";
 import { useParams } from "react-router";

@@ -9,12 +9,12 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import NavbarComponent from "./components/shared/navbar-component";
-import FooterComponent from "./components/shared/footer-component";
-import { AuthProvider } from "./contexts/auth/auth-context";
+import NavbarComponent from "./components/ui/navbar-component";
+import FooterComponent from "./components/ui/footer-component";
+import { AuthProvider } from "./contexts/auth-context";
 import { CookiesProvider } from "react-cookie";
-import { ToastProvider } from "./contexts/toast-context/toast-context";
-import ToastContainer from "./components/shared/toast-component";
+import { ToastProvider } from "./contexts/toast-context";
+import ToastContainer from "./components/ui/toast-component";
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {

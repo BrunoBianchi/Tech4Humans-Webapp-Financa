@@ -1,9 +1,10 @@
 // src/app/layouts/DashboardLayout.tsx
 import React from "react";
-import { useAuth } from "@/app/contexts/auth/auth-context";
+import { useAuth } from "@/app/contexts/auth-context";
 import { Navigate, Outlet } from "react-router";
-import SideBarComponent from "@/app/components/shared/sidebar-component";
-import { AccountProvider } from "../contexts/account-context/account-context";
+import SideBarComponent from "@/app/components/ui/sidebar-component";
+import { AccountProvider } from "../contexts/account-context";
+import { CategoryProvider } from "@/app/contexts/select-context"; // Import CategoryProvider
 
 export default function DashboardLayout() {
   const { user, loading } = useAuth();
@@ -23,7 +24,9 @@ export default function DashboardLayout() {
 
         <main className="flex-2  p-6">
           <AccountProvider>
-            <Outlet />
+            <CategoryProvider> 
+              <Outlet />
+            </CategoryProvider>
           </AccountProvider>
         </main>
       </div>

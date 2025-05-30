@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 import { transactionService } from "@/app/services/transaction-service";
 import type { Transaction } from "@/app/types/transaction-type";
 import { useParams } from "react-router";
-import { useToast } from "../toast-context/toast-context";
+import { useToast } from "./toast-context";
 
 type TransactionContextType = {
   transactions: Transaction[];
@@ -46,12 +46,10 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
       .create(Transaction, cookies.token, sourceAccount, destinationAccount)
       .then((Transaction: Transaction) => {
         setTransactions((prev) => [...prev, Transaction]);
+        addToast("Transacao relizada com sucesso!", "success");
       })
       .catch((error) => {
         addToast(error.message, "error");
-      })
-      .then(() => {
-        addToast("Transacao relizada com sucesso!", "success");
       });
   };
 
@@ -59,7 +57,13 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     const token = cookies.token;
 
-    const data = await transactionService.getAll(token, params.id || "");
+    const data = (
+      (await transactionService.getAll(token, params.id || "")) as Transaction[]
+    ).sort((a: Transaction, b: Transaction) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
+    });
     setTransactions(data);
     setLoading(false);
   };
@@ -84,7 +88,9 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
 export const useTransactionContext = () => {
   const context = useContext(TransactionContext);
   if (!context) {
-    throw new Error("useTransactionContext must be used within an TransactionProvider");
+    throw new Error(
+      "useTransactionContext must be used within an TransactionProvider",
+    );
   }
   return context;
 };

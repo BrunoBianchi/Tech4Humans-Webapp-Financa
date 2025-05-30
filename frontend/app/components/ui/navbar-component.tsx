@@ -1,4 +1,4 @@
-import { useAuth } from "@/app/contexts/auth/auth-context";
+import { useAuth } from "@/app/contexts/auth-context";
 import { useState } from "react";
 
 const Navbar = () => {

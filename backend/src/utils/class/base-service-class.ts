@@ -97,9 +97,22 @@ export abstract class BaseService<T extends ObjectLiteral> {
         whereCondition = { [key]: { id } };
       }
 
+      const effectiveJoins = joins ? [...joins] : [];
+
+      const entityName = this.repository.metadata.name;
+
+      if (entityName === "Account") {
+        if (effectiveJoins.includes("incomingTransactions") && !effectiveJoins.includes("incomingTransactions.category")) {
+          effectiveJoins.push("incomingTransactions.category");
+        }
+        if (effectiveJoins.includes("outgoingTransactions") && !effectiveJoins.includes("outgoingTransactions.category")) {
+          effectiveJoins.push("outgoingTransactions.category");
+        }
+      }
+
       const result = await this.repository.find({
         where: whereCondition,
-        relations: joins || [],
+        relations: effectiveJoins, 
       });
 
       return result;
