@@ -89,7 +89,7 @@ export abstract class BaseService<T extends ObjectLiteral> {
       if (key === "transaction") {
         whereCondition = [
           { sourceAccount: { id } },
-          { destinationAccount: { id } }
+          { destinationAccount: { id } },
         ];
       } else if (key === "user") {
         whereCondition = { user: { id } };

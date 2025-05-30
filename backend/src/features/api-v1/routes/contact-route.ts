@@ -57,9 +57,9 @@ export class ContactRoute {
       },
     ],
   })
-public async getAllContactsRoute(params:{account_id:string}){
-  return await contactService.getAllWithJoin("account",params.account_id)
-}
+  public async getAllContactsRoute(params: { account_id: string }) {
+    return await contactService.getAllWithJoin("account", params.account_id);
+  }
   @Delete({
     path: "/account/:account_id/contact/:contact_id",
     permissions: [isUserOwner],
@@ -76,10 +76,10 @@ public async getAllContactsRoute(params:{account_id:string}){
       },
     ],
   })
-  public async deleteContactRoute(params:{
+  public async deleteContactRoute(params: {
     account_id: string;
     contact_id: string;
   }) {
-    return await contactService.delete(params.contact_id,params.account_id)
+    return await contactService.delete(params.contact_id, params.account_id);
   }
 }

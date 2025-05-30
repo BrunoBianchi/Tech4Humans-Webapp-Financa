@@ -24,7 +24,7 @@ export class TransactionRoute {
         type: "number",
       },
       {
-        name:"type",
+        name: "type",
         type: "string",
       },
       {
@@ -37,7 +37,7 @@ export class TransactionRoute {
   public async createTransactionRoute(params: {
     account_id: string;
     amount: number;
-    type:string;
+    type: string;
     description: string;
     destination: string;
   }) {
@@ -48,7 +48,7 @@ export class TransactionRoute {
       {
         amount: params.amount,
         description: params.description,
-        type:params.type,
+        type: params.type,
         date: new Date(),
       } as transaction,
       [
@@ -65,19 +65,21 @@ export class TransactionRoute {
   }
 
   @Get({
-    path:`/account/:account_id/transactions`,
-    params:[
+    path: `/account/:account_id/transactions`,
+    params: [
       {
         name: "account_id",
         type: "string",
         header: true,
-      }
+      },
     ],
     permissions: [isUserOwner],
   })
-  public async getTransactionsByAccountRoute(params: {
-    account_id: string;
-  }) {
-    return await transactionService.getAllWithJoin("transaction",params.account_id,["sourceAccount","destinationAccount"]);
+  public async getTransactionsByAccountRoute(params: { account_id: string }) {
+    return await transactionService.getAllWithJoin(
+      "transaction",
+      params.account_id,
+      ["sourceAccount", "destinationAccount"],
+    );
   }
 }

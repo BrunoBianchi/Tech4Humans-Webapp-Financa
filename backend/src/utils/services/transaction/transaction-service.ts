@@ -15,6 +15,8 @@ class TransactionService extends BaseService<transaction> {
     const destinationAccount_id = relations?.find(
       (relation) => relation.name === "destinationAccount",
     );
+    if(sourceAccount_id?.id == destinationAccount_id?.id)
+      throw new ApiError(400, "Source and destination accounts cannot be the same!");
     let source = (await accountService.getById(sourceAccount_id?.id as string, [
       "user",
     ])) as Account;

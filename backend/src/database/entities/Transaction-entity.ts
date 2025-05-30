@@ -13,18 +13,18 @@ export class Transaction extends BaseEntity {
     this.date = new Date();
   }
 
-  @Column({nullable: false})
+  @Column({ nullable: false })
   @IsPositive()
   amount!: number;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   description?: string;
 
   @ManyToOne(() => Account, { nullable: false })
   sourceAccount!: Account;
 
-  @Column({ type: "enum", enum: CardEnum,nullable:false })
-  type!:string
+  @Column({ type: "enum", enum: CardEnum, nullable: false })
+  type!: string;
 
   @Column({ default: "pending" })
   status!: string;
@@ -32,6 +32,8 @@ export class Transaction extends BaseEntity {
   @ManyToOne(() => Account, { nullable: false })
   destinationAccount!: Account;
 
-  @ManyToOne(() => Category, (category) => category.transaction,{nullable:true})
+  @ManyToOne(() => Category, (category) => category.transaction, {
+    nullable: true,
+  })
   category!: Category;
 }

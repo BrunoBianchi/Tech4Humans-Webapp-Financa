@@ -15,6 +15,6 @@ export class Budgets extends BaseEntity {
   @Column({ default: 0 })
   amount!: number;
 
-  @OneToMany(() => Category, (category) => category.budget,{nullable:false})
+  @OneToMany(() => Category, (category) => category.budget, { nullable: false })
   categories!: Category[];
 }
