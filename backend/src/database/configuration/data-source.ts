@@ -8,7 +8,6 @@ import { Transaction } from "../entities/Transaction-entity";
 import { Contact } from "../entities/Contact-entity";
 import { Payment } from "../entities/Payment.entity";
 import { Investiment } from "../entities/Investment-entity";
-import { Notification } from "../entities/Notification-entity";
 import { Budgets } from "../entities/Bugedts-entity";
 import { Category } from "../entities/Category-entity";
 export const AppDataSource = new DataSource({

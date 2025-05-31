@@ -14,4 +14,5 @@ export function errorHandler(
   } else {
     res.status(500).json({ message: "Internal server error" });
   }
+  next();
 }

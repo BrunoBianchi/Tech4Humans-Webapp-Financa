@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api/v1";
+const apiBaseUrl = "http://localhost:5000/api/v1";
 
 class ApiService {
   private baseURL: string;
@@ -69,4 +69,4 @@ class ApiService {
   }
 }
 
-export const apiService = new ApiService(API_BASE_URL);
+export const apiService = new ApiService(apiBaseUrl);

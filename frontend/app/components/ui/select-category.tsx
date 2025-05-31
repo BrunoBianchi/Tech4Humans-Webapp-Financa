@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useCategories } from "@/app/contexts/select-context";
-import type { Category } from "@/app/types/category-type"; // Adjust path
+import type { Category } from "@/app/types/category-type";
 
 interface SelectCategoryProps {
   onCategorySelect: (category: Category | null) => void;
   label?: string;
   className?: string;
-  initialSelectedId?: string | null; // To set an initial selection from parent
+  initialSelectedId?: string | null;
   placeholder?: string;
 }
 
@@ -24,11 +24,10 @@ export default function SelectCategory({
     selectCategory: contextSelectCategory,
     error: contextError,
   } = useCategories();
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryegoryName, setNewCategoryName] = useState("");
   const [showAddCategoryInput, setShowAddCategoryInput] = useState(false);
   const [componentError, setComponentError] = useState<string | null>(null);
 
-  // Sync with context or initial prop for selected value
   const currentSelectedValue =
     contextSelectedCategory?.id ?? initialSelectedId ?? "";
 
@@ -39,20 +38,17 @@ export default function SelectCategory({
   }, [initialSelectedId, contextSelectedCategory, contextSelectCategory]);
 
   useEffect(() => {
-    setComponentError(contextError); // Show errors from context (e.g., duplicate category)
+    setComponentError(contextError);
   }, [contextError]);
 
   const handleSelectionChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const categoryId = event.target.value;
-    setComponentError(null); // Clear local error on new action
+    setComponentError(null);
 
     if (categoryId === "add_new") {
       setShowAddCategoryInput(true);
-      // Optionally clear selection or keep previous until new is added
-      // contextSelectCategory(null); // Let user decide if they want to clear
-      // onCategorySelect(null);
     } else if (categoryId === "") {
       contextSelectCategory(null);
       onCategorySelect(null);
@@ -68,19 +64,18 @@ export default function SelectCategory({
   };
 
   const handleAddNewCategory = async () => {
-    if (newCategoryName.trim() === "") {
+    if (newCategoryegoryName.trim() === "") {
       setComponentError("O nome da categoria não pode ser vazio.");
       return;
     }
     try {
-      const newCat = await addCategory(newCategoryName); // This might throw or return existing
-      contextSelectCategory(newCat.id);
-      onCategorySelect(newCat);
+      const newCategory = await addCategory(newCategoryegoryName);
+      contextSelectCategory(newCategory.id);
+      onCategorySelect(newCategory);
       setNewCategoryName("");
       setShowAddCategoryInput(false);
-      setComponentError(null); // Clear error on success
+      setComponentError(null);
     } catch (e: any) {
-      // Error is already set in context by addCategory, or set it here if not
       setComponentError(e.message || "Falha ao adicionar categoria.");
       console.error("Failed to add category:", e);
     }
@@ -119,7 +114,7 @@ export default function SelectCategory({
         <div className="mt-2 flex items-center space-x-2">
           <input
             type="text"
-            value={newCategoryName}
+            value={newCategoryegoryName}
             onChange={(e) => {
               setNewCategoryName(e.target.value);
               setComponentError(null);

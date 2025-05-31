@@ -5,34 +5,34 @@ import { CategoryType } from "../../types/category-type";
 import { transaction } from "../../types/transaction-type";
 import { accountService } from "../account/account-service";
 import { categoryService } from "../category/category-service";
-import { notificationService } from "../notification/notification-service";
 class TransactionService extends BaseService<transaction> {
   public async create(
     object: transaction,
     relations?: Array<{ name: string; id: string }>,
   ): Promise<transaction> {
-    const sourceAccount_id = relations?.find(
+    const sourceAccountId = relations?.find(
       (relation) => relation.name === "sourceAccount",
     );
-    const destinationAccount_id = relations?.find(
+    const destinationAccountId = relations?.find(
       (relation) => relation.name === "destinationAccount",
     );
     const categoryId = relations?.find(
       (relation) => relation.name === "category",
     );
-    if (sourceAccount_id?.id == destinationAccount_id?.id)
+    if (sourceAccountId?.id == destinationAccountId?.id)
       throw new ApiError(
         400,
         "Source and destination accounts cannot be the same!",
       );
-    let category = (await categoryService.getById(
+    const category = (await categoryService.getById(
       categoryId!.id,
     )) as CategoryType;
-    let source = (await accountService.getById(sourceAccount_id?.id as string, [
-      "user",
-    ])) as Account;
-    let destination = (await accountService.getById(
-      destinationAccount_id?.id as string,
+    const source = (await accountService.getById(
+      sourceAccountId?.id as string,
+      ["user"],
+    )) as Account;
+    const destination = (await accountService.getById(
+      destinationAccountId?.id as string,
       ["user"],
     )) as Account;
     if (source.balance - object.amount < 0)
@@ -43,7 +43,7 @@ class TransactionService extends BaseService<transaction> {
       sourceAccount: source,
       destinationAccount: destination,
       category: category,
-    } as any);
+    } as unknown as transaction);
     const savedTransaction = await this.repository.save(newTransaction);
     source.balance -= object.amount;
     destination.balance += object.amount;

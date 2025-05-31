@@ -1,5 +1,3 @@
-// src/app/components/shared/SideBarComponent.tsx
-
 export default function SideBarComponent() {
   return (
     <aside

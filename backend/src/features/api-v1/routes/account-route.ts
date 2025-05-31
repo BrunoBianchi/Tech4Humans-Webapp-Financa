@@ -29,15 +29,14 @@ export class AccountRoute {
     const account: Account = await accountService.create(Account, [
       { name: "user", id: req.user!.id },
     ]);
-    const { user, ...accountWithoutUser } = account as Account;
-    return accountWithoutUser;
+    return account;
   }
 
   @Get({
-    path: "/account/:account_id",
+    path: "/account/:accountId",
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
@@ -49,11 +48,11 @@ export class AccountRoute {
   }
 
   @Delete({
-    path: "/account/:account_id",
+    path: "/account/:accountId",
     permissions: [isUserOwner],
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
@@ -66,7 +65,7 @@ export class AccountRoute {
   @Get({
     path: "/accounts",
   })
-  public async getAllAccountsRoute(_: any, req: Request) {
+  public async getAllAccountsRoute(_: unknown, req: Request) {
     const result = await accountService.getAllWithJoin("user", req.user!.id, [
       "cards",
       "investments",

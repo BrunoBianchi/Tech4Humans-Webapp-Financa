@@ -1,6 +1,6 @@
-import { Column, Entity, OneToMany, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { BaseEntity } from "../baseEntity/base-entity";
-import { Card } from "./Card-entity";
+
 import { Category } from "./Category-entity";
 import { IsPositive } from "class-validator";
 @Entity()

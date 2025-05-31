@@ -4,8 +4,8 @@ import { budget } from "./budgets-type";
 
 export type Card = {
   id: string;
-  card_number: string;
-  card_type: CardEnum;
+  cardNumber: string;
+  cardType: CardEnum;
   account: Account;
   budgets?: budget[];
   limit: number;

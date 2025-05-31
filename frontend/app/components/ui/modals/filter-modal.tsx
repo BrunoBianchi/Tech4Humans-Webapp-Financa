@@ -39,18 +39,18 @@ export default function FilterModal({
           </button>
         </div>
         <div className="space-y-3">
-          {options.map((opt) => (
+          {options.map((option) => (
             <button
-              key={opt.value}
-              onClick={() => onSelect(opt.value)}
+              key={option.value}
+              onClick={() => onSelect(option.value)}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-lg border transition-all ${
-                selected === opt.value
+                selected === option.value
                   ? "bg-[var(--color-finance-primary)] text-white border-[var(--color-finance-primary)]"
                   : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
               }`}
             >
-              <span>{opt.label}</span>
-              {selected === opt.value && (
+              <span>{option.label}</span>
+              {selected === option.value && (
                 <i className="fa-solid fa-check text-white"></i>
               )}
             </button>

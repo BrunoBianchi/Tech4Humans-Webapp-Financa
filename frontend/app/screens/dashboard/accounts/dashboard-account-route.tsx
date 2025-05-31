@@ -166,7 +166,7 @@ export default function AccountMainRoute() {
                     </span>
                     <div className="bg-gray-300/20 backdrop-blur-sm p-1.5 rounded-md w-[60px] h-[38px] flex items-center justify-center">
                       {(() => {
-                        const cardNumber = selectedCard?.card_number || "";
+                        const cardNumber = selectedCard?.cardNumber || "";
                         const firstDigit = cardNumber.charAt(0);
                         const firstTwoDigits = cardNumber.substring(0, 2);
                         const firstFourDigits = cardNumber.substring(0, 4);
@@ -202,7 +202,7 @@ export default function AccountMainRoute() {
                   </div>
                   <div className="my-auto py-3">
                     <p className="text-2xl sm:text-3xl font-mono tracking-wider">
-                      ···· ···· ···· {selectedCard?.card_number.slice(-4)}
+                      ···· ···· ···· {selectedCard?.cardNumber.slice(-4)}
                     </p>
                   </div>
                   <div>

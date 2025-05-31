@@ -1,7 +1,7 @@
 import { PaymentEnum } from "../enums/payment-enum";
 
 export type PaymentType = {
-  payment_id: string;
+  paymentId: string;
   amount: number;
   date: Date;
   description: string;

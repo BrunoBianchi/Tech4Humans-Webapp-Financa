@@ -4,18 +4,18 @@ export const ContactService = {
   getAll: (token: string, id: string) =>
     apiService.get<Contact[]>(`/account/${id}/contacts`, token),
 
-  getById: (account_id: string, token: string, contact_id: string) =>
+  getById: (accountId: string, token: string, contactId: string) =>
     apiService.get<Contact>(
-      `/account/${account_id}/contact/${contact_id}`,
+      `/account/${accountId}/contact/${contactId}`,
       token,
     ),
 
-  create: (data: Contact, token: string, account_id: string) =>
-    apiService.post<Contact>(`/account/${account_id}/contact`, data, token),
+  create: (data: Contact, token: string, accountId: string) =>
+    apiService.post<Contact>(`/account/${accountId}/contact`, data, token),
 
-  delete: (account_id: string, token: string, contact_id: string) =>
+  delete: (account_id: string, token: string, contactId: string) =>
     apiService.delete<void>(
-      `/account/${account_id}/contact/${contact_id}`,
+      `/account/${account_id}/contact/${contactId}`,
       token,
     ),
 };

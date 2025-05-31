@@ -9,10 +9,10 @@ import { BaseEntity } from "../baseEntity/base-entity";
 @Entity()
 export class Investiment extends BaseEntity {
   @Column({ type: "enum", enum: InvestimentoBrasil })
-  investment_type!: string;
+  investmentType!: string;
 
   @Column({ type: "enum", enum: RentabilidadeMensalAproximada })
-  approximated_monthly_gains!: string;
+  approximatedMonthlyGains!: string;
 
   @Column()
   amount!: number;

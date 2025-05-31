@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { BeforeInsert, Column, Entity, ManyToOne } from "typeorm";
 import { Account } from "./Account-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
 import { Category } from "./Category-entity";
@@ -32,7 +32,8 @@ export class Transaction extends BaseEntity {
   @ManyToOne(() => Account, { nullable: false })
   destinationAccount!: Account;
 
-  
-  @ManyToOne(() => Category, (category) => category.transaction,{nullable:true})
+  @ManyToOne(() => Category, (category) => category.transaction, {
+    nullable: true,
+  })
   category!: Category | null;
 }

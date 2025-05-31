@@ -10,18 +10,23 @@
     "eslint": "^9.27.0",
     "globals": "^16.1.0",
     "husky": "^9.1.7",
+    "jest-environment-jsdom": "30.0.0-beta.3",
     "prettier": "3.5.3",
+    "ts-jest": "^29.3.4",
+    "ts-node": "^10.9.2",
     "typescript-eslint": "^8.32.1"
   },
   "scripts": {
     "prepare": "husky",
     "check": "eslint . --ext .ts",
     "check:fix": "eslint . --ext .ts --fix",
-    "prettier": "pnpm exec prettier . --write"
+    "prettier": "pnpm exec prettier . --write",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2"
   }
 }

@@ -7,7 +7,7 @@ export class Contact extends BaseEntity {
   name!: string;
 
   @Column()
-  destination_account_id!: string;
+  destinationAccountId!: string;
 
   @ManyToOne(() => Account, (account) => account.contacts)
   account!: Account;

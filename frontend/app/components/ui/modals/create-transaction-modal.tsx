@@ -12,11 +12,11 @@ export default function CreateTransactionModal({
   isOpen,
   onClose,
 }: CreateTransactionModalProps) {
-  const [n_conta, setn_conta] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [tipo, setTipo] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [quantia, setQuantia] = useState("");
+  const [accountNumberState, setAccountNumberState] = useState("");
+  const [categoryState, setCategoryState] = useState("");
+  const [typeState, setTypeState] = useState("");
+  const [descriptionState, setDescriptionState] = useState("");
+  const [quantityState, setQuantityState] = useState("");
   const params = useParams<{ id: string }>();
   const { addTransaction } = useTransactionContext();
   if (!isOpen) return null;
@@ -25,15 +25,15 @@ export default function CreateTransactionModal({
     e.preventDefault();
     addTransaction(
       {
-        amount: Number(quantia),
-        category: categoria,
-        description: descricao,
+        amount: Number(quantityState),
+        category: categoryState,
+        description: descriptionState,
         sourceAccount: params.id || "",
-        destinationAccount: n_conta,
-        type: tipo,
+        destinationAccount: accountNumberState,
+        type: typeState,
       },
       params.id || "",
-      n_conta,
+      accountNumberState,
     );
   }
 
@@ -93,9 +93,9 @@ export default function CreateTransactionModal({
                 </label>
                 <input
                   type="string"
-                  value={n_conta}
+                  value={accountNumberState}
                   min={1}
-                  onChange={(e) => setn_conta(e.target.value)}
+                  onChange={(e) => setAccountNumberState(e.target.value)}
                   placeholder="ACCOUNT_..."
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
@@ -106,8 +106,8 @@ export default function CreateTransactionModal({
                   Categoria
                 </label>
                 <select
-                  value={categoria}
-                  onChange={(e) => setCategoria(e.target.value)}
+                  value={categoryState}
+                  onChange={(e) => setCategoryState(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                 >
                   <option value="">Selecione a categoria</option>
@@ -118,8 +118,8 @@ export default function CreateTransactionModal({
                   Tipo
                 </label>
                 <select
-                  value={tipo}
-                  onChange={(e) => setTipo(e.target.value)}
+                  value={typeState}
+                  onChange={(e) => setTypeState(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
                 >
@@ -134,10 +134,10 @@ export default function CreateTransactionModal({
                 </label>
                 <input
                   type="number"
-                  value={quantia}
+                  value={quantityState}
                   min={1}
                   pattern="[1-9]+"
-                  onChange={(e) => setQuantia(e.target.value)}
+                  onChange={(e) => setQuantityState(e.target.value)}
                   placeholder="0,00"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
@@ -148,8 +148,8 @@ export default function CreateTransactionModal({
                   Descricao
                 </label>
                 <textarea
-                  value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
+                  value={descriptionState}
+                  onChange={(e) => setDescriptionState(e.target.value)}
                   placeholder="Descricao"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                 />

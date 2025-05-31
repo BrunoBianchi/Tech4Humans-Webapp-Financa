@@ -4,8 +4,8 @@ import {
 } from "../enums/investment-enum";
 
 export type InvestmentType = {
-  investment_id: string;
-  investment_type: InvestimentoBrasil;
-  approximated_monthly_gains: RentabilidadeMensalAproximada;
+  investmentId: string;
+  investmentType: InvestimentoBrasil;
+  approximatedMonthlyGains: RentabilidadeMensalAproximada;
   amount: number;
 };

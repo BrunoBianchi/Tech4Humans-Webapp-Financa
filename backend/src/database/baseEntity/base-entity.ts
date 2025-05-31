@@ -1,16 +1,16 @@
 import { BeforeInsert, Column, PrimaryColumn } from "typeorm";
 import { uid } from "uid";
-import { validate } from "class-validator";
+import { validate, ValidationError } from "class-validator";
 import { ApiError } from "../../utils/class/errors-class";
 export abstract class BaseEntity {
   @PrimaryColumn("varchar", { length: 30 })
   id: string = `${this.constructor.name.toUpperCase()}_${uid(10)}`;
 
   @Column()
-  created_at!: Date;
+  createdAt!: Date;
   @BeforeInsert()
   setCreatedAt() {
-    this.created_at = new Date();
+    this.createdAt = new Date();
   }
   @BeforeInsert()
   async verifyEntity() {
@@ -20,8 +20,8 @@ export abstract class BaseEntity {
         400,
         "Validation failed!",
         errors
-          .map((err: any) => {
-            return Object.values(err.constraints).join(", ");
+          .map((error: ValidationError) => {
+            return Object.values(error.constraints || {}).join(", ");
           })
           .join("; "),
       );

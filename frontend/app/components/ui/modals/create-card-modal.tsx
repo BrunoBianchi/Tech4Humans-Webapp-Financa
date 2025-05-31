@@ -11,9 +11,9 @@ export default function CreateCardModal({
   isOpen,
   onClose,
 }: CreateCardModalProps) {
-  const [n_cartao, setn_cartao] = useState("");
-  const [type, setType] = useState("");
-  const [limit, setLimit] = useState("");
+  const [cardNumberState, setCardNumber] = useState("");
+  const [typeState, setType] = useState("");
+  const [limitState, setLimit] = useState("");
   const { addCard } = useCardContext();
   const params = useParams<{ id: string }>();
   if (!isOpen) return null;
@@ -22,13 +22,13 @@ export default function CreateCardModal({
     e.preventDefault();
     addCard(
       {
-        card_number: n_cartao,
-        card_type: type as "credito" | "debito",
-        limit: Number(limit),
+        cardNumber: cardNumberState,
+        cardType: typeState as "credito" | "debito",
+        limit: Number(limitState),
       },
       params.id || "0",
     );
-    setn_cartao("");
+    setCardNumber("");
     setType("");
     setLimit("");
   }
@@ -89,8 +89,8 @@ export default function CreateCardModal({
               <div className="relative">
                 <input
                   type="number"
-                  value={n_cartao}
-                  onChange={(e) => setn_cartao(e.target.value)}
+                  value={cardNumberState}
+                  onChange={(e) => setCardNumber(e.target.value)}
                   autoComplete="cc-number"
                   inputMode="numeric"
                   className="bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary block w-full  "
@@ -100,7 +100,7 @@ export default function CreateCardModal({
                 />
                 <div className="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
                   {(() => {
-                    const cardNumber = n_cartao || "";
+                    const cardNumber = cardNumberState || "";
                     const firstDigit = cardNumber.charAt(0);
                     const firstTwoDigits = cardNumber.substring(0, 2);
                     const firstFourDigits = cardNumber.substring(0, 4);
@@ -141,7 +141,7 @@ export default function CreateCardModal({
                   Tipo de Cartão
                 </label>
                 <select
-                  value={type}
+                  value={typeState}
                   onChange={(e) => setType(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
@@ -158,7 +158,7 @@ export default function CreateCardModal({
                 </label>
                 <input
                   type="number"
-                  value={limit}
+                  value={limitState}
                   min={1}
                   onChange={(e) => setLimit(e.target.value)}
                   placeholder="0,00"

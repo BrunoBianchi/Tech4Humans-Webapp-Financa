@@ -30,7 +30,7 @@ export class CategoryRoute {
   @Get({
     path: "/categories",
   })
-  public async getAllCategoriesRoute(_: any, req: Request) {
+  public async getAllCategoriesRoute(_: unknown, req: Request) {
     return await categoryService.getAllWithJoin("user", req.user!.id);
   }
 }

@@ -1,4 +1,3 @@
-import { permission } from "process";
 import { isUserOwner } from "../../../middlewares/user-own-account-middleware";
 import { Delete } from "../../../utils/decorators/router/delete-decorator";
 import { Post } from "../../../utils/decorators/router/post-decorator";
@@ -9,10 +8,10 @@ import { Get } from "../../../utils/decorators/router/get-decorator";
 @Router()
 export class ContactRoute {
   @Post({
-    path: "/account/:account_id/contact",
+    path: "/account/:accountId/contact",
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
@@ -21,65 +20,65 @@ export class ContactRoute {
         type: "string",
       },
       {
-        name: "destination_account_id",
+        name: "destinationAccountId",
         type: "string",
       },
     ],
     permissions: [isUserOwner],
   })
   public async createContactRoute(params: {
-    account_id: string;
+    accountId: string;
     name: string;
-    destination_account_id: string;
+    destinationAccountId: string;
   }) {
     return await contactService.create(
       {
         name: params.name,
-        destination_account_id: params.destination_account_id,
+        destinationAccountId: params.destinationAccountId,
       },
       [
         {
           name: "account",
-          id: params.account_id,
+          id: params.accountId,
         },
       ],
     );
   }
 
   @Get({
-    path: "/account/:account_id/contacts",
+    path: "/account/:accountId/contacts",
     permissions: [isUserOwner],
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
     ],
   })
-  public async getAllContactsRoute(params: { account_id: string }) {
-    return await contactService.getAllWithJoin("account", params.account_id);
+  public async getAllContactsRoute(params: { accountId: string }) {
+    return await contactService.getAllWithJoin("account", params.accountId);
   }
   @Delete({
-    path: "/account/:account_id/contact/:contact_id",
+    path: "/account/:accountId/contact/:contactId",
     permissions: [isUserOwner],
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
       {
-        name: "contact_id",
+        name: "contactId",
         type: "string",
         header: true,
       },
     ],
   })
   public async deleteContactRoute(params: {
-    account_id: string;
-    contact_id: string;
+    accountId: string;
+    contactId: string;
   }) {
-    return await contactService.delete(params.contact_id, params.account_id);
+    return await contactService.delete(params.contactId, params.accountId);
   }
 }

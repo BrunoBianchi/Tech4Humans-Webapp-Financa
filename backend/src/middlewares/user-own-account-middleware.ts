@@ -8,9 +8,12 @@ export const isUserOwner: RequestHandler = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const accountUID = z.string().parse(req.params.account_id);
+  if (!req.params) throw new ApiError(401, "Params missing !");
+  if (!req.params.accountId)
+    throw new ApiError(401, "Params accountId missing !");
+  const accountId = z.string().parse(req.params.accountId);
 
-  const account = (await accountService.getById(accountUID, [
+  const account = (await accountService.getById(accountId, [
     "user",
   ])) as Account;
   if (!account) throw new ApiError(404, "Account not found !");

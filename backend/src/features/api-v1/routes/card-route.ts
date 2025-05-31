@@ -8,14 +8,14 @@ import { Get } from "../../../utils/decorators/router/get-decorator";
 @Router()
 export class cardRouter {
   @Post({
-    path: "/account/:account_id/card",
+    path: "/account/:accountId/card",
     params: [
       {
-        name: "card_number",
+        name: "cardNumber",
         type: "string",
       },
       {
-        name: "card_type",
+        name: "cardType",
         type: "string",
       },
       {
@@ -23,7 +23,7 @@ export class cardRouter {
         type: "number",
       },
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
@@ -31,56 +31,53 @@ export class cardRouter {
     permissions: [isUserOwner],
   })
   public async createCardRoute(params: {
-    card_number: string;
-    card_type: string;
+    cardNumber: string;
+    cardType: string;
     limit: number;
-    account_id: string;
+    accountId: string;
   }) {
-    const { card_number, limit, card_type, account_id } = params;
-    return await cardService.create({ card_number, card_type, limit } as Card, [
+    const { cardNumber, limit, cardType, accountId } = params;
+    return await cardService.create({ cardNumber, cardType, limit } as Card, [
       {
         name: "account",
-        id: account_id,
+        id: accountId,
       },
     ]);
   }
   @Delete({
-    path: "/account/:account_id/card/:card_id",
+    path: "/account/:accountId/card/:cardId",
     permissions: [isUserOwner],
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
       {
-        name: "card_id",
+        name: "cardId",
         type: "string",
         header: true,
       },
     ],
   })
-  public async deleteCardRoute(params: {
-    card_id: string;
-    account_id: string;
-  }) {
-    return await cardService.delete(params.card_id, params.account_id, [
+  public async deleteCardRoute(params: { cardID: string; accountId: string }) {
+    return await cardService.delete(params.cardID, params.accountId, [
       "account",
     ]);
   }
 
   @Get({
-    path: "/account/:account_id/cards",
+    path: "/account/:accountId/cards",
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
     ],
     permissions: [isUserOwner],
   })
-  public async getCardsRoute(params: { account_id: string }) {
-    return await cardService.getAllWithJoin("account", params.account_id);
+  public async getCardsRoute(params: { accountId: string }) {
+    return await cardService.getAllWithJoin("account", params.accountId);
   }
 }

@@ -8,11 +8,27 @@ import {
 import z, { ZodTypeAny } from "zod";
 import { ApiError } from "./errors-class";
 
+const simpleZodCreators = {
+  string: z.string,
+  number: z.number,
+  boolean: z.boolean,
+  date: z.date,
+  bigint: z.bigint,
+  undefined: z.undefined,
+  null: z.null,
+  void: z.void,
+  any: z.any,
+  unknown: z.unknown,
+  never: z.never,
+};
+
+type SimpleZodCreatorKey = keyof typeof simpleZodCreators;
+
 type Param = {
   name: string;
-  type: keyof typeof z;
+  type: SimpleZodCreatorKey;
   header?: boolean;
-   required?: boolean;
+  required?: boolean;
 };
 
 type RouteDefinition = {
@@ -21,7 +37,7 @@ type RouteDefinition = {
   permissions?: RequestHandler[];
   params?: Param[];
   header?: boolean;
-  function: (object: any, req: Request, res: Response) => Promise<any>;
+  function: (object: unknown, req: Request, res: Response) => Promise<unknown>;
 };
 
 type ControllerClassParams = {
@@ -56,8 +72,8 @@ export class ControllerClass {
     params.routes.forEach((RouteClass) => {
       const routerInstance = new RouteClass();
       const prototype =
-        (routerInstance as any).constructor?.prototype ||
-        (routerInstance as any).__proto__;
+        (routerInstance as ClassDecorator).constructor?.prototype ||
+        (routerInstance as unknown as { __proto__: unknown }).__proto__;
 
       if (!prototype) {
         throw new Error("Can't find prototype");
@@ -76,7 +92,7 @@ export class ControllerClass {
           if (route && route.method && route.path) {
             const method = route.method as keyof Router;
 
-            (router[method] as Function)(
+            (router[method] as (...unknown: unknown[]) => unknown)(
               route.path,
               route.permissions,
               async (req: Request, res: Response, next: NextFunction) => {
@@ -84,7 +100,15 @@ export class ControllerClass {
 
                 if (route.params && route.params.length > 0) {
                   route.params.forEach((param: Param) => {
-                    let schema = (z as any)[param.type]();
+                    // Linha original: let schema = (z as any)[param.type]();
+
+                    // Obtenha a função criadora do nosso mapa seguro
+                    const creatorFn = simpleZodCreators[param.type];
+
+                    // creatorFn será do tipo (() => ZodString) | (() => ZodNumber) | ... etc.
+                    // A chamada é segura e o tipo de 'schema' será inferido corretamente.
+                    let schema: ZodTypeAny = creatorFn();
+
                     if (!param.required) {
                       schema = schema.optional();
                     }
@@ -115,7 +139,8 @@ export class ControllerClass {
                     res,
                   );
                   res.status(200).json(result);
-                } catch (err: any) {
+                } catch (err: unknown) {
+                  // Alterado de any para unknown para melhor prática
                   next(err);
                 }
               },

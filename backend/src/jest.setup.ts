@@ -15,8 +15,4 @@ beforeAll(async () => {
   await AppDataSource.synchronize();
 });
 
-afterAll(async () => {
-  if (AppDataSource.isInitialized) {
-    await AppDataSource.destroy();
-  }
-});
+

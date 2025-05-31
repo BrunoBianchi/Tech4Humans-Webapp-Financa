@@ -3,8 +3,8 @@ import type { budget } from "./budget-type";
 
 export type Card = {
   id?: string;
-  card_number: string;
-  card_type: "credito" | "debito";
+  cardNumber: string;
+  cardType: "credito" | "debito";
   account?: Account;
   budgets?: string;
   limit: number;

@@ -1,8 +1,8 @@
-const API_BASE_URL = "http://localhost:5000/api/v1";
+const apiBaseUrl = "http://localhost:5000/api/v1";
 
 export const AiService = {
   create: async (prompt: string, token: string) => {
-    const response = await fetch(`${API_BASE_URL}/ai/chat`, {
+    const response = await fetch(`${apiBaseUrl}/ai/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,10 +1,8 @@
-// src/app/layouts/DashboardLayout.tsx
-import React from "react";
 import { useAuth } from "@/app/contexts/auth-context";
 import { Navigate, Outlet } from "react-router";
 import SideBarComponent from "@/app/components/ui/sidebar-component";
 import { AccountProvider } from "../contexts/account-context";
-import { CategoryProvider } from "@/app/contexts/select-context"; // Import CategoryProvider
+import { CategoryProvider } from "@/app/contexts/select-context";
 
 export default function DashboardLayout() {
   const { user, loading } = useAuth();

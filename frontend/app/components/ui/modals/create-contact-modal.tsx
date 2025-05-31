@@ -12,8 +12,8 @@ export default function CreateContactModal({
   isOpen,
   onClose,
 }: CreateContactModalProps) {
-  const [n_conta, setn_conta] = useState("");
-  const [nome, setnome] = useState("");
+  const [accountNumberState, setAccountNumber] = useState("");
+  const [accountNameState, setAccountName] = useState("");
   const params = useParams<{ id: string }>();
   const { addContact } = useContactContext();
   if (!isOpen) return null;
@@ -21,8 +21,8 @@ export default function CreateContactModal({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     addContact({
-      name: nome,
-      destination_account_id: n_conta,
+      name: accountNameState,
+      destinationAccountId: accountNumberState,
     } as Contact);
   }
 
@@ -82,9 +82,9 @@ export default function CreateContactModal({
                 </label>
                 <input
                   type="string"
-                  value={nome}
+                  value={accountNameState}
                   min={1}
-                  onChange={(e) => setnome(e.target.value)}
+                  onChange={(e) => setAccountName(e.target.value)}
                   placeholder="Nome..."
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
@@ -96,9 +96,9 @@ export default function CreateContactModal({
                 </label>
                 <input
                   type="string"
-                  value={n_conta}
+                  value={accountNumberState}
                   min={1}
-                  onChange={(e) => setn_conta(e.target.value)}
+                  onChange={(e) => setAccountNumber(e.target.value)}
                   placeholder="ACCOUNT_..."
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required

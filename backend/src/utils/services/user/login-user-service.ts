@@ -1,6 +1,6 @@
 import { ApiError } from "../../class/errors-class";
 import { User } from "../../types/user-type";
-import { jwt_sign } from "../jwt/jwt-signin-service";
+import { jwtSign } from "../jwt/jwt-signin-service";
 import { getUser } from "./get-user-service";
 import * as bcrypt from "bcrypt";
 export const loginUser = async (email: string, password: string) => {
@@ -9,12 +9,12 @@ export const loginUser = async (email: string, password: string) => {
   const isValidPass = await bcrypt.compare(password, user.password);
   if (!isValidPass) throw new ApiError(401, "Invalid password or email");
   return {
-    authorization: await jwt_sign(user, "1h"),
+    authorization: await jwtSign(user, "1h"),
     expiration: "1h",
     user: {
       name: user.name,
       email: user.email,
-      user_id: user.id,
+      userId: user.id,
     },
   };
 };

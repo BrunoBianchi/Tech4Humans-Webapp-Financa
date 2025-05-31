@@ -1,4 +1,3 @@
-import { Category } from "../../../database/entities/Category-entity";
 import { isUserOwner } from "../../../middlewares/user-own-account-middleware";
 import { Get } from "../../../utils/decorators/router/get-decorator";
 import { Post } from "../../../utils/decorators/router/post-decorator";
@@ -8,10 +7,10 @@ import { transaction } from "../../../utils/types/transaction-type";
 @Router()
 export class TransactionRoute {
   @Post({
-    path: "/transaction/:account_id/:destination",
+    path: "/transaction/:accountId/:destination",
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
@@ -31,7 +30,7 @@ export class TransactionRoute {
       {
         name: "category",
         type: "string",
-        required:false,
+        required: false,
       },
       {
         name: "description",
@@ -41,7 +40,7 @@ export class TransactionRoute {
     permissions: [isUserOwner],
   })
   public async createTransactionRoute(params: {
-    account_id: string;
+    accountId: string;
     amount: number;
     type: string;
     category: string;
@@ -59,7 +58,7 @@ export class TransactionRoute {
         date: new Date(),
       } as transaction,
       [
-        { name: "sourceAccount", id: params.account_id },
+        { name: "sourceAccount", id: params.accountId },
         { name: "destinationAccount", id: params.destination },
         { name: "category", id: params.category },
       ],
@@ -74,20 +73,20 @@ export class TransactionRoute {
   }
 
   @Get({
-    path: `/account/:account_id/transactions`,
+    path: `/account/:accountId/transactions`,
     params: [
       {
-        name: "account_id",
+        name: "accountId",
         type: "string",
         header: true,
       },
     ],
     permissions: [isUserOwner],
   })
-  public async getTransactionsByAccountRoute(params: { account_id: string }) {
+  public async getTransactionsByAccountRoute(params: { accountId: string }) {
     return await transactionService.getAllWithJoin(
       "transaction",
-      params.account_id,
+      params.accountId,
       ["sourceAccount", "destinationAccount", "category"],
     );
   }

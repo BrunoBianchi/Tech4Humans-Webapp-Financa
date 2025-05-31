@@ -16,11 +16,11 @@ export default function CreateFastTransactionModal({
   onClose,
   contact,
 }: CreateFastTransactionModalProps) {
-  const [tipo, setTipo] = useState("");
-  const [descricao, setDescricao] = useState("");
+  const [typeState, setTypeState] = useState("");
+  const [descriptionState, setDescriptionState] = useState("");
   const [selectedTransactionCategory, setSelectedTransactionCategory] =
     useState<Category | null>(null);
-  const [quantia, setQuantia] = useState("");
+  const [quantityState, setQuantityState] = useState("");
   const params = useParams<{ id: string }>();
   const { addTransaction } = useTransactionContext();
   if (!isOpen) return null;
@@ -29,40 +29,38 @@ export default function CreateFastTransactionModal({
     console.log("Category selected in form:", category);
   };
   function handleSubmit(e: React.FormEvent) {
-    console.log(selectedTransactionCategory);
-    console.log("a");
     e.preventDefault();
     if (selectedTransactionCategory?.id) {
       addTransaction(
         {
-          amount: Number(quantia),
+          amount: Number(quantityState),
           category: selectedTransactionCategory?.id || "",
-          description: descricao,
+          description: descriptionState,
           sourceAccount: params.id || "",
-          destinationAccount: contact.destination_account_id,
-          type: tipo,
+          destinationAccount: contact.destinationAccountId,
+          type: typeState,
         },
         params.id || "",
-        contact.destination_account_id || "",
+        contact.destinationAccountId || "",
       );
     } else {
       addTransaction(
         {
-          amount: Number(quantia),
-          description: descricao,
+          amount: Number(quantityState),
+          description: descriptionState,
           sourceAccount: params.id || "",
-          destinationAccount: contact.destination_account_id,
-          type: tipo,
+          destinationAccount: contact.destinationAccountId,
+          type: typeState,
         },
         params.id || "",
-        contact.destination_account_id || "",
+        contact.destinationAccountId || "",
       );
     }
 
     setSelectedTransactionCategory(null);
-    setDescricao("");
-    setTipo("");
-    setQuantia("");
+    setDescriptionState("");
+    setTypeState("");
+    setQuantityState("");
   }
 
   return (
@@ -122,7 +120,7 @@ export default function CreateFastTransactionModal({
                 />
                 {selectedTransactionCategory && (
                   <p className="text-sm text-gray-600 mt-1">
-                    Categoria Atual: {selectedTransactionCategory.name} (ID:{" "}
+                    Categoria Atual: {selectedTransactionCategory.name} (Id:{" "}
                     {selectedTransactionCategory.id})
                   </p>
                 )}
@@ -132,8 +130,8 @@ export default function CreateFastTransactionModal({
                   Tipo
                 </label>
                 <select
-                  value={tipo}
-                  onChange={(e) => setTipo(e.target.value)}
+                  value={typeState}
+                  onChange={(e) => setTypeState(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
                 >
@@ -148,10 +146,10 @@ export default function CreateFastTransactionModal({
                 </label>
                 <input
                   type="number"
-                  value={quantia}
+                  value={quantityState}
                   min={1}
                   pattern="[1-9]+"
-                  onChange={(e) => setQuantia(e.target.value)}
+                  onChange={(e) => setQuantityState(e.target.value)}
                   placeholder="0,00"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                   required
@@ -162,8 +160,8 @@ export default function CreateFastTransactionModal({
                   Descricao
                 </label>
                 <textarea
-                  value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
+                  value={descriptionState}
+                  onChange={(e) => setDescriptionState(e.target.value)}
                   placeholder="Descricao"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
                 />

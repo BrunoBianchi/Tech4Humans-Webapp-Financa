@@ -51,9 +51,6 @@ export default function HomeRoute() {
   };
 
   useEffect(() => {
-    accounts.map((account: Account) => {
-      console.log(account);
-    });
     let prompt = `Olá! Sou ${user?.name?.split(" ")[0] || "um usuário"}. `;
     if (accounts && accounts.length > 0) {
       prompt += `Tenho ${accounts.length} conta(s) com um saldo total de R$ ${formatCurrency(totalBalance)}. `;
@@ -80,7 +77,6 @@ export default function HomeRoute() {
     }
     prompt +=
       "Poderia me dar uma visão geral e um conselho financeiro baseado nesses dados?";
-    console.log(prompt);
     if (user && accounts && accounts.length > 0 && !isLoading) {
       sendMessage(prompt);
     }
@@ -160,15 +156,15 @@ export default function HomeRoute() {
     "bg-emerald-400",
     "bg-teal-400",
     "bg-cyan-400",
-    "bg-sky-400", // Existing example color
+    "bg-sky-400",
     "bg-blue-400",
     "bg-indigo-400",
     "bg-violet-400",
     "bg-purple-400",
-    "bg-fuchsia-400", // Existing example color
+    "bg-fuchsia-400",
     "bg-pink-400",
     "bg-rose-400",
-    "bg-yellow-400", // Existing example color
+    "bg-yellow-400",
   ];
 
   let colorIndex = 0;
@@ -185,28 +181,38 @@ export default function HomeRoute() {
       }
       attempts++;
     }
-    // Fallback if all colors are used (should be rare with enough colors)
     return availableColors[Math.floor(Math.random() * availableColors.length)];
   };
-
   let displaySpendingCategories = categories
     ? categories
         .map((cat) => {
-          const categoryTransactions = outcomingTransactions.filter(
-            (t) => t.category?.id === cat.id || t.category?.name === cat.name,
-          );
+          const categoryTransactions = outcomingTransactions.filter((t) => {
+            // Determine the name of the transaction's category
+            let transactionCategoryName: string | undefined;
+            if (typeof t.category === "string") {
+              transactionCategoryName = t.category;
+            } else if (
+              t.category &&
+              typeof t.category === "object" &&
+              t.category.name
+            ) {
+              transactionCategoryName = t.category.name;
+            }
+            // Compare with the name from the context categories
+            return transactionCategoryName === cat.name;
+          });
           const amount = categoryTransactions.reduce(
             (sum, t) => sum + t.amount,
             0,
           );
           return {
-            id: cat.id || cat.name, // Assuming category has an id or unique name
+            id: cat.id || cat.name,
             name: cat.name,
             amount: amount,
-            color: getNextColor(), // Assign a color
+            color: getNextColor(),
           };
         })
-        .filter((item) => item.amount > 0) // Filter out categories with no spending
+        .filter((item) => item.amount > 0)
     : [];
 
   const sumUserCategories = displaySpendingCategories.reduce(
@@ -219,10 +225,9 @@ export default function HomeRoute() {
       id: "cat-outros",
       name: "Outros",
       amount: totalOutcoming - sumUserCategories,
-      color: "bg-slate-300", // Default color for "Outros"
+      color: "bg-slate-300",
     });
   }
-  // Sort by amount descending to show largest categories first
   displaySpendingCategories.sort((a, b) => b.amount - a.amount);
 
   return (

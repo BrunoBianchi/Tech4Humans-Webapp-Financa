@@ -8,22 +8,37 @@ type ControllerParams = {
   permissions?: Array<RequestHandler>;
 };
 
-function Controller(params: ControllerParams): ClassDecorator {
-  return function (target: Function) {
+interface ControllerStatic {
+  new (...args: unknown[]): object;
+  getRouter?: () => unknown;
+}
+
+function Controller(params: ControllerParams) {
+  return function <T extends ControllerStatic>(target: T): T {
     const controllerInstance = new ControllerClass(params);
 
-    const newConstructor: any = function () {
-      return controllerInstance;
-    };
+    const newConstructor = class extends (target as new (
+      ...args: unknown[]
+    ) => object) {
+      constructor(...args: unknown[]) {
+        super(...args);
+        return controllerInstance;
+      }
+    } as T;
 
-    newConstructor.prototype = Object.create(target.prototype);
-    newConstructor.prototype.constructor = newConstructor;
+    Object.setPrototypeOf(newConstructor, target);
 
-    newConstructor.getRouter = function () {
+    newConstructor.getRouter = () => {
       return controllerInstance.getRouter();
     };
 
-    return newConstructor as any;
+    Object.defineProperty(newConstructor, "name", {
+      value: target.name,
+      writable: false,
+      configurable: true,
+    });
+
+    return newConstructor;
   };
 }
 

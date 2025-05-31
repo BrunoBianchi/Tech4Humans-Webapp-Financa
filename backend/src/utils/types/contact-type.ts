@@ -1,5 +1,5 @@
 export type ContactType = {
-  contact_id?: string;
+  contactId?: string;
   name: string;
-  destination_account_id: string;
+  destinationAccountId: string;
 };

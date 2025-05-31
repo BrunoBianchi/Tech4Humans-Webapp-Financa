@@ -3,7 +3,7 @@ import { RequestHandler } from "express";
 type param = {
   name: string;
   type: string;
-   required?: boolean;
+  required?: boolean;
   header?: boolean;
 };
 

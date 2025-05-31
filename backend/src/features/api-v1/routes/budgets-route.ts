@@ -56,10 +56,10 @@ export class BudgetsRoute {
   }
 
   @Delete({
-    path: "/card/:card/budget/:budget_id",
+    path: "/card/:card/budget/:budgetID",
     params: [
       {
-        name: "budget_id",
+        name: "budgetID",
         type: "string",
         header: true,
       },
@@ -70,7 +70,7 @@ export class BudgetsRoute {
       },
     ],
   })
-  public async deleteBudgetRoute(params: { budget_id: string; card: string }) {
-    return await budgetsService.delete(params.budget_id);
+  public async deleteBudgetRoute(params: { budgetID: string; card: string }) {
+    return await budgetsService.delete(params.budgetID);
   }
 }

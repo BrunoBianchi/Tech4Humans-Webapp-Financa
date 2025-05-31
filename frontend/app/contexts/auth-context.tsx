@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error("Login failed");
     }
     const data = await response.json();
-    const hours = parseInt(data.expiration.split("h")[0], 10) || 1;
+    const hours = parseInt(data.expiration.split("h")[0], 10) || 7;
     setCookie("token", data.authorization, {
       path: "/",
       expires: new Date(Date.now() + hours * 60 * 60 * hours * 1000),
