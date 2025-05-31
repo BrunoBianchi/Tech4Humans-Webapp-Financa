@@ -7,6 +7,6 @@ export type Account = {
   type: string;
   cards?: any[];
   user?: User;
-  category?:Category[];
+  category?: Category[];
   user_id?: string;
 };

@@ -1,12 +1,23 @@
-import { ObjectLiteral, Repository } from "typeorm";
-import { AppDataSource } from "../../database/configuration/data-source";
+import { BaseEntity, ObjectLiteral, Repository } from "typeorm";
 import { ApiError } from "./errors-class";
+import { validate } from "class-validator";
+import { AppDataSource } from "../../database/configuration/data-source";
 export abstract class BaseService<T extends ObjectLiteral> {
   protected repository!: Repository<T>;
+  private classValidator!: any;
   constructor() {
     this.repository = AppDataSource.getRepository(
       this.constructor.name.split("Service")[0],
     );
+    const entities = AppDataSource.options.entities;
+    const classValidator = (entities as []).find(
+      (classConstructor: ClassDecorator) => {
+        return (
+          classConstructor.name == this.constructor.name.split("Service")[0]
+        );
+      },
+    );
+    this.classValidator = classValidator;
   }
 
   public async getById(
@@ -32,6 +43,25 @@ export abstract class BaseService<T extends ObjectLiteral> {
       id: string;
     }>,
   ): Promise<T> {
+    const entityInstance = Object.assign(new this.classValidator(), object);
+    let errors = await validate(entityInstance, {
+      skipMissingProperties: false,
+    });
+    errors = errors.filter((error) => {
+      return error.property != undefined;
+    });
+    if (errors.length > 0) {
+      throw new ApiError(400, "Validation failed", errors.toString());
+    }
+    if (this.constructor.name.split("Service")[0] == "User") {
+      const userRepository = AppDataSource.getRepository("User");
+      const existingUser = await userRepository.findOne({
+        where: { email: object.email },
+      });
+      if (existingUser) {
+        throw new ApiError(400, "User with this email already exists");
+      }
+    }
     const relArray = relations
       ? await Promise.all(
           relations.map(async (relation) => {
@@ -102,17 +132,23 @@ export abstract class BaseService<T extends ObjectLiteral> {
       const entityName = this.repository.metadata.name;
 
       if (entityName === "Account") {
-        if (effectiveJoins.includes("incomingTransactions") && !effectiveJoins.includes("incomingTransactions.category")) {
+        if (
+          effectiveJoins.includes("incomingTransactions") &&
+          !effectiveJoins.includes("incomingTransactions.category")
+        ) {
           effectiveJoins.push("incomingTransactions.category");
         }
-        if (effectiveJoins.includes("outgoingTransactions") && !effectiveJoins.includes("outgoingTransactions.category")) {
+        if (
+          effectiveJoins.includes("outgoingTransactions") &&
+          !effectiveJoins.includes("outgoingTransactions.category")
+        ) {
           effectiveJoins.push("outgoingTransactions.category");
         }
       }
 
       const result = await this.repository.find({
         where: whereCondition,
-        relations: effectiveJoins, 
+        relations: effectiveJoins,
       });
 
       return result;

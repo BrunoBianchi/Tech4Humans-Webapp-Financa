@@ -6,7 +6,7 @@ export type transaction = {
   date: Date;
   amount: number;
   type: string;
-  category:CategoryType;
+  category: CategoryType;
   status: string;
   description: string;
   sourceAccount: Account;

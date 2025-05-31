@@ -9,7 +9,7 @@ export default function AccountLayout() {
     <CardProvider>
       <TransactionProvider>
         <ContactProvider>
-            <Outlet />
+          <Outlet />
         </ContactProvider>
       </TransactionProvider>
     </CardProvider>

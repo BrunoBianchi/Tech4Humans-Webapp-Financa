@@ -1,4 +1,4 @@
 export const jwt_options = {
-  secret: new TextEncoder().encode(process.env.Private_key),
-  alg: "HS256",
+  secret: process.env.JWT_SECRET || process.env.Private_key || "default_secret_key", 
+  alg: "HS256" as const, 
 };

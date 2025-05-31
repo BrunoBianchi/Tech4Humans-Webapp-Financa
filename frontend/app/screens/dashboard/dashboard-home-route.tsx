@@ -22,8 +22,8 @@ export default function HomeRoute() {
   const [showAllAccounts, setShowAllAccounts] = useState(false);
   const [search, setSearch] = useState("");
   const [accountFilterModalOpen, setAccountFilterModalOpen] = useState(false);
-  const {response, isLoading, error, sendMessage} =  useAiInteraction();
-  const {categories, addCategory} = useCategories();
+  const { response, isLoading, error, sendMessage } = useAiInteraction();
+  const { categories, addCategory } = useCategories();
   const incomingTransactions = accounts
     .flatMap((a: any) => a.incomingTransactions || [])
     .filter((t) => t.amount > 0);
@@ -51,32 +51,47 @@ export default function HomeRoute() {
   };
 
   useEffect(() => {
-    accounts.map((account: Account) => { 
-      console.log(account)
-    })
-    let prompt = `Olá! Sou ${user?.name?.split(" ")[0] || 'um usuário'}. `;
+    accounts.map((account: Account) => {
+      console.log(account);
+    });
+    let prompt = `Olá! Sou ${user?.name?.split(" ")[0] || "um usuário"}. `;
     if (accounts && accounts.length > 0) {
       prompt += `Tenho ${accounts.length} conta(s) com um saldo total de R$ ${formatCurrency(totalBalance)}. `;
       prompt += `Recentemente, tive R$ ${formatCurrency(totalIncoming)} em entradas e R$ ${formatCurrency(totalOutcoming)} em saídas. `;
-      prompt += `Aqui estão os detalhes das minhas contas: ${JSON.stringify(accounts.map(acc => ({ bank: acc.bank, type: acc.type, balance: acc.balance
-      })))}. `;
-      prompt += `Minhas transações recentes incluem: ${JSON.stringify(outcomingTransactions.map((transaction)=>{
-        return {
-          amount: transaction.amount,
-          description: transaction.description,
-          date: transaction.date,
-          category: transaction.category?.name || "Sem categoria",
-        };
-      }))}. `;
+      prompt += `Aqui estão os detalhes das minhas contas: ${JSON.stringify(
+        accounts.map((acc) => ({
+          bank: acc.bank,
+          type: acc.type,
+          balance: acc.balance,
+        })),
+      )}. `;
+      prompt += `Minhas transações recentes incluem: ${JSON.stringify(
+        outcomingTransactions.map((transaction) => {
+          return {
+            amount: transaction.amount,
+            description: transaction.description,
+            date: transaction.date,
+            category: transaction.category?.name || "Sem categoria",
+          };
+        }),
+      )}. `;
     } else {
       prompt += `Ainda não tenho contas cadastradas. `;
     }
-    prompt += "Poderia me dar uma visão geral e um conselho financeiro baseado nesses dados?";
-    console.log(prompt)
-    if (user && accounts && accounts.length > 0 && !isLoading) { 
-        sendMessage(prompt);
+    prompt +=
+      "Poderia me dar uma visão geral e um conselho financeiro baseado nesses dados?";
+    console.log(prompt);
+    if (user && accounts && accounts.length > 0 && !isLoading) {
+      sendMessage(prompt);
     }
-  }, [accounts, user, sendMessage, totalIncoming, totalOutcoming, totalBalance]); 
+  }, [
+    accounts,
+    user,
+    sendMessage,
+    totalIncoming,
+    totalOutcoming,
+    totalBalance,
+  ]);
 
   const searchedAccounts = accounts.filter(
     (a: Account) =>
@@ -173,24 +188,26 @@ export default function HomeRoute() {
     // Fallback if all colors are used (should be rare with enough colors)
     return availableColors[Math.floor(Math.random() * availableColors.length)];
   };
-  
+
   let displaySpendingCategories = categories
-  ? categories.map((cat) => {
-      const categoryTransactions = outcomingTransactions.filter(
-        (t) => t.category?.id === cat.id || t.category?.name === cat.name,
-      );
-      const amount = categoryTransactions.reduce(
-        (sum, t) => sum + t.amount,
-        0,
-      );
-      return {
-        id: cat.id || cat.name, // Assuming category has an id or unique name
-        name: cat.name,
-        amount: amount,
-        color: getNextColor(), // Assign a color
-      };
-    }).filter(item => item.amount > 0) // Filter out categories with no spending
-  : [];
+    ? categories
+        .map((cat) => {
+          const categoryTransactions = outcomingTransactions.filter(
+            (t) => t.category?.id === cat.id || t.category?.name === cat.name,
+          );
+          const amount = categoryTransactions.reduce(
+            (sum, t) => sum + t.amount,
+            0,
+          );
+          return {
+            id: cat.id || cat.name, // Assuming category has an id or unique name
+            name: cat.name,
+            amount: amount,
+            color: getNextColor(), // Assign a color
+          };
+        })
+        .filter((item) => item.amount > 0) // Filter out categories with no spending
+    : [];
 
   const sumUserCategories = displaySpendingCategories.reduce(
     (sum, cat) => sum + cat.amount,
@@ -208,7 +225,6 @@ export default function HomeRoute() {
   // Sort by amount descending to show largest categories first
   displaySpendingCategories.sort((a, b) => b.amount - a.amount);
 
-
   return (
     <div className="page-container py-6 md:py-8">
       <div className="mb-6 md:mb-8">
@@ -221,7 +237,11 @@ export default function HomeRoute() {
       </div>
 
       <div className="mb-6 md:mb-8">
-        <SmartAdviceCard response={response} isLoading={isLoading} error={error} />
+        <SmartAdviceCard
+          response={response}
+          isLoading={isLoading}
+          error={error}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">

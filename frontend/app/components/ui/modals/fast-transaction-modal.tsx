@@ -29,20 +29,40 @@ export default function CreateFastTransactionModal({
     console.log("Category selected in form:", category);
   };
   function handleSubmit(e: React.FormEvent) {
-    console.log(contact);
+    console.log(selectedTransactionCategory);
+    console.log("a");
     e.preventDefault();
-    addTransaction(
-      {
-        amount: Number(quantia),
-        category: selectedTransactionCategory?.id,
-        description: descricao,
-        sourceAccount: params.id || "",
-        destinationAccount: contact.destination_account_id,
-        type: tipo,
-      },
-      params.id || "",
-      contact.destination_account_id || "",
-    );
+    if (selectedTransactionCategory?.id) {
+      addTransaction(
+        {
+          amount: Number(quantia),
+          category: selectedTransactionCategory?.id || "",
+          description: descricao,
+          sourceAccount: params.id || "",
+          destinationAccount: contact.destination_account_id,
+          type: tipo,
+        },
+        params.id || "",
+        contact.destination_account_id || "",
+      );
+    } else {
+      addTransaction(
+        {
+          amount: Number(quantia),
+          description: descricao,
+          sourceAccount: params.id || "",
+          destinationAccount: contact.destination_account_id,
+          type: tipo,
+        },
+        params.id || "",
+        contact.destination_account_id || "",
+      );
+    }
+
+    setSelectedTransactionCategory(null);
+    setDescricao("");
+    setTipo("");
+    setQuantia("");
   }
 
   return (
@@ -96,7 +116,6 @@ export default function CreateFastTransactionModal({
 
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-
                 <SelectCategory
                   onCategorySelect={handleCategoryUpdate}
                   label="Escolha a Categoria da Transação"

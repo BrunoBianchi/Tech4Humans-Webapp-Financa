@@ -12,6 +12,7 @@ type Param = {
   name: string;
   type: keyof typeof z;
   header?: boolean;
+   required?: boolean;
 };
 
 type RouteDefinition = {
@@ -83,7 +84,11 @@ export class ControllerClass {
 
                 if (route.params && route.params.length > 0) {
                   route.params.forEach((param: Param) => {
-                    routeParams[param.name] = (z as any)[param.type]();
+                    let schema = (z as any)[param.type]();
+                    if (!param.required) {
+                      schema = schema.optional();
+                    }
+                    routeParams[param.name] = schema;
                   });
                 }
                 try {

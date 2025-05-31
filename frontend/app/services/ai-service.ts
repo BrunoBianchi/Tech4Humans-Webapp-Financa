@@ -12,14 +12,14 @@ export const AiService = {
     });
 
     if (!response.ok) {
-      const errorBody = await response.text(); 
-      
+      const errorBody = await response.text();
+
       throw new Error(
         `Erro ao comunicar com a IA: ${response.status} ${errorBody || response.statusText}`,
       );
     }
 
     const adviceText = await response.text();
-    return adviceText; 
+    return adviceText;
   },
 };

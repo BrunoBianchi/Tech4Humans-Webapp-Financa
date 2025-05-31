@@ -15,16 +15,19 @@ declare global {
 
 const auth: RequestHandler = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   try {
     const Authorization =
       z.string().parse(req.headers.authorization).split("Bearer ")[1] || null;
-    const { payload } = await jwt_verify(Authorization || "");
+    const payload = await jwt_verify(Authorization || "");
     if (!payload) {
       throw new ApiError(401, "User Unauthorized !");
     } else {
+      if (typeof payload === 'string') {
+        throw new ApiError(401, "User Unauthorized !");
+      }
       const { email } = payload;
       const user = (await getUser(email as string)) as User;
       if (!user) throw new ApiError(401, "User Unauthorized !");

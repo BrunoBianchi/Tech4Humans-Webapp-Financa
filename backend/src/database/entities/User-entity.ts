@@ -3,11 +3,12 @@ import bcrypt from "bcrypt";
 import { Account } from "./Account-entity";
 import { Notification } from "./Notification-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
-import { IsEmail, Length } from "class-validator";
+import { IsEmail, IsNotEmpty, Length } from "class-validator";
 import { Category } from "./Category-entity";
 @Entity()
 export class User extends BaseEntity {
-  @Column()
+  @Column({nullable:false})
+  @IsNotEmpty()
   name!: string;
 
   @Column()
@@ -28,9 +29,8 @@ export class User extends BaseEntity {
   @OneToMany(() => Account, (account) => account.user)
   accounts!: Account[];
 
-  @OneToMany(() => Notification, (notification) => notification.user)
-  notifications!: Notification[];
 
-  @OneToMany(()=>Category, (category) => category.user, { nullable: true })
+
+  @OneToMany(() => Category, (category) => category.user, { nullable: true })
   categories!: Category[];
 }

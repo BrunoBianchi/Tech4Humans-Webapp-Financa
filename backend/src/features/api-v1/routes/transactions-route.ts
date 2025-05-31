@@ -29,8 +29,9 @@ export class TransactionRoute {
         type: "string",
       },
       {
-        name:'category',
-        type:'string',
+        name: "category",
+        type: "string",
+        required:false,
       },
       {
         name: "description",
@@ -43,10 +44,9 @@ export class TransactionRoute {
     account_id: string;
     amount: number;
     type: string;
-    category:string;
+    category: string;
     description: string;
     destination: string;
-    
   }) {
     const transaction: Omit<
       transaction,
@@ -61,7 +61,7 @@ export class TransactionRoute {
       [
         { name: "sourceAccount", id: params.account_id },
         { name: "destinationAccount", id: params.destination },
-        {name:'category',id:params.category}
+        { name: "category", id: params.category },
       ],
     );
     return {
@@ -69,7 +69,7 @@ export class TransactionRoute {
       amount: transaction.amount,
       description: transaction.description,
       date: transaction.date,
-      category:transaction.category.id,
+      category: transaction.category.id,
     };
   }
 
@@ -88,7 +88,7 @@ export class TransactionRoute {
     return await transactionService.getAllWithJoin(
       "transaction",
       params.account_id,
-      ["sourceAccount", "destinationAccount","category"],
+      ["sourceAccount", "destinationAccount", "category"],
     );
   }
 }

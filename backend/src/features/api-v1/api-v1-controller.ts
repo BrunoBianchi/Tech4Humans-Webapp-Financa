@@ -17,7 +17,7 @@ import { CategoryRoute } from "./routes/category-route";
     ContactRoute,
     BudgetsRoute,
     AiRoute,
-    CategoryRoute
+    CategoryRoute,
   ],
   path: "/api/v1",
   permissions: [auth],

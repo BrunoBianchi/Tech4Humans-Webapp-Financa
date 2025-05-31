@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useCategories } from '@/app/contexts/select-context';
-import type { Category } from '@/app/types/category-type'; // Adjust path
+import React, { useState, useEffect } from "react";
+import { useCategories } from "@/app/contexts/select-context";
+import type { Category } from "@/app/types/category-type"; // Adjust path
 
 interface SelectCategoryProps {
   onCategorySelect: (category: Category | null) => void;
@@ -17,13 +17,20 @@ export default function SelectCategory({
   initialSelectedId,
   placeholder = "Selecione ou adicione uma categoria",
 }: SelectCategoryProps) {
-  const { categories, selectedCategory: contextSelectedCategory, addCategory, selectCategory: contextSelectCategory, error: contextError } = useCategories();
-  const [newCategoryName, setNewCategoryName] = useState('');
+  const {
+    categories,
+    selectedCategory: contextSelectedCategory,
+    addCategory,
+    selectCategory: contextSelectCategory,
+    error: contextError,
+  } = useCategories();
+  const [newCategoryName, setNewCategoryName] = useState("");
   const [showAddCategoryInput, setShowAddCategoryInput] = useState(false);
   const [componentError, setComponentError] = useState<string | null>(null);
 
   // Sync with context or initial prop for selected value
-  const currentSelectedValue = contextSelectedCategory?.id ?? (initialSelectedId ?? '');
+  const currentSelectedValue =
+    contextSelectedCategory?.id ?? initialSelectedId ?? "";
 
   useEffect(() => {
     if (initialSelectedId && !contextSelectedCategory) {
@@ -35,7 +42,9 @@ export default function SelectCategory({
     setComponentError(contextError); // Show errors from context (e.g., duplicate category)
   }, [contextError]);
 
-  const handleSelectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectionChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const categoryId = event.target.value;
     setComponentError(null); // Clear local error on new action
 
@@ -49,7 +58,7 @@ export default function SelectCategory({
       onCategorySelect(null);
       setShowAddCategoryInput(false);
     } else {
-      const foundCategory = categories.find(cat => cat.id === categoryId);
+      const foundCategory = categories.find((cat) => cat.id === categoryId);
       if (foundCategory) {
         contextSelectCategory(categoryId);
         onCategorySelect(foundCategory);
@@ -59,7 +68,7 @@ export default function SelectCategory({
   };
 
   const handleAddNewCategory = async () => {
-    if (newCategoryName.trim() === '') {
+    if (newCategoryName.trim() === "") {
       setComponentError("O nome da categoria não pode ser vazio.");
       return;
     }
@@ -67,7 +76,7 @@ export default function SelectCategory({
       const newCat = await addCategory(newCategoryName); // This might throw or return existing
       contextSelectCategory(newCat.id);
       onCategorySelect(newCat);
-      setNewCategoryName('');
+      setNewCategoryName("");
       setShowAddCategoryInput(false);
       setComponentError(null); // Clear error on success
     } catch (e: any) {
@@ -79,7 +88,14 @@ export default function SelectCategory({
 
   return (
     <div className={`mb-4 ${className}`}>
-      {label && <label htmlFor="category-select" className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
+      {label && (
+        <label
+          htmlFor="category-select"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          {label}
+        </label>
+      )}
       <div className="flex items-center space-x-2">
         <select
           id="category-select"
@@ -93,7 +109,9 @@ export default function SelectCategory({
               {category.name}
             </option>
           ))}
-          <option value="add_new" className="font-semibold text-indigo-600">-- Adicionar Nova --</option>
+          <option value="add_new" className="font-semibold text-indigo-600">
+            -- Adicionar Nova --
+          </option>
         </select>
       </div>
 
@@ -102,7 +120,10 @@ export default function SelectCategory({
           <input
             type="text"
             value={newCategoryName}
-            onChange={(e) => { setNewCategoryName(e.target.value); setComponentError(null); }}
+            onChange={(e) => {
+              setNewCategoryName(e.target.value);
+              setComponentError(null);
+            }}
             placeholder="Nome da nova categoria"
             className="mt-1 block flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
@@ -115,7 +136,9 @@ export default function SelectCategory({
           </button>
         </div>
       )}
-      {componentError && <p className="mt-1 text-xs text-red-600">{componentError}</p>}
+      {componentError && (
+        <p className="mt-1 text-xs text-red-600">{componentError}</p>
+      )}
     </div>
   );
 }

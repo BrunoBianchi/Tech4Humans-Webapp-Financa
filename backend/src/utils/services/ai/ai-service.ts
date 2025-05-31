@@ -6,10 +6,10 @@ export const generateAiResponse = async (prompt: string): Promise<string> => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer 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`, // Consider moving this to an environment variable
+          Authorization: `Bearer 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`, 
         },
         body: JSON.stringify({
-          model: "meta-llama/llama-4-scout-17b-16e-instruct", // Consider making this configurable
+          model: "meta-llama/llama-4-scout-17b-16e-instruct", 
           messages: [
             {
               role: "user",

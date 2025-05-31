@@ -17,15 +17,17 @@ class TransactionService extends BaseService<transaction> {
     const destinationAccount_id = relations?.find(
       (relation) => relation.name === "destinationAccount",
     );
-    const categoryId = relations?.find( 
+    const categoryId = relations?.find(
       (relation) => relation.name === "category",
-    )
+    );
     if (sourceAccount_id?.id == destinationAccount_id?.id)
       throw new ApiError(
         400,
         "Source and destination accounts cannot be the same!",
       );
-    let category = (await categoryService.getById(categoryId!.id) )as CategoryType
+    let category = (await categoryService.getById(
+      categoryId!.id,
+    )) as CategoryType;
     let source = (await accountService.getById(sourceAccount_id?.id as string, [
       "user",
     ])) as Account;
@@ -40,27 +42,17 @@ class TransactionService extends BaseService<transaction> {
       ...object,
       sourceAccount: source,
       destinationAccount: destination,
-      category: category
+      category: category,
     } as any);
     const savedTransaction = await this.repository.save(newTransaction);
     source.balance -= object.amount;
     destination.balance += object.amount;
     await accountService.update(source.id, source);
     await accountService.update(destination.id, destination);
-    await notificationService.create(
-      {
-        date: new Date(),
-        description: `Você recebeu R$ ${object.amount} de ${source.user!.name}`,
-        title: `Transação recebida de  ${source.user!.name}`,
-      },
-      [
-        {
-          name: "user",
-          id: destination.user!.id,
-        },
-      ],
-    );
-    return Array.isArray(savedTransaction) ? savedTransaction[0] : savedTransaction;
+
+    return Array.isArray(savedTransaction)
+      ? savedTransaction[0]
+      : savedTransaction;
   }
 }
 

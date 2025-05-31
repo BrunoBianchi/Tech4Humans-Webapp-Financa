@@ -24,7 +24,7 @@ export default function DashboardLayout() {
 
         <main className="flex-2  p-6">
           <AccountProvider>
-            <CategoryProvider> 
+            <CategoryProvider>
               <Outlet />
             </CategoryProvider>
           </AccountProvider>

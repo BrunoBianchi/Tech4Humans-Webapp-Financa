@@ -28,7 +28,6 @@ export const AppDataSource = new DataSource({
     Contact,
     Payment,
     Investiment,
-    Notification,
     Budgets,
     Category,
   ],

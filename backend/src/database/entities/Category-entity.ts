@@ -9,12 +9,14 @@ export class Category extends BaseEntity {
   @Column()
   name!: string;
 
-  @ManyToOne(() => Budgets, (budgets) => budgets.categories,{nullable:true})
+  @ManyToOne(() => Budgets, (budgets) => budgets.categories, { nullable: true })
   budget!: Budgets;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.category,{nullable:true})
+  @OneToMany(() => Transaction, (transaction) => transaction.category, {
+    nullable: true,
+  })
   transaction!: Transaction[];
 
-  @ManyToOne(()=>User, (user) => user.categories, { nullable:false })
+  @ManyToOne(() => User, (user) => user.categories, { nullable: false })
   user!: User;
 }
