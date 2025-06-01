@@ -233,7 +233,7 @@ O diagrama Entidade-Relacionamento (ER) abaixo ilustra as principais entidades d
 ## Decisoes da arquitetura
 
 ### Backend - Arquitetura Modular e MVC
-A combinação das arquiteturas ![modular](https://medium.com/geekculture/what-is-modular-architecture-benefits-implementation-methods-8c272ebc05eb) e ![MVC](https://coodesh.com/blog/dicionario/o-que-e-arquitetura-mvc/) no backend proporciona uma base sólida e flexível para o desenvolvimento do sistema, inspirando em um framework moderno ![nestjs](https://nestjs.com)
+A combinação das arquiteturas [modular](https://medium.com/geekculture/what-is-modular-architecture-benefits-implementation-methods-8c272ebc05eb) e [MVC](https://coodesh.com/blog/dicionario/o-que-e-arquitetura-mvc/) no backend proporciona uma base sólida e flexível para o desenvolvimento do sistema, inspirando em um framework moderno [Nestjs](https://nestjs.com)
 
 #### 1. Arquitetura Modular
 A adoção de uma arquitetura modular no backend foi uma decisão estratégica, motivada pela familiaridade com estruturas semelhantes (como a do Angular) e pelos seguintes benefícios:
@@ -277,5 +277,55 @@ O sistema foi projetado com validação em múltiplas camadas, garantindo robust
 #### Banco de Dados (PostgreSQL)
 - **Validação de integridade e restrições:** Antes da inserção de novos dados, o banco de dados aplica validações automáticas por meio de constraints e tipos de dados definidos no modelo, prevenindo inconsistências e mantendo a integridade das informações.
 
+### Utilização de cookies 
 
+A escolha por utilizar cookies no frontend, em vez de localStorage ou sessionStorage, é justificada pelos seguintes benefícios:
 
+1. **Proteção contra ataques XSS (Cross-Site Scripting)**
+    - **Cookies HttpOnly:** Ao marcar um cookie como `HttpOnly=true`, ele se torna inacessível ao JavaScript do navegador. Assim, mesmo que exista uma vulnerabilidade XSS, um atacante não conseguirá ler esse cookie via `document.cookie`.
+    - **localStorage/sessionStorage vulneráveis:** Dados armazenados em `localStorage` ou `sessionStorage` ficam sempre disponíveis em `window.localStorage` ou `window.sessionStorage`. Se houver um script malicioso injetado, ele pode facilmente ler e extrair esses dados.
+
+2. **Expiração e escopo de domínio**
+    - **Configuração granular:** Cookies permitem definir `Expires`/`Max-Age`, `Domain`, `Path`, `Secure` e `SameSite`, oferecendo controle preciso sobre validade, escopo e segurança.
+    - **localStorage/sessionStorage:** Não possuem controle nativo de expiração ou escopo de domínio, exigindo implementação manual dessas regras.
+
+3. **Persistência e compartilhamento entre abas**
+    - **Cookies:** Permitem controle de expiração e são compartilhados entre abas e janelas do navegador, facilitando a manutenção do estado de autenticação.
+    - **sessionStorage:** Dados somem ao fechar a aba e não são compartilhados entre abas.
+    - **localStorage:** Dados persistem indefinidamente, mas não oferecem controle de expiração automática.
+
+4. **Segurança de transporte (HTTPS/Secure flag)**
+    - **Cookie com Secure=true:** Garante que o cookie só seja enviado em conexões HTTPS, protegendo contra interceptação em conexões inseguras.
+    - **localStorage/sessionStorage:** Dados podem ser expostos se houver downgrade para HTTP, pois não há proteção nativa de transporte.
+
+---
+
+### Utilização de JsonWebToken (JWT) para autenticação
+
+A escolha pelo uso de JWT (JSON Web Token) como mecanismo de autenticação na aplicação se baseia em diversos benefícios que atendem tanto à segurança quanto à escalabilidade do sistema:
+
+1. **Autenticação stateless e escalável**
+    - **Sem sessão no servidor:** O JWT armazena todas as informações relevantes (ID do usuário, permissões, expiração) dentro do próprio token, eliminando a necessidade de manter sessões no backend. Isso facilita o balanceamento de carga e a escalabilidade horizontal, pois qualquer instância do backend pode validar o token localmente.
+
+2. **Padrão amplamente suportado e interoperável**
+    - **Integração facilitada:** JWT é um padrão aberto, suportado por diversas linguagens e frameworks, tornando-o ideal para sistemas distribuídos, microsserviços e integrações com terceiros.
+    - **Transporte flexível:** Pode ser transmitido via cabeçalho HTTP (`Authorization: Bearer <token>`), cookies ou até mesmo parâmetros de URL, conforme a necessidade da aplicação.
+
+3. **Segurança e controle de expiração**
+    - **Assinatura digital:** O token é assinado (HMAC ou RSA), garantindo integridade e autenticidade dos dados. O backend pode verificar se o token foi alterado ou forjado.
+    - **Expiração automática:** O campo `exp` define a validade do token, limitando o tempo de uso e reduzindo riscos em caso de vazamento. É possível implementar refresh tokens para sessões prolongadas de forma segura.
+
+4. **Flexibilidade e customização**
+    - **Claims personalizados:** O JWT permite incluir informações adicionais (claims) conforme as necessidades do negócio, como roles, permissões ou dados contextuais, facilitando decisões de autorização diretamente no backend.
+    - **Controle granular de acesso:** Permite implementar diferentes níveis de acesso e políticas de segurança de forma centralizada e padronizada.
+
+5. **Compatibilidade com cookies seguros**
+    - **Armazenamento seguro:** O JWT pode ser armazenado em cookies com flags `HttpOnly`, `Secure` e `SameSite`, combinando os benefícios de ambos os mecanismos para máxima proteção contra ataques XSS e CSRF.
+
+---
+
+## Logica de desenvolvimento
+
+### Principais funcionalidades 
+
+#### 1.
