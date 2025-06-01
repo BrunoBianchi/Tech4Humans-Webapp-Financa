@@ -18,5 +18,4 @@ export class Card extends BaseEntity {
 
   @ManyToOne(() => Account, (account) => account.cards)
   account!: Account;
-
 }
