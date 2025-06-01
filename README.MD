@@ -1,70 +1,72 @@
 # TechFinance - TechLab 2025
 
-## Indice
+Bem-vindo ao repositório do **TechFinance**, uma aplicação fullstack desenvolvida para o desafio TechLab 2025 da Tech4Humans. Este documento apresenta uma visão profissional e detalhada do projeto, incluindo decisões de arquitetura, lógica de desenvolvimento, estrutura do projeto, instruções de execução e cobertura de testes.
 
-- [Primeiros Passos](#-primeiros-passos)\\
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)\\
-- [Estruturas do projeto](#-estruturas-do-projeto)\\
-- [Decisoes da arquitetura](#-decisoes-da-arquitetura)\\
-## Primeiros Passos
+---
 
-Primeiramente, clone o rep usando o comando:
+## Índice
 
-```sh
-git clone https://github.com/BrunoBianchi/Tech4Humans-Webapp-Financa.git
-```
+- [Visão Geral](#visão-geral)
+- [Decisões de Arquitetura](#decisões-de-arquitetura)
+- [Lógica de Desenvolvimento](#lógica-de-desenvolvimento)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Instruções de Execução](#instruções-de-execução)
+- [Cobertura de Testes](#cobertura-de-testes)
 
-## Tecnologias Utilizadas
+---
 
-### Geral
+## Visão Geral
 
-- [Pnpm](https://pnpm.io/pt/) para o gerenciamento de pacotes de maneira rapida e eficiente.\\
-- [Node.js](https://nodejs.org/pt) ambiente de execucao javascript\\
-- [TypeScript](https://www.typescriptlang.org) uma surper class do javascript para type safety \\
-- [Dotenv](https://www.npmjs.com/package/dotenv) biblioteca para a manipulacao de informacoes secretas\\
-- [Docker](https://www.docker.com) para gerenciamento mais facil das aplicacoes\\
-- [Husky](https://typicode.github.io/husky/) para pre commits\\
-- [Eslint](https://eslint.org) para analise de tipagem e problemas\\
-- [Prettier](https://prettier.io) para formatagem do codigo\\
-- [Jest](https://jestjs.io/pt-BR/) para testes unitarios\\
+O **TechFinance** é uma solução para gerenciamento financeiro pessoal, composta por um backend robusto em Node.js/TypeScript e um frontend moderno em React. O projeto foi estruturado para garantir escalabilidade, segurança e facilidade de manutenção.
+
+---
+
+## Decisões de Arquitetura
 
 ### Backend
 
-- [Express](https://expressjs.com/pt-br/) para a criacao do servidor backend\\
-- [PostgreSQL](https://www.postgresql.org) Banco de dados SQL\\
-- [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken) para seguranca com assinaturas digitais\\
-- [TypeORM](https://typeorm.io) uma biblioteca para abstracao de sql\\
-- [Cors](https://typeorm.io) biblioteca para comunicao segura entre frontend e backend\\
-- [express-rate-limit](https://www.npmjs.com/package/express-rate-limit) biblioteca para limitar a quantidade de requisicoes \\
--[Zod](https://zod.dev) uma biblioteca para validacao de interface em requisicoes\\
--[Bcrypt](https://www.npmjs.com/package/bcrypt) biblioteca para fazer hash de senhas\\
-- [Uid](https://www.npmjs.com/package/uid) biblioteca para criacao de id's unicos\\
--[Reflect-Metadata](https://www.npmjs.com/package/reflect-metadata) para manipulacao de objetos na criacao de decorators\\
--[Class-Validator](https://www.npmjs.com/package/class-validator) biblioteca para validacao de estruturas de classes\\
--[Nodemon](https://nodemon.io) para monitoramento e reinicializacao do servidor\\
+- **TypeORM** foi escolhido como ORM por seu excelente suporte a TypeScript, integração nativa com decorators e facilidade de migração de banco de dados. Diferente de alternativas como Sequelize, o TypeORM oferece uma sintaxe mais alinhada ao padrão TypeScript e maior flexibilidade na modelagem de entidades.
+- **Express** foi adotado pela sua simplicidade, flexibilidade e grande ecossistema de middlewares, facilitando a criação de APIs RESTful.
+- **PostgreSQL** foi selecionado como banco de dados relacional por sua robustez, confiabilidade e recursos avançados, como transações e suporte a JSON.
+- **Zod** e **Class-Validator** foram utilizados para validação de dados, garantindo integridade e segurança nas requisições.
+- **JWT (JsonWebToken)** foi implementado para autenticação segura baseada em tokens.
+- **Docker** foi utilizado para padronizar ambientes de desenvolvimento e facilitar o deploy.
 
 ### Frontend
 
-- [Vite](https://vite.dev) biblioteca para cricao rapida de projetos \\
-- [React](https://react.dev) biblioteca para desenvolvimento web\\
-- [Reac-Router](https://reactrouter.com) biblioteca para fazer roteamento do react mais facilmente\\
-- [Tailwindcss](https://tailwindcss.com) framework de css \\
-- [FlowBite](https://flowbite.com) biblioteca de componentes \\
-- [Mui](https://mui.com) biblioteca de componentes react\\
+- **React** foi escolhido pela sua componentização, reatividade e grande comunidade.
+- **Vite** foi utilizado para acelerar o processo de build e desenvolvimento.
+- **TailwindCSS** e **MUI** foram adotados para estilização rápida e consistente da interface.
+- **React Router** facilita o roteamento entre páginas, promovendo uma navegação fluida.
 
-### Outros
+### Outras Decisões
 
-- [Bruno](https://www.usebruno.com) aplicativo desktop para visualizar requisicoes\\
-- [PgAdmin](https://www.pgadmin.org) SGBD (visualizacao dos dados do banco)\\
-- [DockerDesktop](https://www.docker.com) facilitar a manipulacao dos containers\\
-- [Vscode](https://code.visualstudio.com) como editor de codigo\\
-- [Swagger](https://swagger-autogen.github.io/docs/) para criacao de documentacao da api\\
+- **Husky**, **ESLint** e **Prettier** garantem qualidade e padronização do código.
+- **Jest** foi escolhido para testes unitários, devido à sua integração com TypeScript e facilidade de uso.
+
+---
+
+## Lógica de Desenvolvimento
+
+### Operações de Transferência entre Contas
+
+A lógica de transferência garante que:
+- O saldo da conta de origem seja verificado antes da transação.
+- As operações sejam atômicas, utilizando transações do banco de dados para evitar inconsistências.
+- Todas as transferências sejam registradas na tabela de transações, com informações detalhadas sobre origem, destino, valor e data.
+
+### Tratamento de Erros
+
+- Todos os endpoints possuem tratamento centralizado de erros, retornando mensagens claras e status HTTP apropriados.
+- Erros de validação, autenticação e autorização são tratados separadamente para facilitar o diagnóstico e a manutenção.
+- Logs de erros são gerados para monitoramento e auditoria.
+
+---
 
 ## Estrutura do Projeto
 
-O aplicativo esta separado em um unico diretorio contendo subpastas *backend* e *frontend* contendo cada um servidores diferentes \\
-Para as regras de negocio desse projeto, utilizei uma arquitetura modular tanto no backend quanto no front end
-
+O projeto está organizado em duas principais pastas: `backend` e `frontend`, cada uma com sua própria estrutura modular.
 
 ```
 Desafio-Webapp-Tech4humans/
@@ -101,9 +103,106 @@ Desafio-Webapp-Tech4humans/
 └── pnpm-lock.yaml                # Lockfile do pnpm na raiz
 ```
 
-## Decisoes da arquitetura
+---
 
+## Tecnologias Utilizadas
 
+### Geral
+
+- [Pnpm](https://pnpm.io/pt/) – Gerenciamento eficiente de pacotes
+- [Node.js](https://nodejs.org/pt) – Ambiente de execução JavaScript
+- [TypeScript](https://www.typescriptlang.org) – Tipagem estática para maior segurança
+- [Dotenv](https://www.npmjs.com/package/dotenv) – Gerenciamento de variáveis de ambiente
+- [Docker](https://www.docker.com) – Padronização de ambientes
+- [Husky](https://typicode.github.io/husky/) – Hooks de pré-commit
+- [ESLint](https://eslint.org) & [Prettier](https://prettier.io) – Qualidade e formatação do código
+- [Jest](https://jestjs.io/pt-BR/) – Testes unitários
+
+### Backend
+
+- [Express](https://expressjs.com/pt-br/) – Framework web
+- [PostgreSQL](https://www.postgresql.org) – Banco de dados relacional
+- [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken) – Autenticação JWT
+- [TypeORM](https://typeorm.io) – ORM para TypeScript
+- [Cors](https://www.npmjs.com/package/cors) – Comunicação segura entre frontend e backend
+- [express-rate-limit](https://www.npmjs.com/package/express-rate-limit) – Limitação de requisições
+- [Zod](https://zod.dev) & [Class-Validator](https://www.npmjs.com/package/class-validator) – Validação de dados
+- [Bcrypt](https://www.npmjs.com/package/bcrypt) – Hash de senhas
+- [Uid](https://www.npmjs.com/package/uid) – Geração de IDs únicos
+- [Reflect-Metadata](https://www.npmjs.com/package/reflect-metadata) – Suporte a decorators
+- [Nodemon](https://nodemon.io) – Hot reload do servidor
+
+### Frontend
+
+- [Vite](https://vite.dev) – Build rápido
+- [React](https://react.dev) – Biblioteca de UI
+- [React Router](https://reactrouter.com) – Roteamento SPA
+- [TailwindCSS](https://tailwindcss.com) & [MUI](https://mui.com) – Estilização e componentes
+- [FlowBite](https://flowbite.com) – Componentes adicionais
+
+### Outros
+
+- [Bruno](https://www.usebruno.com) – Testes de API
+- [PgAdmin](https://www.pgadmin.org) – Gerenciamento do banco de dados
+- [Docker Desktop](https://www.docker.com) – Gerenciamento de containers
+- [VSCode](https://code.visualstudio.com) – Editor de código
+- [Swagger](https://swagger-autogen.github.io/docs/) – Documentação da API
+
+---
+
+## Instruções de Execução
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/)
+- [Pnpm](https://pnpm.io/)
+- [Docker](https://www.docker.com/) (opcional, mas recomendado)
+- [PostgreSQL](https://www.postgresql.org/) (caso não utilize Docker)
+
+### 1. Clone o repositório
+
+```sh
+git clone https://github.com/BrunoBianchi/Tech4Humans-Webapp-Financa.git
+cd Tech4Humans-Webapp-Financa
+```
+
+### 2. Configuração do Backend
+
+```sh
+cd backend
+cp .env.example .env # Configure as variáveis de ambiente conforme necessário
+pnpm install
+pnpm typeorm migration:run # Executa as migrações do banco de dados
+pnpm dev # Inicia o servidor em modo desenvolvimento
+```
+
+### 3. Configuração do Frontend
+
+```sh
+cd ../frontend
+pnpm install
+pnpm dev # Inicia o frontend em modo desenvolvimento
+```
+
+### 4. Utilizando Docker (opcional)
+
+Para rodar toda a stack com Docker Compose:
+
+```sh
+docker-compose up --build
+```
+
+---
+
+## Cobertura de Testes
+
+- **Backend:** Os testes unitários cobrem as principais regras de negócio, incluindo autenticação, operações de transferência, validação de dados e tratamento de erros. Os testes estão localizados na pasta `backend/src/__tests__` e são executados via Jest.
+- **Frontend:** Componentes críticos e hooks possuem testes unitários, garantindo o correto funcionamento das telas e integração com a API.
+- **Relatórios de Cobertura:** Após rodar os testes com `pnpm test`, relatórios são gerados na pasta `coverage/`, permitindo análise detalhada da cobertura.
+
+---
+
+## Modelo de Dados
 
 ```mermaid
 erDiagram
@@ -126,8 +225,6 @@ erDiagram
     Transaction }o--|| Account : "sourceAccount"
     Transaction }o--|| Account : "destinationAccount"
     Transaction }o--|| Category : "category"
-
-    %% Card não tem mais relação com Payment aqui
 
     Budgets ||--o{ Category : "budget_categories"
     Category }o--|| Budgets : "budget"
@@ -188,5 +285,9 @@ erDiagram
         string name
         datetime createdAt
     }
-    %% Bloco da entidade Payment removido
 ```
+
+---
+
+Para dúvidas ou sugestões, abra uma issue ou entre em contato!
+
