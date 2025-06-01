@@ -232,9 +232,26 @@ O diagrama Entidade-Relacionamento (ER) abaixo ilustra as principais entidades d
 
 ## Decisoes da arquitetura
 
-### Backend
-### 1. Arquitetura Modular
-- **Explicacao**: Optei por utilizar uma arquitetura por alguns motivos, primeiro por ja estar muito familiarizado com a arquitetura do angular e tambem por:
-    - 1.1 [Separation of Concerns]
+### Backend - Arquitetura Modular e MVC
+A combinação das arquiteturas ![modular](https://medium.com/geekculture/what-is-modular-architecture-benefits-implementation-methods-8c272ebc05eb) e ![MVC](https://coodesh.com/blog/dicionario/o-que-e-arquitetura-mvc/) no backend proporciona uma base sólida e flexível para o desenvolvimento do sistema, inspirando em um framework moderno ![nestjs](https://nestjs.com)
 
-Para dúvidas ou sugestões, por favor, abra uma issue no repositório GitHub ou entre em contato com os desenvolvedores.
+#### 1. Arquitetura Modular
+A adoção de uma arquitetura modular no backend foi uma decisão estratégica, motivada pela familiaridade com estruturas semelhantes (como a do Angular) e pelos seguintes benefícios:
+
+- **Separação de Responsabilidades (SoC):** Cada módulo é dedicado a uma funcionalidade específica do negócio (ex: autenticação, gerenciamento de transações). Isso isola as responsabilidades, tornando o código mais compreensível e focado.
+- **Manutenção Simplificada:** Alterações ou correções em um módulo têm impacto mínimo sobre os demais, reduzindo o risco de regressões e facilitando a manutenção evolutiva do sistema.
+- **Reusabilidade de Código:** Componentes, serviços e lógicas comuns podem ser encapsulados em módulos e reutilizados em diferentes partes da aplicação, promovendo a eficiência e consistência do desenvolvimento (princípio DRY - Don't Repeat Yourself).
+- **Clareza de Domínio:** A estrutura modular reflete diretamente os domínios e subdomínios do negócio, facilitando o entendimento da aplicação tanto para novos desenvolvedores quanto para a equipe atual.
+- **Escalabilidade Granular:** Permite que módulos específicos sejam otimizados ou escalados independentemente, conforme a demanda, sem a necessidade de escalar toda a aplicação.
+- **Testabilidade Aprimorada:** Módulos com responsabilidades bem definidas são mais fáceis de testar isoladamente, permitindo a criação de testes unitários e de integração mais eficazes e focados.
+- **Desenvolvimento Paralelo:** Diferentes equipes ou desenvolvedores podem trabalhar em módulos distintos simultaneamente com menor conflito, agilizando o processo de desenvolvimento.
+
+#### 2.Arquitetura MVC(Model-View-controller) 
+Inspirado no NestJS, essa arquitetura foi utilizada para separar logicamente o negócio, a interface do usuário e a interação com o usuário.
+
+- **Menos boilerplate:** Decorators abstraem grande parte da configuração de rotas.
+- **Reuso de código e modularidade:** Agrupa funcionalidades por domínio, facilitando a extração e reutilização de módulos em outros projetos.
+- **Padronização de rotas:** A abstração via decorators garante que todas as rotas sigam um padrão consistente de definição, facilitando a manutenção, documentação e entendimento da API.
+- **Aplicação de cross-cutting concerns de forma centralizada:** Utilizando middlewares e decorators, preocupações transversais como autenticação, autorização, logging, validação de dados e tratamento de erros são implementadas de maneira centralizada e reutilizável. Isso garante que regras e políticas globais sejam aplicadas de forma consistente em toda a API, reduzindo duplicidade de código e facilitando a manutenção.
+
+### Frontend-
