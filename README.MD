@@ -1,6 +1,6 @@
 # TechFinance - TechLab 2025
 
-Bem-vindo ao repositório do **TechFinance**, uma aplicação fullstack desenvolvida para o desafio TechLab 2025 da Tech4Humans. Este documento apresenta uma visão profissional e detalhada do projeto, incluindo decisões de arquitetura, lógica de desenvolvimento, estrutura do projeto, instruções de execução e cobertura de testes.
+Bem-vindo ao repositório do **TechFinance**, uma aplicação fullstack desenvolvida para o desafio TechLab 2025 da Tech4Humans. Este documento oferece uma visão detalhada do projeto, incluindo decisões de arquitetura, lógica de desenvolvimento, estrutura do projeto, instruções de execução e cobertura de testes.
 
 ---
 
@@ -13,103 +13,64 @@ Bem-vindo ao repositório do **TechFinance**, uma aplicação fullstack desenvol
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Instruções de Execução](#instruções-de-execução)
 - [Cobertura de Testes](#cobertura-de-testes)
+- [Modelo da Aplicação](#modelo-da-aplicação)
+- [Modelo de Dados](#modelo-de-dados)
 
 ---
 
 ## Visão Geral
 
-O **TechFinance** é uma solução para gerenciamento financeiro pessoal, composta por um backend robusto em Node.js/TypeScript e um frontend moderno em React. O projeto foi estruturado para garantir escalabilidade, segurança e facilidade de manutenção.
-
----
-
-## Decisões de Arquitetura
-
-### Backend
-
-- **TypeORM** foi escolhido como ORM por seu excelente suporte a TypeScript, integração nativa com decorators e facilidade de migração de banco de dados. Diferente de alternativas como Sequelize, o TypeORM oferece uma sintaxe mais alinhada ao padrão TypeScript e maior flexibilidade na modelagem de entidades.
-- **Express** foi adotado pela sua simplicidade, flexibilidade e grande ecossistema de middlewares, facilitando a criação de APIs RESTful.
-- **PostgreSQL** foi selecionado como banco de dados relacional por sua robustez, confiabilidade e recursos avançados, como transações e suporte a JSON.
-- **Zod** e **Class-Validator** foram utilizados para validação de dados, garantindo integridade e segurança nas requisições.
-- **JWT (JsonWebToken)** foi implementado para autenticação segura baseada em tokens.
-- **Docker** foi utilizado para padronizar ambientes de desenvolvimento e facilitar o deploy.
-
-### Frontend
-
-- **React** foi escolhido pela sua componentização, reatividade e grande comunidade.
-- **Vite** foi utilizado para acelerar o processo de build e desenvolvimento.
-- **TailwindCSS** e **MUI** foram adotados para estilização rápida e consistente da interface.
-- **React Router** facilita o roteamento entre páginas, promovendo uma navegação fluida.
-
-### Outras Decisões
-
-- **Husky**, **ESLint** e **Prettier** garantem qualidade e padronização do código.
-- **Jest** foi escolhido para testes unitários, devido à sua integração com TypeScript e facilidade de uso.
-
----
-
-## Lógica de Desenvolvimento
-
-### Operações de Transferência entre Contas
-
-A lógica de transferência garante que:
-
-- O saldo da conta de origem seja verificado antes da transação.
-- As operações sejam atômicas, utilizando transações do banco de dados para evitar inconsistências.
-- Todas as transferências sejam registradas na tabela de transações, com informações detalhadas sobre origem, destino, valor e data.
-
-### Tratamento de Erros
-
-- Todos os endpoints possuem tratamento centralizado de erros, retornando mensagens claras e status HTTP apropriados.
-- Erros de validação, autenticação e autorização são tratados separadamente para facilitar o diagnóstico e a manutenção.
-- Logs de erros são gerados para monitoramento e auditoria.
+O **TechFinance** é uma solução de gerenciamento financeiro pessoal, composta por um backend robusto desenvolvido em Node.js/TypeScript e um frontend moderno construído com React. O projeto foi arquitetado visando escalabilidade, segurança e facilidade de manutenção.
 
 ---
 
 ## Estrutura do Projeto
 
-O projeto está organizado em duas principais pastas: `backend` e `frontend`, cada uma com sua própria estrutura modular.
+O projeto é um monorepo organizado com as seguintes pastas principais na raiz: `backend` para a API Node.js/TypeScript e `frontend` para a interface de usuário em React. Cada uma possui uma estrutura modular interna detalhada abaixo:
 
 ```
 Desafio-Webapp-Tech4humans/
-├── backend/                      # API HTTP em Node.js/TypeScript
-│   ├── src/
-│   │   ├── database/             # Configuração do banco, entidades, baseEntity, etc.
-│   │   ├── features/             # Features e controllers REST
-│   │   ├── middlewares/          # Middlewares Express
-│   │   ├── utils/                # Utilitários, serviços, classes de erro
-│   │   └── main.ts               # Ponto de entrada da aplicação
-│   ├── coverage/                 # Relatórios de cobertura de testes
-│   ├── jest.config.ts            # Configuração do Jest
-│   ├── tsconfig.json             # Configuração do TypeScript
+├── backend/                      # Lógica do servidor (API) em Node.js/TypeScript
+│   ├── src/                      # Código fonte do backend
+│   │   ├── database/             # Configuração do banco, entidades, migrações, baseEntity
+│   │   ├── features/             # Módulos de funcionalidades (controllers, services, DTOs)
+│   │   ├── middlewares/          # Middlewares Express (autenticação, tratamento de erros)
+│   │   ├── utils/                # Utilitários, serviços compartilhados, classes de erro
+│   │   └── main.ts               # Ponto de entrada da aplicação backend
+│   ├── coverage/                 # Relatórios de cobertura de testes do backend
+│   ├── jest.config.ts            # Configuração do Jest para o backend
+│   ├── tsconfig.json             # Configuração do TypeScript para o backend
 │   ├── package.json              # Dependências e scripts do backend
-│   └── .env                      # Variáveis de ambiente
-├── frontend/                     # Interface de usuário em React
-│   ├── app/
+│   └── .env                      # Variáveis de ambiente específicas do backend (ex: .env.example)
+├── frontend/                     # Interface de usuário em React/Vite
+│   ├── app/                      # Código fonte do frontend (estrutura similar a Next.js/Remix)
 │   │   ├── components/           # Componentes React reutilizáveis
-│   │   ├── contexts/             # Context API para gerenciamento de estado
-│   │   ├── hooks/                # Custom hooks
-│   │   ├── screens/              # Telas/páginas da aplicação
-│   │   ├── services/             # Serviços de API e utilitários
-│   │   ├── types/                # Definições de tipos TypeScript
-│   │   ├── root.tsx              # Root component
-│   │   └── app.css               # Estilos globais
-│   ├── public/                   # Assets estáticos (imagens, ícones, etc)
-│   ├── jest.config.ts            # Configuração do Jest
-│   ├── tsconfig.json             # Configuração do TypeScript
+│   │   ├── contexts/             # Context API para gerenciamento de estado global
+│   │   ├── hooks/                # Custom hooks React
+│   │   ├── screens/              # Telas/páginas da aplicação (componentes de rota)
+│   │   ├── services/             # Lógica de chamada à API e outros serviços
+│   │   ├── types/                # Definições de tipos TypeScript para o frontend
+│   │   ├── root.tsx              # Componente raiz da aplicação React
+│   │   └── app.css               # Estilos globais ou CSS base
+│   ├── public/                   # Assets estáticos (imagens, ícones, fontes)
+│   ├── jest.config.ts            # Configuração do Jest para o frontend
+│   ├── tsconfig.json             # Configuração do TypeScript para o frontend
 │   ├── vite.config.ts            # Configuração do Vite
 │   ├── package.json              # Dependências e scripts do frontend
-│   └── pnpm-lock.yaml            # Lockfile do pnpm
-├── docs/                         # Documentação do Swagger
-├── package.json                  # Configuração do monorepo (se houver)
-└── pnpm-lock.yaml                # Lockfile do pnpm na raiz
+│   └── pnpm-lock.yaml            # Lockfile do pnpm para o frontend (se não for workspace pnpm)
+├── docs/                         # Documentação adicional (ex: Swagger, coleções Postman)
+├── package.json                  # Configurações do monorepo (workspaces pnpm) e scripts globais
+└── pnpm-lock.yaml                # Lockfile do pnpm para a raiz do monorepo
 ```
 
 ---
 
 ## Tecnologias Utilizadas
 
-### Geral
+O projeto utiliza um conjunto de tecnologias modernas e consolidadas para garantir eficiência, robustez e uma boa experiência de desenvolvimento.
 
+### Geral
+Tecnologias aplicadas em todo o projeto ou para fins de desenvolvimento e infraestrutura:
 - [Pnpm](https://pnpm.io/pt/) – Gerenciamento eficiente de pacotes
 - [Node.js](https://nodejs.org/pt) – Ambiente de execução JavaScript
 - [TypeScript](https://www.typescriptlang.org) – Tipagem estática para maior segurança
@@ -120,7 +81,7 @@ Desafio-Webapp-Tech4humans/
 - [Jest](https://jestjs.io/pt-BR/) – Testes unitários
 
 ### Backend
-
+Principais tecnologias e bibliotecas utilizadas no desenvolvimento da API:
 - [Express](https://expressjs.com/pt-br/) – Framework web
 - [PostgreSQL](https://www.postgresql.org) – Banco de dados relacional
 - [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken) – Autenticação JWT
@@ -134,7 +95,7 @@ Desafio-Webapp-Tech4humans/
 - [Nodemon](https://nodemon.io) – Hot reload do servidor
 
 ### Frontend
-
+Principais tecnologias e bibliotecas utilizadas na construção da interface do usuário:
 - [Vite](https://vite.dev) – Build rápido
 - [React](https://react.dev) – Biblioteca de UI
 - [React Router](https://reactrouter.com) – Roteamento SPA
@@ -142,7 +103,7 @@ Desafio-Webapp-Tech4humans/
 - [FlowBite](https://flowbite.com) – Componentes adicionais
 
 ### Outros
-
+Ferramentas auxiliares utilizadas para desenvolvimento, testes e gerenciamento:
 - [Bruno](https://www.usebruno.com) – Testes de API
 - [PgAdmin](https://www.pgadmin.org) – Gerenciamento do banco de dados
 - [Docker Desktop](https://www.docker.com) – Gerenciamento de containers
@@ -155,173 +116,125 @@ Desafio-Webapp-Tech4humans/
 
 ### Pré-requisitos
 
-- [Node.js](https://nodejs.org/)
+- [Node.js](https://nodejs.org/) (versão LTS recomendada)
 - [Pnpm](https://pnpm.io/)
-- [Docker](https://www.docker.com/) (opcional, mas recomendado)
-- [PostgreSQL](https://www.postgresql.org/) (caso não utilize Docker)
+- [Docker](https://www.docker.com/) (opcional, mas altamente recomendado para facilitar a configuração)
+- [PostgreSQL](https://www.postgresql.org/) (necessário apenas se não utilizar Docker)
 
-### 1. Clone o repositório
+### 1. Clone o Repositório
 
 ```sh
 git clone https://github.com/BrunoBianchi/Tech4Humans-Webapp-Financa.git
 cd Tech4Humans-Webapp-Financa
 ```
 
-### 2. Configuracao Geral
+### 2. Configuração das Variáveis de Ambiente
 
-Na pasta root (Tech4Humans-Webapp-Financa), criar uma variavel chamada .env e adicionar as seguintes informacoes
-
-```
-PORT = 5000
+#### 2.1 Variáveis Globais (Arquivo `.env` na Raiz)
+Crie um arquivo `.env` na pasta raiz do projeto (`Tech4Humans-Webapp-Financa`). Este arquivo é utilizado principalmente pelo `docker-compose.yml`.
+```dotenv
+# Configurações Gerais da Aplicação
+PORT=5000
 NODE_ENV=development
-FRONTEND_PORT = 5173
-POSTGRES_HOST = postgres  # Caso nao use docker, trocar por localhost
-POSTGRES_PORT = 5433 
-POSTGRES_USER = tech4humans
-POSTGRES_PASSWORD = tech4humans
-POSTGRES_DB = webapp
-POSTGRES_LOGS = <Boolean, para ver logs do banco>
-REDIS_HOST = redis  # Caso nao use docker, trocar por localhost
-REDIS_PORT = 6379
-PRIVATE_KEY = <Sua chave secreta para o jwt>
+FRONTEND_PORT=5173
+
+# Configurações do PostgreSQL (usadas pelo Docker Compose e backend)
+POSTGRES_HOST=postgres          # Nome do serviço Docker. Use 'localhost' se rodar PostgreSQL localmente.
+POSTGRES_PORT=5433              # Porta exposta pelo container PostgreSQL ou porta local.
+POSTGRES_USER=tech4humans
+POSTGRES_PASSWORD=tech4humans
+POSTGRES_DB=webapp
+POSTGRES_LOGS=false             # Defina como 'true' para habilitar logs detalhados do TypeORM.
+
+# Configurações do Redis (usadas pelo Docker Compose e backend)
+REDIS_HOST=redis                # Nome do serviço Docker. Use 'localhost' se rodar Redis localmente.
+REDIS_PORT=6379                 # Porta exposta pelo container Redis ou porta local.
+
+# Chave Secreta para JWT
+PRIVATE_KEY=SuaChaveSecretaSuperSeguraAqui # Substitua por uma chave secreta forte e única.
 ```
 
-### 2.1 (Opcional) Configuracao geral usando Docker
+#### 2.2 Variáveis do Backend (Arquivo `backend/.env`)
+O backend possui seu próprio arquivo `.env` para configurações específicas. Se o arquivo `backend/.env.example` existir, copie-o.
+```sh
+cd backend
+cp .env.example .env  # Se o arquivo .env.example existir
+cd ..
+```
+Revise o arquivo `backend/.env` e ajuste as variáveis conforme necessário, especialmente `POSTGRES_HOST`, `POSTGRES_PORT`, `REDIS_HOST`, `REDIS_PORT` se não estiver usando Docker (ex: `POSTGRES_HOST=localhost`). Muitas variáveis podem ser lidas do `.env` da raiz se a aplicação estiver configurada para tal, mas o `backend/.env` tem precedência para o serviço de backend.
 
-Na pasta root (Tech4Humans-Webapp-Financa), use os comandos do docker para criar as imagens e roda-las:
+### 3. Execução
 
+Você pode rodar o projeto usando Docker (recomendado para simplicidade) ou manualmente configurando cada serviço.
+
+#### 3.1 Com Docker (Recomendado)
+Esta abordagem gerencia o backend, frontend, banco de dados PostgreSQL e Redis automaticamente.
+Na pasta raiz do projeto (`Tech4Humans-Webapp-Financa`):
 ```sh
 docker compose build --no-cache
 docker compose up
-
 ```
+- O frontend estará acessível em `http://localhost:<FRONTEND_PORT>` (ex: `http://localhost:5173`).
+- O backend estará acessível em `http://localhost:<PORT>` (ex: `http://localhost:5000`).
 
-### 2.2 Configuração do Backend
+#### 3.2 Manualmente (Sem Docker)
+Certifique-se de que o PostgreSQL e o Redis (se utilizado ativamente pelo backend) estejam instalados, configurados e rodando em sua máquina local. As portas e credenciais devem corresponder às definidas nos arquivos `.env`.
 
+##### 3.2.1 Backend
 ```sh
 cd backend
-cp .env.example .env
 pnpm install
+
+# Certifique-se que o banco de dados 'webapp' (ou o nome definido em POSTGRES_DB) existe
+# no seu servidor PostgreSQL local e que as credenciais em backend/.env estão corretas.
 pnpm exec typeorm-ts-node-commonjs migration:run -d src/database/configuration/data-source.ts
+
 pnpm run start
 ```
+O backend estará rodando na porta especificada (ex: `5000`).
 
-### 2.2. Configuração do Frontend
-
+##### 3.2.2 Frontend
 ```sh
-cd ../frontend
+cd frontend # Navegue para a pasta frontend (ex: 'cd ../frontend' se estiver na pasta 'backend')
 pnpm install
-vite
+pnpm run dev # Ou 'vite', dependendo do script configurado em frontend/package.json
 ```
+O frontend estará rodando na porta especificada (ex: `5173`).
+---
 
-## Cobertura de Testes
+## Arquitetura da Aplicação
 
-- **Backend:** Os testes unitários cobrem as principais regras de negócio, incluindo autenticação, operações de transferência, validação de dados e tratamento de erros. Os testes estão localizados na pasta `backend/src/__tests__` e são executados via Jest.
-- **Frontend:** Componentes críticos e hooks possuem testes unitários, garantindo o correto funcionamento das telas e integração com a API.
-- **Relatórios de Cobertura:** Após rodar os testes com `pnpm test`, relatórios são gerados na pasta `coverage/`, permitindo análise detalhada da cobertura.
+A aplicação foi desenvolvida com uma arquitetura de microsserviços locais, consistindo em:
+- Um servidor **frontend** (React/Vite) responsável pela interface do usuário e consumo da API.
+- Um servidor **backend** (Node.js/Express/TypeScript) responsável pela API RESTful, lógica de negócios, e comunicação com o banco de dados e Redis.
+- Um servidor de banco de dados **PostgreSQL**.
+- Um servidor **Redis** para caching e/ou gerenciamento de filas.
+
+![Modelo Geral da Aplicação](https://i.imgur.com/Kq8GzZn.png "Diagrama da arquitetura geral da aplicação TechFinance")
+
+### Arquitetura do Backend
+O backend foi modelado utilizando uma estrutura modular, visando facilitar a organização e manutenção do código. As funcionalidades são agrupadas em módulos, cada um contendo seus respectivos controllers, services, DTOs (Data Transfer Objects) e entidades.
+
+#### Arquitetura da API
+A API foi desenvolvida seguindo um padrão de design inspirado no [NestJS](https://docs.nestjs.com/controllers), utilizando decorators e `reflect-metadata` para definir rotas, validações e injeção de dependência de forma declarativa. Este padrão promove uma organização clara de responsabilidades e facilita a escalabilidade da API.
+
+![Modelo da API Backend](https://i.imgur.com/4ZLtVVq.png "Diagrama do padrão da API backend, inspirado no NestJS")
 
 ---
 
-## Modelo do App
-A aplicacao foi desenvolvida criando um servidor frontend responsavel pelo website e consumo de api, um servidor backend responsavel pela criacao da api, conexao com o banco de dados e com redis, um servidor postgres como banco de dados e um servidor redis para criacao de filas.
+#### Arquitetura das entidades do banco de dados
 
+O diagrama Entidade-Relacionamento (ER) abaixo ilustra as principais entidades do sistema e seus relacionamentos:
 
-![Modelo Geral](https://i.imgur.com/Kq8GzZn.png)
-
-
-### 2. Modelo do backend
-O backend foi modelado utilizando uma estrutura modular para facilidade de criacao de rotas,controllers, services, classes, decorator etc. 
-
-#### 2.1 Modelo da Api
-A Api foi modelada com um padrao semelhante ao [nestjs](https://docs.nestjs.com/controllers), porem desenvolvida do zero utilizando decorators e reflect-metada
-
-![Modelo da api](https://docs.nestjs.com/assets/Controllers_1.png)
-
-## Modelo de Dados
-
-```mermaid
-erDiagram
-
-    User ||--o{ Account : "accounts"
-    Account }o--|| User : "user"
-
-    User ||--o{ Category : "user_categories"
-    Category }o--|| User : "user"
-
-    Account ||--o{ Card : "cards"
-    Card }o--|| Account : "account"
-
-    Account ||--o{ Contact : "contacts"
-    Contact }o--|| Account : "account"
-
-    Account ||--o{ Investiment : "investments"
-    Investiment }o--|| Account : "account"
-
-    Transaction }o--|| Account : "sourceAccount"
-    Transaction }o--|| Account : "destinationAccount"
-    Transaction }o--|| Category : "category"
-
-    Budgets ||--o{ Category : "budget_categories"
-    Category }o--|| Budgets : "budget"
-
-    User {
-        string id PK
-        string name
-        string email
-        string password
-        datetime createdAt
-    }
-    Account {
-        string id PK
-        string bank
-        string type
-        number balance
-        number orcamento
-        datetime createdAt
-    }
-    Card {
-        string id PK
-        string cardNumber
-        number limit
-        string cardType
-        datetime createdAt
-    }
-    Transaction {
-        string id PK
-        datetime date
-        number amount
-        string description
-        string type
-        string status
-        datetime createdAt
-    }
-    Contact {
-        string id PK
-        string name
-        string destinationAccountId
-        datetime createdAt
-    }
-    Investiment {
-        string id PK
-        string investmentType
-        string approximatedMonthlyGains
-        number amount
-        datetime createdAt
-    }
-    Budgets {
-        string id PK
-        string name
-        number value
-        number amount
-        datetime createdAt
-    }
-    Category {
-        string id PK
-        string name
-        datetime createdAt
-    }
-```
+![Diagrama ER](https://i.imgur.com/D27S9iV.png)
 
 ---
 
-Para dúvidas ou sugestões, abra uma issue ou entre em contato!
+## Decisoes da arquitetura
+
+### Backend
+### 1. Arquitetura Modular
+- **Explicacao**: Optei por utilizar uma arquitetura por alguns motivos, primeiro por ja estar muito familiarizado com a arquitetura do angular e tambem por:
+    - 1.1 [Separation of Concerns]
+
+Para dúvidas ou sugestões, por favor, abra uma issue no repositório GitHub ou entre em contato com os desenvolvedores.
