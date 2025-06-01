@@ -3,8 +3,8 @@ import { useState } from "react";
 function ExampleChart() {
   // Dados fictícios para entradas e saídas
   const days = ["D1", "D2", "D3", "D4", "D5", "D6", "D7"];
-  const inflow = [2000, 1800, 2200, 2100, 2400, 2300, 2500];   // Entradas (em R$)
-  const outflow = [1200, 1400, 1100, 1300, 1250, 1500, 1450];  // Saídas (em R$)
+  const inflow = [2000, 1800, 2200, 2100, 2400, 2300, 2500]; // Entradas (em R$)
+  const outflow = [1200, 1400, 1100, 1300, 1250, 1500, 1450]; // Saídas (em R$)
 
   // Configurações do SVG
   const width = 350;
@@ -18,10 +18,10 @@ function ExampleChart() {
   const xStep = (width - 2 * padding) / (days.length - 1);
 
   // Função auxiliar para converter valor em coordenada Y no SVG
-  const toY = (value:any) => {
+  const toY = (value: any) => {
     const chartHeight = height - 2 * padding;
     // Inverte o eixo Y pois, em SVG, y=0 é o topo
-    return padding + (1 - value  / maxValue) * chartHeight;
+    return padding + (1 - value / maxValue) * chartHeight;
   };
 
   // Gera string de pontos para cada linha (inflow e outflow)
@@ -151,7 +151,12 @@ function ExampleChart() {
           strokeWidth="1"
           rx="4"
         />
-        <circle cx={width - padding - 104} cy={padding + 12} r="5" fill="var(--color-finance-in)" />
+        <circle
+          cx={width - padding - 104}
+          cy={padding + 12}
+          r="5"
+          fill="var(--color-finance-in)"
+        />
         <text
           x={width - padding - 95}
           y={padding + 16}
@@ -159,7 +164,12 @@ function ExampleChart() {
         >
           Entradas
         </text>
-        <circle cx={width - padding - 104} cy={padding + 28} r="5" fill="var(--color-finance-out)" />
+        <circle
+          cx={width - padding - 104}
+          cy={padding + 28}
+          r="5"
+          fill="var(--color-finance-out)"
+        />
         <text
           x={width - padding - 95}
           y={padding + 32}
@@ -202,26 +212,37 @@ function AiAnalysisCard() {
       {/* Título com ícone FontAwesome Pro */}
       <div className="flex items-center mb-4">
         <i className="fas fa-robot text-finance-primary text-2xl mr-2"></i>
-        <h3 className="font-semibold text-2xl text-gray-900">TechFinance AI ✨</h3>
+        <h3 className="font-semibold text-2xl text-gray-900">
+          TechFinance AI ✨
+        </h3>
       </div>
       {/* Saudação personalizada */}
       <p className="text-gray-700 mb-4">
-        Olá, Bruno! É um prazer ajudá-lo a entender melhor sua situação financeira.
+        Olá, Bruno! É um prazer ajudá-lo a entender melhor sua situação
+        financeira.
       </p>
       {/* Visão Geral Financeira */}
       <div className="bg-finance-bg rounded-lg p-4 mb-4">
-        <h4 className="font-medium text-gray-800 mb-2">Visão Geral Financeira</h4>
+        <h4 className="font-medium text-gray-800 mb-2">
+          Visão Geral Financeira
+        </h4>
         <p className="text-gray-600 text-sm">
           📊 <span className="font-semibold">Total de Entradas:</span>{" "}
-          <span className="text-finance-in">R${totalInflow.toLocaleString()}</span>
+          <span className="text-finance-in">
+            R${totalInflow.toLocaleString()}
+          </span>
         </p>
         <p className="text-gray-600 text-sm">
           📉 <span className="font-semibold">Total de Saídas:</span>{" "}
-          <span className="text-finance-out">R${totalOutflow.toLocaleString()}</span>
+          <span className="text-finance-out">
+            R${totalOutflow.toLocaleString()}
+          </span>
         </p>
         <p className="text-gray-600 text-sm">
           💰 <span className="font-semibold">Saldo Líquido:</span>{" "}
-          <span className={netBalance >= 0 ? "text-finance-in" : "text-finance-out"}>
+          <span
+            className={netBalance >= 0 ? "text-finance-in" : "text-finance-out"}
+          >
             R${netBalance.toLocaleString()}
           </span>
         </p>
@@ -232,13 +253,16 @@ function AiAnalysisCard() {
           <h4 className="font-medium text-gray-800 mb-2">Insights da IA</h4>
           <ul className="list-disc list-inside text-gray-700 text-sm space-y-1 mb-3">
             <li>
-              Observamos que as entradas aumentaram 25% em relação à semana anterior.
+              Observamos que as entradas aumentaram 25% em relação à semana
+              anterior.
             </li>
             <li>
-              Os gastos com alimentação representam 35% do total de saídas. Considere revisar este orçamento.
+              Os gastos com alimentação representam 35% do total de saídas.
+              Considere revisar este orçamento.
             </li>
             <li>
-              Você terminou a semana com saldo positivo de R${netBalance.toLocaleString()}. Bom trabalho!
+              Você terminou a semana com saldo positivo de R$
+              {netBalance.toLocaleString()}. Bom trabalho!
             </li>
           </ul>
         </div>
@@ -262,10 +286,7 @@ export default function Home() {
                 liberte-se das correntes financeiras
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
-                Sua{" "}
-                <span className="text-finance-primary-dark">
-                  Liberdade
-                </span>{" "}
+                Sua <span className="text-finance-primary-dark">Liberdade</span>{" "}
                 financeira a um clique de distância
               </h1>
               <p className="text-lg text-gray-600 max-w-xl mx-auto md:mx-0">
@@ -495,7 +516,9 @@ export default function Home() {
                 <p className="text-4xl font-bold mb-1 text-finance-primary-dark">
                   R$0
                 </p>
-                <p className="text-xs text-gray-500 mb-6 opacity-0">placeholder</p>
+                <p className="text-xs text-gray-500 mb-6 opacity-0">
+                  placeholder
+                </p>
                 <ul className="mb-8 space-y-3 text-left flex-grow">
                   <li className="text-sm text-gray-700 flex items-start">
                     <svg
@@ -551,7 +574,9 @@ export default function Home() {
                 <p className="text-4xl font-bold mb-1 text-finance-primary-dark">
                   R$29/mês
                 </p>
-                <p className="text-xs text-gray-500 mb-6">cobrado mensalmente</p>
+                <p className="text-xs text-gray-500 mb-6">
+                  cobrado mensalmente
+                </p>
                 <ul className="mb-8 space-y-3 text-left flex-grow">
                   <li className="text-sm text-gray-700 flex items-start">
                     <svg
@@ -607,7 +632,9 @@ export default function Home() {
                 <p className="text-4xl font-bold mb-1 text-finance-primary-dark">
                   Sob consulta
                 </p>
-                <p className="text-xs text-gray-500 mb-6 opacity-0">placeholder</p>
+                <p className="text-xs text-gray-500 mb-6 opacity-0">
+                  placeholder
+                </p>
                 <ul className="mb-8 space-y-3 text-left flex-grow">
                   <li className="text-sm text-gray-700 flex items-start">
                     <svg
@@ -687,8 +714,8 @@ export default function Home() {
                   </span>
                 </summary>
                 <p className="mt-3 text-gray-600 text-sm leading-relaxed">
-                  Sim, usamos criptografia de nível bancário e não armazenamos suas
-                  credenciais.
+                  Sim, usamos criptografia de nível bancário e não armazenamos
+                  suas credenciais.
                 </p>
               </details>
               <details className="p-5 border border-gray-200 rounded-xl bg-finance-bg group">
@@ -712,8 +739,8 @@ export default function Home() {
                   </span>
                 </summary>
                 <p className="mt-3 text-gray-600 text-sm leading-relaxed">
-                  Você recebe notificações instantâneas via app sempre que houver
-                  movimentações.
+                  Você recebe notificações instantâneas via app sempre que
+                  houver movimentações.
                 </p>
               </details>
               <details className="p-5 border border-gray-200 rounded-xl bg-finance-bg group">

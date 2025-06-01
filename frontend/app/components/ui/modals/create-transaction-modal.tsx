@@ -1,7 +1,9 @@
 import { useAccountContext } from "@/app/contexts/account-context";
 import { useTransactionContext } from "@/app/contexts/transaction-context";
+import type { Category } from "@/app/types/category-type";
 import { useState } from "react";
 import { useParams } from "react-router";
+import SelectCategory from "../select-category";
 
 interface CreateTransactionModalProps {
   isOpen: boolean;
@@ -13,20 +15,24 @@ export default function CreateTransactionModal({
   onClose,
 }: CreateTransactionModalProps) {
   const [accountNumberState, setAccountNumberState] = useState("");
-  const [categoryState, setCategoryState] = useState("");
+  const [selectedTransactionCategory, setSelectedTransactionCategory] =
+    useState<Category | null>(null);
   const [typeState, setTypeState] = useState("");
   const [descriptionState, setDescriptionState] = useState("");
   const [quantityState, setQuantityState] = useState("");
   const params = useParams<{ id: string }>();
   const { addTransaction } = useTransactionContext();
   if (!isOpen) return null;
-
+  const handleCategoryUpdate = (category: Category | null) => {
+    setSelectedTransactionCategory(category);
+    console.log("Category selected in form:", category);
+  };
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     addTransaction(
       {
         amount: Number(quantityState),
-        category: categoryState,
+        category: selectedTransactionCategory?.id,
         description: descriptionState,
         sourceAccount: params.id || "",
         destinationAccount: accountNumberState,
@@ -102,16 +108,16 @@ export default function CreateTransactionModal({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Categoria
-                </label>
-                <select
-                  value={categoryState}
-                  onChange={(e) => setCategoryState(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-finance-primary focus:outline-none"
-                >
-                  <option value="">Selecione a categoria</option>
-                </select>
+                <SelectCategory
+                  onCategorySelect={handleCategoryUpdate}
+                  label="Escolha a Categoria da Transação"
+                />
+                {selectedTransactionCategory && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    Categoria Atual: {selectedTransactionCategory.name} (Id:{" "}
+                    {selectedTransactionCategory.id})
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">

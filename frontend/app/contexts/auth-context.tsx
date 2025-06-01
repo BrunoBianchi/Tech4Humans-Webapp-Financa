@@ -17,7 +17,7 @@ interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  signUp: (email: string, password: string,name:string) => Promise<void>;
+  signUp: (email: string, password: string, name: string) => Promise<void>;
   loading: boolean;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -77,17 +77,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(data.user);
   };
 
-    const signUp = async (email: string, password: string,name:string) => {
+  const signUp = async (email: string, password: string, name: string) => {
     const response = await fetch("http://localhost:5000/user/sign-up", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({name, email, password }),
-    }).then((res) =>res.json());
+      body: JSON.stringify({ name, email, password }),
+    }).then((res) => res.json());
 
     if (response.message) {
       throw new Error(response.message);
     }
-    const data = response
+    const data = response;
     const hours = parseInt(data.expiration.split("h")[0], 10) || 7;
     setCookie("token", data.authorization, {
       path: "/",
@@ -104,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login,signUp, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signUp, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

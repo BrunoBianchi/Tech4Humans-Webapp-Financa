@@ -23,7 +23,7 @@ export const AiService = {
     return adviceText;
   },
 
-    sendMessage: async (prompt: string, token: string) => {
+  sendMessage: async (prompt: string, token: string) => {
     const response = await fetch(`${apiBaseUrl}/ai/chat`, {
       method: "POST",
       headers: {

@@ -91,7 +91,9 @@ body {
   @apply text-white font-semibold transition-all duration-300 ease-in-out;
 }
 .btn-gradient:hover {
-  box-shadow: 0 8px 25px -5px var(--color-finance-primary), 0 4px 15px rgba(0,0,0,0.07); /* Softer shadow */
+  box-shadow:
+    0 8px 25px -5px var(--color-finance-primary),
+    0 4px 15px rgba(0, 0, 0, 0.07); /* Softer shadow */
   transform: translateY(-2px) scale(1.03);
 }
 
@@ -102,7 +104,9 @@ body {
 }
 .btn-primary-solid:hover {
   background-color: var(--color-finance-primary-dark);
-  box-shadow: 0 6px 20px -5px var(--color-finance-primary-dark), 0 4px 12px rgba(0,0,0,0.06);
+  box-shadow:
+    0 6px 20px -5px var(--color-finance-primary-dark),
+    0 4px 12px rgba(0, 0, 0, 0.06);
   transform: translateY(-1px);
 }
 
@@ -115,17 +119,18 @@ body {
 .btn-outline:hover {
   background-color: var(--color-finance-primary);
   color: white;
-  box-shadow: 0 6px 20px -5px var(--color-finance-primary), 0 4px 12px rgba(0,0,0,0.06);
+  box-shadow:
+    0 6px 20px -5px var(--color-finance-primary),
+    0 4px 12px rgba(0, 0, 0, 0.06);
   transform: translateY(-1px);
 }
 
 /* Hero Badge Style */
 .hero-badge {
   background-color: rgba(128, 62, 227, 0.1); /* Light purple background */
-  color: var(--color-finance-purple);      /* Purple text */
+  color: var(--color-finance-purple); /* Purple text */
   @apply text-[15px] font-bold py-2 px-4 rounded-full inline-block; /* Increased padding slightly */
 }
-
 
 @keyframes wave {
   0% {

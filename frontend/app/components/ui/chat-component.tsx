@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import { useAccountContext } from "../contexts/account-context";
-import { useAiInteraction } from "../hooks/ai-hook"; 
+import { useAccountContext } from "../../contexts/account-context";
+import { useAiInteraction } from "../../hooks/ai-hook";
 
 export default function ChatPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
-  const { getAccountById } = useAccountContext(); 
-  
-  const { sendMessage, responseChat, isLoading, error } = useAiInteraction(); 
+  const { getAccountById } = useAccountContext();
+
+  const { sendMessage, responseChat, isLoading, error } = useAiInteraction();
   const [isWaitingForBot, setIsWaitingForBot] = useState(false);
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCurrentUrl(window.location.href);
@@ -42,32 +42,45 @@ export default function ChatPopup() {
   }, [messages]);
 
   useEffect(() => {
-    if (isWaitingForBot && !isLoading) { 
-      
+    if (isWaitingForBot && !isLoading) {
       if (responseChat) {
-        setMessages((prev) => [...prev, {
-          from: "bot" as const,
-          text: (JSON.parse(responseChat)).choices[0].message.content|| "Desculpe, não consegui entender sua pergunta.",
-          id: Date.now() + 1,
-        }]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            from: "bot" as const,
+            text:
+              JSON.parse(responseChat).choices[0].message.content ||
+              "Desculpe, não consegui entender sua pergunta.",
+            id: Date.now() + 1,
+          },
+        ]);
       } else if (error) {
         console.error("Erro da IA no hook:", error);
-        setMessages((prev) => [...prev, {
-          from: "bot" as const,
-          text: "Ocorreu um erro ao processar sua pergunta.",
-          id: Date.now() + 1,
-        }]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            from: "bot" as const,
+            text: "Ocorreu um erro ao processar sua pergunta.",
+            id: Date.now() + 1,
+          },
+        ]);
       } else {
-        console.warn("Resposta da IA não foi uma string válida ou estava vazia após carregamento:", responseChat);
-        setMessages((prev) => [...prev, {
-          from: "bot" as const,
-          text: "Desculpe, não consegui processar sua pergunta no momento.",
-          id: Date.now() + 1,
-        }]);
+        console.warn(
+          "Resposta da IA não foi uma string válida ou estava vazia após carregamento:",
+          responseChat,
+        );
+        setMessages((prev) => [
+          ...prev,
+          {
+            from: "bot" as const,
+            text: "Desculpe, não consegui processar sua pergunta no momento.",
+            id: Date.now() + 1,
+          },
+        ]);
       }
-      setIsWaitingForBot(false); 
+      setIsWaitingForBot(false);
     }
-  }, [responseChat, isLoading, isWaitingForBot, error]); 
+  }, [responseChat, isLoading, isWaitingForBot, error]);
 
   const togglePopup = () => {
     setIsOpen((prev) => !prev);
@@ -79,7 +92,7 @@ export default function ChatPopup() {
     if (!text) return;
 
     const newMessage = { from: "user" as const, text, id: Date.now() };
-    setMessages((prev:any) => [...prev, newMessage]);
+    setMessages((prev: any) => [...prev, newMessage]);
     setInputValue("");
 
     let prompt = `Ola, sou um usuario do TechFinance, preciso de ajuda com o seguinte assunto: ${text}.`;
@@ -89,17 +102,19 @@ export default function ChatPopup() {
 
     prompt += `${JSON.stringify(messages)}`;
 
-    setIsWaitingForBot(true); 
+    setIsWaitingForBot(true);
     try {
-      await sendMessage(prompt); 
-                                 
-    } catch (error) { 
+      await sendMessage(prompt);
+    } catch (error) {
       console.error("Erro ao chamar sendMessage:", error);
-      setMessages((prev) => [...prev, {
-        from: "bot" as const,
-        text: "Ocorreu um erro ao enviar sua mensagem. Tente novamente.",
-        id: Date.now() + 1,
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: "bot" as const,
+          text: "Ocorreu um erro ao enviar sua mensagem. Tente novamente.",
+          id: Date.now() + 1,
+        },
+      ]);
       setIsWaitingForBot(false);
     }
   };
@@ -154,7 +169,7 @@ export default function ChatPopup() {
               space-y-3 bg-finance-bg
             `}
           >
-            {messages.map((msg:any) => (
+            {messages.map((msg: any) => (
               <div
                 key={msg.id}
                 className={`

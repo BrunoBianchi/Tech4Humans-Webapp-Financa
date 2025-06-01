@@ -34,7 +34,7 @@ export function useAiInteraction() {
     [cookies],
   );
 
-    const sendMessage = useCallback(
+  const sendMessage = useCallback(
     async (prompt: string) => {
       if (!cookies?.token) {
         setError("Token de autenticação não encontrado.");
@@ -58,5 +58,12 @@ export function useAiInteraction() {
     [cookies],
   );
 
-  return { responseAnalyzes,responseChat, isLoading, error, sendMessage,generateAnalyzes };
+  return {
+    responseAnalyzes,
+    responseChat,
+    isLoading,
+    error,
+    sendMessage,
+    generateAnalyzes,
+  };
 }

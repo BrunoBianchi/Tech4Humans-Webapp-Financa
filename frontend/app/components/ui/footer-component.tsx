@@ -50,10 +50,7 @@ export default function FooterComponent() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="hover:underline"
-                  >
+                  <a href="#" className="hover:underline">
                     Discord
                   </a>
                 </li>

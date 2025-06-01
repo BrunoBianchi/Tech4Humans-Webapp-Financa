@@ -22,7 +22,8 @@ export default function HomeRoute() {
   const [showAllAccounts, setShowAllAccounts] = useState(false);
   const [search, setSearch] = useState("");
   const [accountFilterModalOpen, setAccountFilterModalOpen] = useState(false);
-  const { responseAnalyzes, isLoading, error, generateAnalyzes } = useAiInteraction();
+  const { responseAnalyzes, isLoading, error, generateAnalyzes } =
+    useAiInteraction();
   const { categories, addCategory } = useCategories();
   const incomingTransactions = accounts
     .flatMap((a: any) => a.incomingTransactions || [])

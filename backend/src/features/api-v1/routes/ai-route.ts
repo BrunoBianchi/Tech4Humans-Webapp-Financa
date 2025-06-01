@@ -1,6 +1,9 @@
 import { Post } from "../../../utils/decorators/router/post-decorator";
 import { Router } from "../../../utils/decorators/router/router-decorator";
-import { generateAiAnalyzeResponse,generateAiChatResponse } from "../../../utils/services/ai/ai-service";
+import {
+  generateAiAnalyzeResponse,
+  generateAiChatResponse,
+} from "../../../utils/services/ai/ai-service";
 @Router()
 export class AiRoute {
   @Post({
@@ -16,7 +19,7 @@ export class AiRoute {
     return await generateAiAnalyzeResponse(params.prompt);
   }
 
-    @Post({
+  @Post({
     path: "/ai/chat",
     params: [
       {

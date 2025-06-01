@@ -6,7 +6,6 @@ import { Account } from "../entities/Account-entity";
 import { Card } from "../entities/Card-entity";
 import { Transaction } from "../entities/Transaction-entity";
 import { Contact } from "../entities/Contact-entity";
-import { Payment } from "../entities/Payment.entity";
 import { Investiment } from "../entities/Investment-entity";
 import { Budgets } from "../entities/Bugedts-entity";
 import { Category } from "../entities/Category-entity";
@@ -25,7 +24,6 @@ export const AppDataSource = new DataSource({
     Card,
     Transaction,
     Contact,
-    Payment,
     Investiment,
     Budgets,
     Category,
