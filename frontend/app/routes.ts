@@ -8,7 +8,7 @@ import {
 
 export default [
   index("screens/home-route.tsx"),
-  route("sign-in", "screens/sign-in-route.tsx"),
+  route("sign-up", "screens/sign-up-route.tsx"),
   route("login", "screens/login-route.tsx"),
   ...prefix("dashboard", [
     layout("screens/dashboard-layout.tsx", [

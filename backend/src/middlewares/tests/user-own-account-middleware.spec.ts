@@ -4,7 +4,6 @@ import { isUserOwner } from "../user-own-account-middleware";
 import { userService } from "../../utils/services/user/user-service";
 import { accountService } from "../../utils/services/account/account-service";
 
-
 describe("User Own Account Middleware", () => {
   let response: Partial<Response>;
   let request: Partial<Request>;
@@ -19,11 +18,14 @@ describe("User Own Account Middleware", () => {
       name: "Test User",
       password: "password123",
     });
-    account = await accountService.create({
-      bank: "Test Bank",
-      balance: 1000,
-      type: "poupanca"
-    }, [{ name: "user", id: user.id }]);
+    account = await accountService.create(
+      {
+        bank: "Test Bank",
+        balance: 1000,
+        type: "poupanca",
+      },
+      [{ name: "user", id: user.id }],
+    );
   });
 
   afterAll(async () => {

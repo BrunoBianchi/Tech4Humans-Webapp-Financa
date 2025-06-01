@@ -71,7 +71,7 @@ export default function SmartAdviceCard({
           <span
             className={textClass}
             dangerouslySetInnerHTML={{
-              __html: response.choices[0].message.content,
+              __html: response.choices[0]?response.choices[0].message.content:`Nenhum conselho disponível no momento.`,
             }}
           />
         </div>

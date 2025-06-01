@@ -14,5 +14,3 @@ beforeAll(async () => {
   await AppDataSource.initialize();
   await AppDataSource.synchronize();
 });
-
-

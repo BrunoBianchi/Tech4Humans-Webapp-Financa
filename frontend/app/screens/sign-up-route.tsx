@@ -1,25 +1,38 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import { useNavigate, Link } from "react-router";
 import { useAuth } from "../contexts/auth-context";
-import { useNavigate } from "react-router";
 
-export default function LoginPage() {
+export default function SignUpPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
-    setError("");
+    setError(null);
+
+    if (!name || !email || !password) {
+      setError("Por favor, preencha todos os campos.");
+      setLoading(false);
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Por favor, insira um email válido.");
+      setLoading(false);
+      return;
+    }
     try {
-      await login(email, password);
+      await signUp(email, password, name);
       navigate("/dashboard");
-    } catch (error) {
-      console.error("Login failed:", error);
-      setError("Email ou senha incorretos. Por favor, tente novamente.");
+    } catch (err) {
+      console.error("Sign up failed:", err);
+      setError(err instanceof Error ? err.message : "Erro ao criar conta. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -27,18 +40,18 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-finance-bg p-4 sm:p-6 lg:p-8">
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 bg-white shadow-2xl rounded-2xl overflow-hidden">
+      <div className=" max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 bg-white shadow-2xl rounded-2xl overflow-hidden">
         <div className="hidden md:flex items-center justify-center p-8 lg:p-12 bg-white h-full">
           <img
             src="./login-sigin.svg"
-            alt="Ilustração de login"
+            alt="Ilustração de cadastro"
             className=" object-cover"
           />
         </div>
         <div className="flex flex-col justify-center p-10 sm:p-12 lg:p-16">
           <div className="mb-8 text-center md:text-left">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Bem-vindo de volta ao
+              Crie sua conta no
             </h2>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-finance-primary">
               TechFinance
@@ -52,6 +65,25 @@ export default function LoginPage() {
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 mb-1.5"
+              >
+                Nome
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Seu nome completo"
+                className="w-full px-4 py-3.5 rounded-lg bg-gray-50 border border-gray-200
+                           focus:bg-white focus:ring-2 focus:ring-finance-primary-light
+                           focus:border-transparent focus:outline-none transition-all duration-150"
+                required
+              />
+            </div>
             <div>
               <label
                 htmlFor="email"
@@ -84,11 +116,12 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Digite sua senha"
+                placeholder="Crie uma senha (mín. 6 caracteres)"
                 className="w-full px-4 py-3.5 rounded-lg bg-gray-50 border border-gray-200
                            focus:bg-white focus:ring-2 focus:ring-finance-primary-light
                            focus:border-transparent focus:outline-none transition-all duration-150"
                 required
+                minLength={6}
               />
             </div>
 
@@ -107,19 +140,19 @@ export default function LoginPage() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               ) : (
-                "Entrar"
+                "Criar conta"
               )}
             </button>
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-600">
-            Não tem uma conta?{" "}
-            <a
-              href="/sign-up"
+            Já tem uma conta?{" "}
+            <Link
+              to="/login"
               className="font-medium text-finance-primary hover:text-finance-primary-dark hover:underline"
             >
-              Criar
-            </a>
+              Entrar
+            </Link>
           </p>
         </div>
       </div>

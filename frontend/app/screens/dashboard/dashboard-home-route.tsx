@@ -22,7 +22,7 @@ export default function HomeRoute() {
   const [showAllAccounts, setShowAllAccounts] = useState(false);
   const [search, setSearch] = useState("");
   const [accountFilterModalOpen, setAccountFilterModalOpen] = useState(false);
-  const { response, isLoading, error, sendMessage } = useAiInteraction();
+  const { responseAnalyzes, isLoading, error, generateAnalyzes } = useAiInteraction();
   const { categories, addCategory } = useCategories();
   const incomingTransactions = accounts
     .flatMap((a: any) => a.incomingTransactions || [])
@@ -78,12 +78,12 @@ export default function HomeRoute() {
     prompt +=
       "Poderia me dar uma visão geral e um conselho financeiro baseado nesses dados?";
     if (user && accounts && accounts.length > 0 && !isLoading) {
-      sendMessage(prompt);
+      generateAnalyzes(prompt);
     }
   }, [
     accounts,
     user,
-    sendMessage,
+    generateAnalyzes,
     totalIncoming,
     totalOutcoming,
     totalBalance,
@@ -187,7 +187,6 @@ export default function HomeRoute() {
     ? categories
         .map((cat) => {
           const categoryTransactions = outcomingTransactions.filter((t) => {
-            // Determine the name of the transaction's category
             let transactionCategoryName: string | undefined;
             if (typeof t.category === "string") {
               transactionCategoryName = t.category;
@@ -198,7 +197,6 @@ export default function HomeRoute() {
             ) {
               transactionCategoryName = t.category.name;
             }
-            // Compare with the name from the context categories
             return transactionCategoryName === cat.name;
           });
           const amount = categoryTransactions.reduce(
@@ -243,7 +241,7 @@ export default function HomeRoute() {
 
       <div className="mb-6 md:mb-8">
         <SmartAdviceCard
-          response={response}
+          response={responseAnalyzes}
           isLoading={isLoading}
           error={error}
         />

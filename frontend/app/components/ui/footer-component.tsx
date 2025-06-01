@@ -43,7 +43,7 @@ export default function FooterComponent() {
               <ul className="text-gray-500  font-medium">
                 <li className="mb-4">
                   <a
-                    href="https://github.com/themesberg/flowbite"
+                    href="https://github.com/BrunoBianchi/Tech4Humans-Webapp-Financa"
                     className="hover:underline "
                   >
                     Github
@@ -51,7 +51,7 @@ export default function FooterComponent() {
                 </li>
                 <li>
                   <a
-                    href="https://discord.gg/4eeurUVvTy"
+                    href="#"
                     className="hover:underline"
                   >
                     Discord

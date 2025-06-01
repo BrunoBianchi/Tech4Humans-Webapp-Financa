@@ -11,7 +11,7 @@ import { Delete } from "../../utils/decorators/router/delete-decorator";
 @Router()
 export class UserRoute {
   @Post({
-    path: "/sign-in",
+    path: "/sign-up",
 
     params: [
       {

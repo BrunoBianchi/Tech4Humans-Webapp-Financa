@@ -21,15 +21,12 @@ const Navbar = () => {
   return (
     <nav className="bg-finance-bg py-4 px-6">
       <div className="max-w-screen-xl mx-auto flex items-center justify-between relative">
-        {/* Logo */}
         <div className="flex items-center space-x-3 bg-white py-1 px-3 rounded-full">
           <div className="py-2 rounded-full">
             <img src="/tech.jpeg" alt="Logo" className="rounded-full h-8 w-8" />
           </div>
           <span className="text-xl font-bold text-gray-900">TechFinance</span>
         </div>
-
-        {/* Menu desktop */}
         <div className="hidden lg:flex bg-white rounded-full px-8 py-4 shadow-sm items-center space-x-6 text-gray-700 font-medium text-base">
           <a href="/" className="text-black font-semibold">
             Home
@@ -43,7 +40,6 @@ const Navbar = () => {
           <a href="#" className="hover:text-finance-primary-dark">
             Reviews
           </a>
-          {/* Blog Dropdown */}
           <div className="relative">
             <button
               onClick={() => setBlogMenuOpen(!blogMenuOpen)}
@@ -126,7 +122,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Menu mobile toggle */}
         <div className="lg:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -157,7 +152,6 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Avatar ou login */}
         <div className="ml-4 relative">
           {user && !loading ? (
             <>
@@ -218,7 +212,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Menu mobile */}
       {mobileMenuOpen && (
         <div className="lg:hidden mt-4 bg-white rounded-xl shadow px-6 py-4 space-y-3 text-gray-800 font-medium">
           <a href="#" className="block">

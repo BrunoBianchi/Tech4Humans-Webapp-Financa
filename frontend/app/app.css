@@ -3,8 +3,9 @@
 @import "flowbite";
 
 body {
-  @apply bg-finance-bg;
+  @apply bg-finance-bg text-gray-900; /* Added default text color */
 }
+
 @layer base {
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
@@ -12,6 +13,7 @@ body {
     margin: 0;
   }
 }
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -22,9 +24,12 @@ body {
     transform: translateY(0);
   }
 }
+
 .animate-fade-in {
   animation: fade-in 0.2s ease;
 }
+
+/* CSS Custom Properties from your original theme */
 @theme {
   --color-finance-primary: #453ee3;
   --color-finance-primary-dark: #3a34bf;
@@ -34,6 +39,7 @@ body {
   --color-finance-purple-dark: #6d34c2;
   --color-finance-out: #e3493e;
   --color-finance-in: #3ee357;
+  /* Gradients - keep if used elsewhere, though landing page seems to prefer solid colors for buttons/text */
   --color-gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --color-gradient-blue: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --color-gradient-teal: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -51,7 +57,6 @@ body {
   @apply bg-white rounded-xl shadow-md p-5 lg:p-6;
 }
 
-/* Agora apenas o ícone tem gradiente, o card fica branco e o texto preto */
 .account-row {
   @apply flex items-center justify-between p-3 rounded-lg bg-white cursor-pointer transition-shadow shadow-sm hover:shadow-md;
 }
@@ -76,32 +81,52 @@ body {
   @apply text-gray-500 text-sm truncate max-w-[280px];
 }
 
+/* Button Styles */
 .btn-gradient {
   background: linear-gradient(
     90deg,
     var(--color-finance-primary) 0%,
     var(--color-finance-primary-light) 100%
   );
-  color: #fff;
-  transition:
-    box-shadow 0.2s,
-    transform 0.2s;
+  @apply text-white font-semibold transition-all duration-300 ease-in-out;
 }
 .btn-gradient:hover {
-  box-shadow: 0 8px 32px rgba(69, 62, 227, 0.15);
+  box-shadow: 0 8px 25px -5px var(--color-finance-primary), 0 4px 15px rgba(0,0,0,0.07); /* Softer shadow */
   transform: translateY(-2px) scale(1.03);
 }
-.btn-gradient {
-  background: linear-gradient(90deg, #453ee3 0%, #4b43fa 100%);
-  color: #fff;
-  transition:
-    box-shadow 0.2s,
-    transform 0.2s;
+
+.btn-primary-solid {
+  background-color: var(--color-finance-primary);
+  color: white;
+  @apply font-semibold transition-all duration-300 ease-in-out;
 }
-.btn-gradient:hover {
-  box-shadow: 0 8px 32px 0 rgba(69, 62, 227, 0.15);
-  transform: translateY(-2px) scale(1.03);
+.btn-primary-solid:hover {
+  background-color: var(--color-finance-primary-dark);
+  box-shadow: 0 6px 20px -5px var(--color-finance-primary-dark), 0 4px 12px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
 }
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--color-finance-primary);
+  color: var(--color-finance-primary);
+  @apply font-semibold transition-all duration-300 ease-in-out;
+}
+.btn-outline:hover {
+  background-color: var(--color-finance-primary);
+  color: white;
+  box-shadow: 0 6px 20px -5px var(--color-finance-primary), 0 4px 12px rgba(0,0,0,0.06);
+  transform: translateY(-1px);
+}
+
+/* Hero Badge Style */
+.hero-badge {
+  background-color: rgba(128, 62, 227, 0.1); /* Light purple background */
+  color: var(--color-finance-purple);      /* Purple text */
+  @apply text-[15px] font-bold py-2 px-4 rounded-full inline-block; /* Increased padding slightly */
+}
+
+
 @keyframes wave {
   0% {
     background-position: 0% 50%;
@@ -118,3 +143,17 @@ body {
   background-size: 200% 200%;
   animation: wave 5s ease infinite;
 }
+
+/* Tailwind Custom Colors (ensure your tailwind.config.js is set up if you prefer using classes like bg-finance-primary) */
+/* For direct use in @apply, CSS variables are fine */
+/* Example tailwind.config.js extension:
+  theme: {
+    extend: {
+      colors: {
+        'finance-primary': 'var(--color-finance-primary)',
+        'finance-primary-dark': 'var(--color-finance-primary-dark)',
+        // ... etc.
+      }
+    }
+  }
+*/
