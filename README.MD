@@ -325,7 +325,31 @@ A escolha pelo uso de JWT (JSON Web Token) como mecanismo de autenticação na a
 ---
 
 ## Logica de desenvolvimento
+Para o projeto, foi pensando em criar um sistema financeiro que suporta a criacao de varias contas e cartoes para um controle mais geral.
 
 ### Principais funcionalidades 
 
-#### 1.
+#### 1. Usuario
+- **Cadastro e Login de Usuarios:** Hash utilizando bcrypt das senhas e geracao de tokens jwt para validacao rapida.
+- **Middlewares:** Middlewares foram criados para permissoes de certas rotas, com authentificacao e dono de conta
+
+#### 2. Contas
+- **Multiplas Contas:** Permite usuario cadastrar multiplas contas 
+- **Tipos:** Contas podem ser do tipo Poupanca ou Corrente
+- **Regras de Negocio:**
+    - Conta com no minimo 1 real   
+
+#### 3. Cartoes
+
+#### 4. Transacoes
+- entradas e saidas pendentes
+
+#### 5. Categorias
+
+#### 6. IA
+
+#### 7. Graficos
+
+#### 8. Contatos
+
+#### 9. Filas em Redis
