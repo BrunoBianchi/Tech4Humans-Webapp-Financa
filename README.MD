@@ -254,4 +254,28 @@ Inspirado no NestJS, essa arquitetura foi utilizada para separar logicamente o n
 - **Padronização de rotas:** A abstração via decorators garante que todas as rotas sigam um padrão consistente de definição, facilitando a manutenção, documentação e entendimento da API.
 - **Aplicação de cross-cutting concerns de forma centralizada:** Utilizando middlewares e decorators, preocupações transversais como autenticação, autorização, logging, validação de dados e tratamento de erros são implementadas de maneira centralizada e reutilizável. Isso garante que regras e políticas globais sejam aplicadas de forma consistente em toda a API, reduzindo duplicidade de código e facilitando a manutenção.
 
-### Frontend-
+### Frontend - Arquitetura Modular Baseada em Componentes
+
+A arquitetura do frontend foi pensada para maximizar a modularidade e a clareza, inspirando-se em práticas consolidadas do ecossistema React. A estrutura do projeto organiza cada domínio da aplicação em módulos próprios, com separação clara entre componentes, contextos, hooks, serviços e telas. Essa abordagem traz os seguintes benefícios:
+
+- **Separação de Responsabilidades (SoC):** Cada módulo do frontend é responsável por uma funcionalidade específica (ex: autenticação, dashboard, transações), tornando o código mais organizado e fácil de entender.
+- **Reuso de Componentes:** Componentes e hooks reutilizáveis são centralizados, promovendo o princípio DRY e facilitando a manutenção e evolução da interface.
+- **Escalabilidade:** A modularização permite adicionar novas funcionalidades ou telas sem impactar outras áreas do sistema, facilitando o crescimento do projeto.
+- **Facilidade de Testes:** A divisão em módulos e componentes isolados torna a escrita de testes unitários e de integração mais simples e eficiente.
+- **Padronização e Consistência:** O uso de padrões como Context API para estado global, React Router para navegação e organização por domínio garante uma base consistente e previsível para todo o frontend.
+
+### Validação em Camadas (Frontend, Backend e Banco de Dados)
+
+O sistema foi projetado com validação em múltiplas camadas, garantindo robustez contra falhas e fornecendo feedback imediato ao usuário. Cada camada implementa mecanismos específicos de validação, promovendo segurança, integridade dos dados e melhor experiência de uso.
+
+#### Frontend
+- **Validação de tipos e expressões:** Utilização de expressões regulares (regex) e checagem de tipos antes do envio dos dados para a API, evitando requisições inválidas e reduzindo o consumo desnecessário de recursos.
+
+#### Backend
+- **Validação automática estruturada:** A arquitetura do backend, aliada ao uso de decorators e da biblioteca Zod, garante validação automática e rigorosa dos dados recebidos, assegurando que apenas informações corretas e no formato esperado sejam processadas.
+
+#### Banco de Dados (PostgreSQL)
+- **Validação de integridade e restrições:** Antes da inserção de novos dados, o banco de dados aplica validações automáticas por meio de constraints e tipos de dados definidos no modelo, prevenindo inconsistências e mantendo a integridade das informações.
+
+
+
