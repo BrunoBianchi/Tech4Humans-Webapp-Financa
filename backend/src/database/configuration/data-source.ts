@@ -1,13 +1,16 @@
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+const rootEnvPath = path.resolve(process.cwd(), '../.env');
+import { resolve } from 'path';
+
+dotenv.config({ path: rootEnvPath });
 import { User } from "../entities/User-entity";
 import { Account } from "../entities/Account-entity";
 import { Card } from "../entities/Card-entity";
 import { Transaction } from "../entities/Transaction-entity";
 import { Contact } from "../entities/Contact-entity";
 import { Investiment } from "../entities/Investment-entity";
-import { Budgets } from "../entities/Bugedts-entity";
 import { Category } from "../entities/Category-entity";
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -16,7 +19,7 @@ export const AppDataSource = new DataSource({
   username: process.env.POSTGRES_USER || "postgres",
   password: process.env.POSTGRES_PASSWORD || "postgres",
   database: process.env.POSTGRES_DB || "postgres",
-  synchronize: true,
+  synchronize: false,
   logging: process.env.POSTGRES_LOGS === "true" ? true : false,
   entities: [
     User,
@@ -25,8 +28,8 @@ export const AppDataSource = new DataSource({
     Transaction,
     Contact,
     Investiment,
-    Budgets,
+ 
     Category,
   ],
-  migrations: ["../migrations/*.ts"],
+  migrations:[resolve(__dirname, '../migrations/*.ts')],
 });

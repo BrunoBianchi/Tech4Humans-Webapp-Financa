@@ -5,7 +5,7 @@ import { useAiInteraction } from "../../hooks/ai-hook";
 export default function ChatPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
-  const { getAccountById } = useAccountContext();
+  const { getAccountById,accounts } = useAccountContext();
 
   const { sendMessage, responseChat, isLoading, error } = useAiInteraction();
   const [isWaitingForBot, setIsWaitingForBot] = useState(false);
@@ -98,6 +98,8 @@ export default function ChatPopup() {
     let prompt = `Ola, sou um usuario do TechFinance, preciso de ajuda com o seguinte assunto: ${text}.`;
     if (accountData) {
       prompt += ` Esses sao os dados disponiveis da conta atual: ${JSON.stringify(accountData)}`;
+    }else {
+      prompt += `Esses sao todos os meu dados disponiveis: ${JSON.stringify(accounts)}`
     }
 
     prompt += `${JSON.stringify(messages)}`;

@@ -4,7 +4,6 @@ import { AccountRoute } from "./routes/account-route";
 import { TransactionRoute } from "./routes/transactions-route";
 import { cardRouter } from "./routes/card-route";
 import { ContactRoute } from "./routes/contact-route";
-import { BudgetsRoute } from "./routes/budgets-route";
 import { AiRoute } from "./routes/ai-route";
 import { CategoryRoute } from "./routes/category-route";
 
@@ -15,7 +14,6 @@ import { CategoryRoute } from "./routes/category-route";
     TransactionRoute,
     cardRouter,
     ContactRoute,
-    BudgetsRoute,
     AiRoute,
     CategoryRoute,
   ],

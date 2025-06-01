@@ -2,12 +2,16 @@ import express from "express";
 import * as dotenv from "dotenv";
 import featuresController from "./features/features-controller";
 import "reflect-metadata";
+import path from 'path'; 
+
 import { AppDataSource } from "./database/configuration/data-source";
 import { errorHandler } from "./middlewares/error-handler-middleware";
 import { ApiError } from "./utils/class/errors-class";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
-dotenv.config();
+const rootEnvPath = path.resolve(process.cwd(), '../.env');
+dotenv.config({ path: rootEnvPath });
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 300,

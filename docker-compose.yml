@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRESQL_USERNAME=tech4humans   # MUDADO
+      - POSTGRESQL_PASSWORD=tech4humans   # MUDADO (verifique se esta é a senha correta que você quer usar)
+      - POSTGRESQL_DATABASE=webapp      # MUDADO
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build:
+      context: ./backend
+    command: sh -c "pnpm exec typeorm-ts-node-commonjs migration:run -d src/database/configuration/data-source.ts && pnpm start" # Nova linha
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend
+    command: pnpm dev --host
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules 
+
+volumes:
+  postgres_data:
+  redis_data:

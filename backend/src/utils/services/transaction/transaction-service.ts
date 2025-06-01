@@ -24,6 +24,19 @@ class TransactionService extends BaseService<transaction> {
         400,
         "Source and destination accounts cannot be the same!",
       );
+    const allTransactions = await this.repository.find({
+      where: {
+        sourceAccount: { id: sourceAccountId?.id },
+      },
+    });
+    const pendingTransaction = allTransactions.filter(
+      (transaction) => transaction.status === "pending",
+    );
+    const amountPending = pendingTransaction.reduce(
+      (acc, transaction) => acc + transaction.amount,
+      0,
+    );
+
     const category = (await categoryService.getById(
       categoryId!.id,
     )) as CategoryType;
@@ -31,6 +44,8 @@ class TransactionService extends BaseService<transaction> {
       sourceAccountId?.id as string,
       ["user"],
     )) as Account;
+    if (source.balance - amountPending - object.amount < 0)
+      throw new ApiError(400, "Insufficient funds after pending transactions!");
     const destination = (await accountService.getById(
       destinationAccountId?.id as string,
       ["user"],
@@ -44,15 +59,10 @@ class TransactionService extends BaseService<transaction> {
       destinationAccount: destination,
       category: category,
     } as unknown as transaction);
-    const savedTransaction = await this.repository.save(newTransaction);
-    source.balance -= object.amount;
-    destination.balance += object.amount;
-    await accountService.update(source.id, source);
-    await accountService.update(destination.id, destination);
 
-    return Array.isArray(savedTransaction)
-      ? savedTransaction[0]
-      : savedTransaction;
+    await this.repository.save(newTransaction);
+
+    return newTransaction;
   }
 }
 

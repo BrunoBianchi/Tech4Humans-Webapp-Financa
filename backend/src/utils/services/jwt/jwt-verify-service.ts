@@ -13,7 +13,12 @@ export const jwtVerify = async (
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       throw new ApiError(401, `JWT Error: ${error.message}`);
+    } else if (error instanceof Error) {
+      throw new ApiError(401, `Verification Error: ${error.message}`);
     }
-    throw new ApiError(401, "Not a valid authorization token!");
+    throw new ApiError(
+      401,
+      "Not a valid authorization token for verification! Unknown error.",
+    );
   }
 };

@@ -6,9 +6,9 @@ services:
     ports:
       - "5433:5432"
     environment:
-      - POSTGRES_USER=tech4humans
-      - POSTGRES_PASSWORD=tech4humans
-      - POSTGRES_DB=webapp
+      - POSTGRESQL_USERNAME=tech4humans
+      - POSTGRESQL_PASSWORD=tech4humans
+      - POSTGRESQL_DATABASE=webapp
     volumes:
       - postgres_data:/bitnami/postgresql
 

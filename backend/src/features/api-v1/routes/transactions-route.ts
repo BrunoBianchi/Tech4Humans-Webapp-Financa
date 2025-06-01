@@ -4,6 +4,7 @@ import { Post } from "../../../utils/decorators/router/post-decorator";
 import { Router } from "../../../utils/decorators/router/router-decorator";
 import { transactionService } from "../../../utils/services/transaction/transaction-service";
 import { transaction } from "../../../utils/types/transaction-type";
+import { transactionQueue } from "../../../queues/transaction-queue";
 @Router()
 export class TransactionRoute {
   @Post({
@@ -51,18 +52,21 @@ export class TransactionRoute {
       transaction,
       "sourceAccount" | "destinationAccount"
     > = await transactionService.create(
-      {
-        amount: params.amount,
-        description: params.description,
-        type: params.type,
-        date: new Date(),
-      } as transaction,
-      [
-        { name: "sourceAccount", id: params.accountId },
-        { name: "destinationAccount", id: params.destination },
-        { name: "category", id: params.category },
-      ],
-    );
+        {
+          amount: params.amount,
+          description: params.description,
+          type: params.type,
+          date: new Date(),
+        } as transaction,
+        [
+          { name: "sourceAccount", id: params.accountId },
+          { name: "destinationAccount", id: params.destination },
+          { name: "category", id: params.category },
+        ],
+      );
+    
+      await transactionQueue.addTransaction(transaction.id);
+    
     return {
       id: transaction.id,
       amount: transaction.amount,

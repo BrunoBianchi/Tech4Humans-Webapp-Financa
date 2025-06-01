@@ -18,35 +18,6 @@ import FilterModal, {
 } from "@/app/components/ui/modals/filter-modal";
 import { useDynamicFilter } from "@/app/hooks/filter-hook";
 
-const mockBudgetsData = [
-  {
-    id: "b1",
-    name: "Supermercado & Comida",
-    icon: "fa-solid fa-cart-shopping",
-    iconBgStyle: { background: "var(--color-gradient-orange)" },
-    totalAmount: 2000,
-    spentAmount: 750,
-    currency: "R$",
-  },
-  {
-    id: "b2",
-    name: "Assinaturas & Serviços",
-    icon: "fa-solid fa-rss",
-    iconBgStyle: { background: "var(--color-gradient-purple)" },
-    totalAmount: 350,
-    spentAmount: 150,
-    currency: "R$",
-  },
-  {
-    id: "b3",
-    name: "Lazer & Entretenimento",
-    icon: "fa-solid fa-film",
-    iconBgStyle: { background: "var(--color-gradient-teal)" },
-    totalAmount: 800,
-    spentAmount: 600,
-    currency: "R$",
-  },
-];
 
 export default function AccountMainRoute() {
   const { getAccountById } = useAccountContext();
@@ -290,78 +261,7 @@ export default function AccountMainRoute() {
             </div>
           </div>
 
-          <div className="card p-5 md:p-6">
-            <div className="flex justify-between items-center mb-5">
-              <h2 className="text-xl font-semibold text-gray-800">
-                Orçamentos
-              </h2>
-              <a
-                href="#"
-                className="text-sm text-[var(--color-finance-primary)] hover:text-[var(--color-finance-primary-dark)] font-medium"
-              >
-                Ver todos
-              </a>
-            </div>
-            <div className="space-y-5">
-              {mockBudgetsData.map((budget) => {
-                const percentage =
-                  budget.totalAmount > 0
-                    ? (budget.spentAmount / budget.totalAmount) * 100
-                    : 0;
-                const remainingAmount = budget.totalAmount - budget.spentAmount;
-                return (
-                  <div key={budget.id} className="budget-item">
-                    <div className="flex items-center mb-2">
-                      <div
-                        className="w-9 h-9 rounded-lg flex items-center justify-center text-white mr-3 shadow-md flex-shrink-0"
-                        style={budget.iconBgStyle}
-                      >
-                        <i className={`${budget.icon} text-base`}></i>
-                      </div>
-                      <div className="flex-grow min-w-0">
-                        <span className="font-medium text-gray-700 text-sm block truncate pr-2">
-                          {budget.name}
-                        </span>
-                      </div>
-                      <span className="text-sm font-semibold text-gray-800 whitespace-nowrap ml-2">
-                        {budget.currency}
-                        {budget.totalAmount.toLocaleString("pt-BR", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </span>
-                    </div>
-                    <div className="w-full bg-slate-200 rounded-full h-2 dark:bg-gray-700">
-                      <div
-                        className="bg-[var(--color-finance-primary)] h-2 rounded-full transition-all duration-500 ease-out"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    <div className="mt-2 flex justify-between text-xs text-gray-500">
-                      <span>
-                        Gasto: {budget.currency}
-                        {budget.spentAmount.toLocaleString("pt-BR", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </span>
-                      <span>
-                        Restante: {budget.currency}
-                        {remainingAmount.toLocaleString("pt-BR", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <button className="mt-6 w-full flex items-center justify-center py-3.5 px-4 border-2 border-dashed border-gray-300 hover:border-[var(--color-finance-primary-light)] rounded-lg text-gray-500 hover:text-[var(--color-finance-primary] transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-[var(--color-finance-primary-light)]/50">
-              <i className="fa-solid fa-plus mr-2 text-sm transition-transform duration-200 group-hover:rotate-90"></i>
-              <span className="text-sm font-medium">Criar Novo Orçamento</span>
-            </button>
-          </div>
+
         </div>
 
         <div className="lg:col-span-7 space-y-6 md:space-y-8">
@@ -371,12 +271,64 @@ export default function AccountMainRoute() {
             </h3>
             <p className="text-4xl md:text-[40px] font-bold text-gray-800 mb-5">
               <span className="text-2xl md:text-[28px] text-gray-500/90 font-medium align-baseline">
-                R$
+              R$
               </span>{" "}
               {Number(account.balance).toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+              })}{" "}
+              <span
+                className={`text-base font-medium ${
+                  (() => {
+                    const pendingTransactions = transactions.filter(
+                      (t) =>
+                        t.status === "pending" &&
+                        ((t.destinationAccount as any)?.id === account.id ||
+                          (t.sourceAccount as any)?.id === account.id)
+                    );
+                    const pendingBalance = pendingTransactions.reduce((acc, t) => {
+                      if ((t.destinationAccount as any)?.id === account.id) {
+                        return acc + Number(t.amount);
+                      } else if ((t.sourceAccount as any)?.id === account.id) {
+                        return acc - Number(t.amount);
+                      }
+                      return acc;
+                    }, 0);
+                    if (pendingBalance > 0) return "text-finance-in";
+                    if (pendingBalance < 0) return "text-finance-out";
+                    return "text-gray-500/80";
+                  })()
+                } align-middle ml-2`}
+                style={{ display: "inline-flex", alignItems: "center", height: "1.8em" }}
+              >
+                (
+                {(() => {
+                  const pendingTransactions = transactions.filter(
+                    (t) =>
+                      t.status === "pending" &&
+                      ((t.destinationAccount as any)?.id === account.id ||
+                        (t.sourceAccount as any)?.id === account.id)
+                  );
+                  const pendingBalance = pendingTransactions.reduce((acc, t) => {
+                    if ((t.destinationAccount as any)?.id === account.id) {
+                      return acc + Number(t.amount);
+                    } else if ((t.sourceAccount as any)?.id === account.id) {
+                      return acc - Number(t.amount);
+                    }
+                    return acc;
+                  }, 0);
+                  const formatted = Math.abs(pendingBalance).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  });
+                  return pendingBalance === 0
+                    ? "sem saldo pendente"
+                    : pendingBalance > 0
+                    ? `+ R$ ${formatted} pendente`
+                    : `- R$ ${formatted} pendente`;
+                })()}
+                )
+              </span>
             </p>
             <div className="grid sm:grid-cols-3 gap-2.5">
               <button

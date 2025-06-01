@@ -52,6 +52,7 @@ O **TechFinance** é uma solução para gerenciamento financeiro pessoal, compos
 ### Operações de Transferência entre Contas
 
 A lógica de transferência garante que:
+
 - O saldo da conta de origem seja verificado antes da transação.
 - As operações sejam atômicas, utilizando transações do banco de dados para evitar inconsistências.
 - Todas as transferências sejam registradas na tabela de transações, com informações detalhadas sobre origem, destino, valor e data.
@@ -166,33 +167,52 @@ git clone https://github.com/BrunoBianchi/Tech4Humans-Webapp-Financa.git
 cd Tech4Humans-Webapp-Financa
 ```
 
-### 2. Configuração do Backend
+### 2. Configuracao Geral
+
+Na pasta root (Tech4Humans-Webapp-Financa), criar uma variavel chamada .env e adicionar as seguintes informacoes
+
+```
+PORT = 5000
+NODE_ENV=development
+FRONTEND_PORT = 5173
+POSTGRES_HOST = postgres  # Caso nao use docker, trocar por localhost
+POSTGRES_PORT = 5433 
+POSTGRES_USER = tech4humans
+POSTGRES_PASSWORD = tech4humans
+POSTGRES_DB = webapp
+POSTGRES_LOGS = <Boolean, para ver logs do banco>
+REDIS_HOST = redis  # Caso nao use docker, trocar por localhost
+REDIS_PORT = 6379
+PRIVATE_KEY = <Sua chave secreta para o jwt>
+```
+
+### 2.1 (Opcional) Configuracao geral usando Docker
+
+Na pasta root (Tech4Humans-Webapp-Financa), use os comandos do docker para criar as imagens e roda-las:
+
+```sh
+docker compose build --no-cache
+docker compose up
+
+```
+
+### 2.2 Configuração do Backend
 
 ```sh
 cd backend
-cp .env.example .env # Configure as variáveis de ambiente conforme necessário
+cp .env.example .env
 pnpm install
-pnpm typeorm migration:run # Executa as migrações do banco de dados
-pnpm dev # Inicia o servidor em modo desenvolvimento
+pnpm exec typeorm-ts-node-commonjs migration:run -d src/database/configuration/data-source.ts
+pnpm run start
 ```
 
-### 3. Configuração do Frontend
+### 2.2. Configuração do Frontend
 
 ```sh
 cd ../frontend
 pnpm install
-pnpm dev # Inicia o frontend em modo desenvolvimento
+vite
 ```
-
-### 4. Utilizando Docker (opcional)
-
-Para rodar toda a stack com Docker Compose:
-
-```sh
-docker-compose up --build
-```
-
----
 
 ## Cobertura de Testes
 
@@ -201,6 +221,21 @@ docker-compose up --build
 - **Relatórios de Cobertura:** Após rodar os testes com `pnpm test`, relatórios são gerados na pasta `coverage/`, permitindo análise detalhada da cobertura.
 
 ---
+
+## Modelo do App
+A aplicacao foi desenvolvida criando um servidor frontend responsavel pelo website e consumo de api, um servidor backend responsavel pela criacao da api, conexao com o banco de dados e com redis, um servidor postgres como banco de dados e um servidor redis para criacao de filas.
+
+
+![Modelo Geral](https://i.imgur.com/Kq8GzZn.png)
+
+
+### 2. Modelo do backend
+O backend foi modelado utilizando uma estrutura modular para facilidade de criacao de rotas,controllers, services, classes, decorator etc. 
+
+#### 2.1 Modelo da Api
+A Api foi modelada com um padrao semelhante ao [nestjs](https://docs.nestjs.com/controllers), porem desenvolvida do zero utilizando decorators e reflect-metada
+
+![Modelo da api](https://docs.nestjs.com/assets/Controllers_1.png)
 
 ## Modelo de Dados
 
@@ -290,4 +325,3 @@ erDiagram
 ---
 
 Para dúvidas ou sugestões, abra uma issue ou entre em contato!
-
