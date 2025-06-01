@@ -336,20 +336,46 @@ Para o projeto, foi pensando em criar um sistema financeiro que suporta a criaca
 #### 2. Contas
 - **Multiplas Contas:** Permite usuario cadastrar multiplas contas 
 - **Tipos:** Contas podem ser do tipo Poupanca ou Corrente
+- **Validaçao:** Middleware para validacao de existe conta e se o usuario eh o dono
 - **Regras de Negocio:**
     - Conta com no minimo 1 real   
 
 #### 3. Cartoes
+- **Multiplos Cartoes:** Permite usuario cadastrar multiplos cartoes
+- **Tipos:** Cartoes podem ser do tipo Credito ou Debito
+- **Limite:** Adicionar limite aos cartoes
+- **Icones dinamicos:**
+    - **Visa:** Se o primeiro digito for ``4``
+    - **Mastercard:** Se o primeiro digito for ``5`` ou os quatro primeiros dígitos estiverem entre ``2221`` e ``2720``, mostra o ícone do Mastercard.
+    - **American Express:** Se os dois primeiros digitos forem ``34`` ou ``37``
+    - **Discover:** Se o primeiro digito for ``6``
+    - **Outros:** Se nao corresponder a nenhum, ele nao coloca nada.
+- **Regras de negocio:**
+    - Limite superior a 0
 
 #### 4. Transacoes
-- entradas e saidas pendentes
+- **Transacoes entre Bancos:** Permite realizar transacao de dinheiro de um banco para outro. 
+- **Validacao de Saldo:** Verificacao antes da transacao para conta nao ficar com saldo negativo.
+- **Transacao e Saldo Pendentes:** Cada Transacao criada eh colocado como pendente sinalizando a conta de saida a pendencia em vermelho e na conta de entrada a pendencia em verde. Apos a validacao pela fila do redis, os valores sao debitados e acrecidos.
+- **Regras de Negocio:**
+    - Valor maior que 0
+    - Transacao somente para banco de usuarios diferentes
 
-#### 5. Categorias
+#### 5. Filtros Dinamicos
+- **Tipos:**
+    - [a-z]
+    - [A-Z]
+    - [Periodo]
+    - [Tipo]: Somente para contas, inclue filtrar por poupanca ou corrente
+- **Componentes:** Valido para contas e contatos
+- **Inputs:** contas podem ser procurados por nome
 
-#### 6. IA
+#### 6. Categorias
 
-#### 7. Graficos
+#### 7. Dashboard
 
-#### 8. Contatos
+#### 8. IA
 
-#### 9. Filas em Redis
+#### 9. Contatos
+
+#### 10. Filas em Redis
