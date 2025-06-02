@@ -83,7 +83,6 @@ Desafio-Webapp-Tech4humans/
 │   ├── vite.config.ts            # Configuração do Vite
 │   ├── package.json              # Dependências e scripts do frontend
 │   └── pnpm-lock.yaml            # Lockfile do pnpm para o frontend (se não for workspace pnpm)
-├── docs/                         # Documentação adicional (ex: Swagger, coleções Postman)
 ├── package.json                  # Configurações do monorepo (workspaces pnpm) e scripts globais
 └── pnpm-lock.yaml                # Lockfile do pnpm para a raiz do monorepo
 ```
@@ -133,7 +132,6 @@ Ferramentas auxiliares utilizadas para desenvolvimento, testes e gerenciamento:
 - [PgAdmin](https://www.pgadmin.org) – Gerenciamento do banco de dados
 - [Docker Desktop](https://www.docker.com) – Gerenciamento de containers
 - [VSCode](https://code.visualstudio.com) – Editor de código
-- [Swagger](https://swagger-autogen.github.io/docs/) – Documentação da API
 
 ---
 
@@ -461,6 +459,9 @@ Foi implementado um limite de taxa (rate limiting) como medida adicional de prot
 
 ### 4. Paginação na API
 - Transações, contatos e cartões são atualmente enviados em uma única requisição. A implementação de paginação poderia melhorar a velocidade de resposta e reduzir a sobrecarga do servidor, dividindo os dados em páginas e consumindo-as conforme necessário.
+
+#### 5. Swagger
+- Ter adicionado swagger para uma documentação mais profissional da api
 
 ---
 
