@@ -2,7 +2,7 @@
 
 Bem-vindo ao repositório do **TechFinance**, uma aplicação fullstack desenvolvida para o desafio TechLab 2025 da Tech4Humans. Este documento oferece uma visão detalhada do projeto, incluindo decisões de arquitetura, lógica de desenvolvimento, estrutura do projeto, instruções de execução e cobertura de testes.
 
----
+--- 
 
 ## Índice
 
@@ -37,7 +37,6 @@ Desafio-Webapp-Tech4humans/
 │   │   ├── middlewares/          # Middlewares Express (autenticação, tratamento de erros)
 │   │   ├── utils/                # Utilitários, serviços compartilhados, classes de erro
 │   │   └── main.ts               # Ponto de entrada da aplicação backend
-│   ├── coverage/                 # Relatórios de cobertura de testes do backend
 │   ├── jest.config.ts            # Configuração do Jest para o backend
 │   ├── tsconfig.json             # Configuração do TypeScript para o backend
 │   ├── package.json              # Dependências e scripts do backend
@@ -140,7 +139,7 @@ FRONTEND_PORT=5173
 
 # Configurações do PostgreSQL (usadas pelo Docker Compose e backend)
 POSTGRES_HOST=postgres          # Nome do serviço Docker. Use 'localhost' se rodar PostgreSQL localmente.
-POSTGRES_PORT=5433              # Porta exposta pelo container PostgreSQL ou porta local.
+POSTGRES_PORT=5432               # 5433 se for usado sem docker !
 POSTGRES_USER=tech4humans
 POSTGRES_PASSWORD=tech4humans
 POSTGRES_DB=webapp
@@ -204,7 +203,7 @@ O frontend estará rodando na porta especificada (ex: `5173`).
 
 ## Arquitetura da Aplicação
 
-A aplicação foi desenvolvida com uma arquitetura de microsserviços locais, consistindo em:
+A aplicação foi desenvolvida com uma arquitetura de serviços independentes, executados localmente, consistindo em:
 - Um servidor **frontend** (React/Vite) responsável pela interface do usuário e consumo da API.
 - Um servidor **backend** (Node.js/Express/TypeScript) responsável pela API RESTful, lógica de negócios, e comunicação com o banco de dados e Redis.
 - Um servidor de banco de dados **PostgreSQL**.
@@ -222,7 +221,7 @@ A API foi desenvolvida seguindo um padrão de design inspirado no [NestJS](https
 
 ---
 
-#### Arquitetura das entidades do banco de dados
+#### Arquitetura das Entidades do Banco de Dados
 
 O diagrama Entidade-Relacionamento (ER) abaixo ilustra as principais entidades do sistema e seus relacionamentos:
 
@@ -230,10 +229,10 @@ O diagrama Entidade-Relacionamento (ER) abaixo ilustra as principais entidades d
 
 ---
 
-## Decisoes da arquitetura
+## Decisões de Arquitetura
 
 ### Backend - Arquitetura Modular e MVC
-A combinação das arquiteturas [modular](https://medium.com/geekculture/what-is-modular-architecture-benefits-implementation-methods-8c272ebc05eb) e [MVC](https://coodesh.com/blog/dicionario/o-que-e-arquitetura-mvc/) no backend proporciona uma base sólida e flexível para o desenvolvimento do sistema, inspirando em um framework moderno [Nestjs](https://nestjs.com)
+A combinação das arquiteturas [modular](https://medium.com/geekculture/what-is-modular-architecture-benefits-implementation-methods-8c272ebc05eb) e [MVC](https://coodesh.com/blog/dicionario/o-que-e-arquitetura-mvc/) no backend proporciona uma base sólida e flexível para o desenvolvimento do sistema, inspirada no framework moderno [NestJS](https://nestjs.com).
 
 #### 1. Arquitetura Modular
 A adoção de uma arquitetura modular no backend foi uma decisão estratégica, motivada pela familiaridade com estruturas semelhantes (como a do Angular) e pelos seguintes benefícios:
@@ -246,11 +245,11 @@ A adoção de uma arquitetura modular no backend foi uma decisão estratégica, 
 - **Testabilidade Aprimorada:** Módulos com responsabilidades bem definidas são mais fáceis de testar isoladamente, permitindo a criação de testes unitários e de integração mais eficazes e focados.
 - **Desenvolvimento Paralelo:** Diferentes equipes ou desenvolvedores podem trabalhar em módulos distintos simultaneamente com menor conflito, agilizando o processo de desenvolvimento.
 
-#### 2.Arquitetura MVC(Model-View-controller) 
-Inspirado no NestJS, essa arquitetura foi utilizada para separar logicamente o negócio, a interface do usuário e a interação com o usuário.
+#### 2. Arquitetura MVC (Model-View-Controller)
+Inspirada no NestJS, esta arquitetura foi utilizada para separar logicamente as responsabilidades de negócio, a interface do usuário e a interação com o usuário.
 
-- **Menos boilerplate:** Decorators abstraem grande parte da configuração de rotas.
-- **Reuso de código e modularidade:** Agrupa funcionalidades por domínio, facilitando a extração e reutilização de módulos em outros projetos.
+- **Menos código boilerplate:** Decorators abstraem grande parte da configuração de rotas.
+- **Reutilização de código e modularidade:** Agrupa funcionalidades por domínio, facilitando a extração e reutilização de módulos em outros projetos.
 - **Padronização de rotas:** A abstração via decorators garante que todas as rotas sigam um padrão consistente de definição, facilitando a manutenção, documentação e entendimento da API.
 - **Aplicação de cross-cutting concerns de forma centralizada:** Utilizando middlewares e decorators, preocupações transversais como autenticação, autorização, logging, validação de dados e tratamento de erros são implementadas de maneira centralizada e reutilizável. Isso garante que regras e políticas globais sejam aplicadas de forma consistente em toda a API, reduzindo duplicidade de código e facilitando a manutenção.
 
@@ -277,10 +276,10 @@ O sistema foi projetado com validação em múltiplas camadas, garantindo robust
 #### Banco de Dados (PostgreSQL)
 - **Validação de integridade e restrições:** Antes da inserção de novos dados, o banco de dados aplica validações automáticas por meio de constraints e tipos de dados definidos no modelo, prevenindo inconsistências e mantendo a integridade das informações.
 
-### Utilizacao do redis
-Redis foi escolhido para simular um caso real de varias transacoe sem sobrecarregamento do servidor.
+### Utilização do Redis
+O Redis foi escolhido para simular um cenário real com múltiplas transações, visando evitar a sobrecarga do servidor.
 
-### Utilização de cookies 
+### Utilização de Cookies
 
 A escolha por utilizar cookies no frontend, em vez de localStorage ou sessionStorage, é justificada pelos seguintes benefícios:
 
@@ -303,7 +302,7 @@ A escolha por utilizar cookies no frontend, em vez de localStorage ou sessionSto
 
 ---
 
-### Utilização de JsonWebToken (JWT) para autenticação
+### Utilização de JsonWebToken (JWT) para Autenticação
 
 A escolha pelo uso de JWT (JSON Web Token) como mecanismo de autenticação na aplicação se baseia em diversos benefícios que atendem tanto à segurança quanto à escalabilidade do sistema:
 
@@ -327,105 +326,144 @@ A escolha pelo uso de JWT (JSON Web Token) como mecanismo de autenticação na a
 
 ---
 
-## Logica de desenvolvimento
-Para o projeto, foi pensando em criar um sistema financeiro que suporta a criacao de varias contas e cartoes para um controle mais geral.
+## Lógica de Desenvolvimento
+O projeto foi concebido para criar um sistema financeiro que suporte a criação de múltiplas contas e cartões, permitindo um controle financeiro mais abrangente.
 
-### Principais funcionalidades 
+### Principais Funcionalidades
 
-#### 1. Usuario
-- **Cadastro e Login de Usuarios:** Hash utilizando bcrypt das senhas e geracao de tokens jwt para validacao rapida.
-- **Middlewares:** Middlewares foram criados para permissoes de certas rotas, com authentificacao e dono de conta
+#### 1. Usuário
+- **Cadastro e Login de Usuários:** Utilização de bcrypt para hash de senhas e geração de tokens JWT para validação rápida.
+- **Middlewares:** Foram criados middlewares para controle de permissões em rotas específicas, incluindo autenticação e verificação de propriedade da conta.
 
 #### 2. Contas
-- **Multiplas Contas:** Permite usuario cadastrar multiplas contas 
-- **Tipos:** Contas podem ser do tipo Poupanca ou Corrente
-- **Validaçao:** Middleware para validacao de existe conta e se o usuario eh o dono
-- **Regras de Negocio:**
-    - Conta com no minimo 1 real   
+- **Múltiplas Contas:** Permite ao usuário cadastrar múltiplas contas.
+- **Tipos:** As contas podem ser do tipo Poupança ou Corrente.
+- **Validação:** Middleware para verificar a existência da conta e se o usuário é o proprietário.
+- **Regras de Negócio:**
+    - Saldo mínimo inicial da conta de R$ 1,00.
 
-#### 3. Cartoes
-- **Multiplos Cartoes:** Permite usuario cadastrar multiplos cartoes
-- **Tipos:** Cartoes podem ser do tipo Credito ou Debito
-- **Limite:** Adicionar limite aos cartoes
-- **Icones dinamicos:**
-    - **Visa:** Se o primeiro digito for ``4``
-    - **Mastercard:** Se o primeiro digito for ``5`` ou os quatro primeiros dígitos estiverem entre ``2221`` e ``2720``, mostra o ícone do Mastercard.
-    - **American Express:** Se os dois primeiros digitos forem ``34`` ou ``37``
-    - **Discover:** Se o primeiro digito for ``6``
-    - **Outros:** Se nao corresponder a nenhum, ele nao coloca nada.
-- **Regras de negocio:**
-    - Limite superior a 0
+#### 3. Cartões
+- **Múltiplos Cartões:** Permite ao usuário cadastrar múltiplos cartões.
+- **Tipos:** Os cartões podem ser do tipo Crédito ou Débito.
+- **Limite:** Possibilidade de adicionar limite aos cartões.
+- **Ícones dinâmicos:**
+    - **Visa:** Se o primeiro dígito for `4`.
+    - **Mastercard:** Se o primeiro dígito for `5` ou os quatro primeiros dígitos estiverem entre `2221` e `2720`.
+    - **American Express:** Se os dois primeiros dígitos forem `34` ou `37`.
+    - **Discover:** Se o primeiro dígito for `6`.
+    - **Outros:** Caso não corresponda a nenhuma bandeira, nenhum ícone específico é exibido.
+- **Regras de Negócio:**
+    - Limite do cartão deve ser superior a 0.
 
-#### 4. Transacoes
-- **Transacoes entre Bancos:** Permite realizar transacao de dinheiro de um banco para outro. 
-- **Validacao de Saldo:** Verificacao antes da transacao para conta nao ficar com saldo negativo.
-- **Transacao e Saldo Pendentes:** Cada Transacao criada eh colocado como pendente sinalizando a conta de saida a pendencia em vermelho e na conta de entrada a pendencia em verde. Apos a validacao pela fila do redis, os valores sao debitados e acrecidos.
-- **Regras de Negocio:**
-    - Valor maior que 0
-    - Transacao somente para banco de usuarios diferentes
-    - Selecionar uma categoria 
+#### 4. Transações
+- **Transações entre Contas:** Permite realizar transferências de valores entre contas.
+- **Validação de Saldo:** Verificação prévia ao processamento da transação para garantir que a conta de origem não fique com saldo negativo.
+- **Transação e Saldo Pendentes:** Cada transação criada é marcada como pendente, sinalizando na conta de origem (em vermelho) e na conta de destino (em verde). Após a validação pela fila do Redis, os valores são debitados e creditados.
+- **Regras de Negócio:**
+    - Valor maior que 0.
+    - Transação permitida somente entre contas de usuários diferentes.
+    - Selecionar uma categoria.
 
-#### 5. Filtros Dinamicos
+#### 5. Filtros Dinâmicos
 - **Tipos:**
     - [a-z]
     - [A-Z]
-    - [Periodo]
-    - [Tipo]: Somente para contas, inclue filtrar por poupanca ou corrente
-- **Componentes:** Valido para contas e contatos
-- **Inputs:** contas podem ser procurados por nome
+    - [Período]
+    - [Tipo]: Aplicável a contas, permite filtrar por Poupança ou Corrente.
+- **Componentes:** Válido para contas e contatos.
+- **Inputs:** Contas podem ser pesquisadas por nome.
 
 #### 6. Categorias
-- **Divisao do dinheiro:** Possibilita visualizacao do dinheiro gasto nas transacoes
+- **Divisão de Despesas:** Possibilita a visualização dos gastos categorizados por transações.
 
 #### 7. Dashboard
 - **Informativo:**
-    - Visualizacao total de contas 
-    - Saldo total
-    - Saidas e entradas
-    - Divisao das contas
+    - Visualização do total de contas.
+    - Saldo total.
+    - Saídas e entradas (fluxo de caixa).
+    - Divisão de saldos por conta.
 
 #### 8. IA
-- **Ajudar na manutencao do dinheiro:** FinanceTechAi recebe todos os dados do usuario, tais como contas, dinheiro, cartoes, transacoes, categorias e faz um planejamento para ajudar usuario a entender como esta acontecendo a movimentacao do dinheiro, alem disso da dicas importantes para manter dinheiro seguro.
-- **Popup Chat:** Usuario consegue conversar diretamente com IA para sanar sua duvidas ou ter insights
-    - **Account:** O Popup em ``/dashboard/account`` utiliza dados especificos da conta na conversa do usuario
-    - **Dashboard:** O Popup em ``/dashboard`` utiliza dados de todas as contas, transacoes e categorias na conversa com o usuario.
-    - **Continuacao da conversa:** IA consegue interpretar a conversa e continuar a produzindo insights.
+- **Auxílio na Gestão Financeira:** O FinanceTechAI analisa os dados do usuário (contas, saldos, cartões, transações, categorias) para fornecer um planejamento financeiro, ajudando o usuário a entender a movimentação de seu dinheiro e oferecendo dicas para uma gestão financeira segura.
+- **Popup Chat:** O usuário pode interagir diretamente com a IA para sanar dúvidas ou obter insights.
+    - **Conta Específica:** O popup em `/dashboard/account` utiliza dados específicos da conta selecionada na conversa com o usuário.
+    - **Visão Geral (Dashboard):** O popup em `/dashboard` utiliza dados consolidados de todas as contas, transações e categorias na conversa com o usuário.
+    - **Continuidade da Conversa:** A IA é capaz de interpretar o histórico da conversa e continuar fornecendo insights relevantes.
 
 #### 9. Contatos
-- **Multiplos Contatos:** Usuario pode cadastrar em cada conta usuarios para fazer transacoes mais rapidamente.
+- **Múltiplos Contatos:** O usuário pode cadastrar contatos associados a cada conta para agilizar transações recorrentes.
 
 #### 10. Filas em Redis
-- **Sistema de fila:** Utiliza-se o principio FIFO (First In - First Out) para o processamente das transacoes.
-- **Alteracao Dinamica do dinheiro:** Após o processamento da transação a api executa a tarefa de modificar
-    - Saldo da conta de origem
-    - Saldo da conta de destino
-    - Status de ``Pending`` para ``Completed``
+- **Sistema de Fila:** Utiliza o princípio FIFO (First In, First Out) para o processamento das transações.
+- **Alteração Dinâmica de Saldos:** Após o processamento da transação, a API executa as seguintes tarefas:
+    - Saldo da conta de origem.
+    - Saldo da conta de destino.
+    - Alteração do status da transação de `Pending` para `Completed`.
 ---
 
-#### 11. Rate limit
-Foi utilizado rate limit para fazer uma protecao a mais ao servidor para sanar tambem a sobrecarga dele, sendo de maximo 20 requests por segundo.
+#### 11. Rate Limit
+Foi implementado um limite de taxa (rate limiting) como medida adicional de proteção ao servidor, prevenindo sobrecargas, com um máximo de 20 requisições por segundo.
 
-## Possiveis Melhorias / Funcionalidades que seriam interessantes
+## Possíveis Melhorias / Funcionalidades Adicionais Sugeridas
 
-### 1. Sistema de cache
-- **Desempenho:** Melhorar o desempenho do backend utilizando um sistema de cache redis para envio de dados salvos em uma memoria flash para nao ter que fazer requisicoes ao banco de dados.
-- **Reducao de latencia:** Respostas mais rapidas.
-- **Escabilidade Horizontal:** 
-    - **Cache distribuido:** Suporte a modelos de cluster e replicacao (shards ou replicas de leitura)
-    - **Camada de estado compartilhado:** Redis centralizado para varias aplicacoes.
-- **Alivio de "picos de trafego"**:
-    - **Protecao contra "cache stampede":** Evita que centenas de processos facam a mesma consulta pesado ao banco ao memso tempo, populando um cache apos primeira requisicao para demais processos.
+### 1. Implementação de Sistema de Cache
+- **Desempenho:** Aprimorar o desempenho do backend utilizando um sistema de cache com Redis para armazenar dados frequentemente acessados em memória, reduzindo a necessidade de consultas ao banco de dados.
+- **Redução de Latência:** Proporcionar respostas mais rápidas.
+- **Escalabilidade Horizontal:**
+    - **Cache Distribuído:** Suporte a modelos de cluster e replicação (shards ou réplicas de leitura).
+    - **Camada de Estado Compartilhado:** Redis centralizado para múltiplas instâncias da aplicação.
+- **Alívio de Picos de Tráfego:**
+    - **Proteção contra "Cache Stampede":** Evita que múltiplos processos realizem a mesma consulta pesada ao banco de dados simultaneamente, populando o cache após a primeira requisição para os demais processos.
 
-### 2. Commits
-- **Melhorado o padrao:**
-    - Ter utilizado melhor o padrao de feat, fix e etc
-    - Mais commits para deixar melhorar a especificidade da mudanca
+### 2. Padronização de Commits
+- **Aprimorar o padrão de commits:**
+    - Utilizar de forma mais consistente o padrão convencional de commits (ex: feat, fix, chore).
+    - Realizar commits mais granulares para aumentar a especificidade das alterações.
 
-#### 3. Utilizacao de testes End-to-End
-- Utilizacao de bibliotecas como [Cypress](https://www.cypress.io) para testar inteiramente o fluxo de processos entre frontend e backend
+### 3. Implementação de Testes End-to-End
+- Utilização de bibliotecas como [Cypress](https://www.cypress.io) para testar integralmente os fluxos de processos entre o frontend e o backend.
 
-#### 4. Pagination da API
-- Transacoes, Contatos, cartoes sao todos enviados em um unico request, poderia ser melhorado a velocidade e sobrecarga do servidor fazer a divisao da requisicao limitando por paginas e entao consumi-las assim que necessario.
+### 4. Paginação na API
+- Transações, contatos e cartões são atualmente enviados em uma única requisição. A implementação de paganação poderia melhorar a velocidade de resposta e reduzir a sobrecarga do servidor, dividindo os dados em páginas e consumindo-as conforme necessário.
 
+---
 
+## Testes Unitários
+- Os testes unitários foram focados nas regras de negócio da aplicação:
+    - **Usuário**:
+        - Criação de usuário:
+            - E-mail inválido
+            - Senha curta
+            - E-mail já existente
+            - Criação válida
+    - **Transações:**
+        - Criação de transação:
+            - Valor inválido
+            - Saldo insuficiente
+            - Categoria inválida
+            - Sem Categoria
+            - Conta inválida
+            - Criação válida
+    - **Contatos:**
+        - Criação de Contato:
+            - Conta inválida
+            - Sem Nome
+            - Criação válida
+    - **Categoria:**
+        - Criação de Categoria:
+            - Sem nome
+    - **Cartão:**
+        - Criação de Cartão:
+            - Sem nome
+            - Limite menor que 0
+            - Criação válida
+        - Remoção de Cartão:
+            - ID inválido
+            - Remoção válida
+    - **Middlewares:**
+        - Autenticação
+        - Dono da conta
+---
 
+## Agradecimentos
+> Desde já, agradeço imensamente à Tech4Humans e ao CEU pela oportunidade de participar desta dinâmica que envolveu grande esforço, trabalho e aprendizado. Ser avaliado por profissionais experientes nesta área é uma experiência única, que certamente possibilitará maior aprendizagem e me ajudará a identificar áreas para aprimoramento. Muito obrigado!

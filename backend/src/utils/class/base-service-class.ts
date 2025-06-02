@@ -61,7 +61,7 @@ export abstract class BaseService<T extends ObjectLiteral> {
   ): Promise<T | ApiError> {
     const object = await this.repository.findOne({
       where: { id } as unknown as FindOptionsWhere<T>,
-      relations,
+      relations: relations,
     });
     if (!object)
       throw new ApiError(
@@ -80,31 +80,34 @@ export abstract class BaseService<T extends ObjectLiteral> {
   ): Promise<T> {
     const entityInstance = Object.assign(new this.classValidator(), object);
     let errors: ValidationError[] = await validate(entityInstance, {
-      // Typed errors
-      skipMissingProperties: false, // Consider if true is more appropriate for partial updates
+      skipMissingProperties: false, 
     });
     errors = errors.filter((error: ValidationError) => {
       return error.property !== undefined;
     });
+ 
     if (errors.length > 0) {
       throw new ApiError(
         400,
         "Validation failed",
-        errors.map((e) => e.toString()).join(", "),
+        errors
+          .map(
+            (e) =>
+              `${e.property}: ${e.constraints ? Object.values(e.constraints).join(", ") : ""}`,
+          )
+          .join("; "),
       );
     }
     if (this.constructor.name.split("Service")[0] === "User") {
       const userRepository = AppDataSource.getRepository("User");
-      const existingUser = await userRepository.findOne({
-        where: {
-          email: (object as unknown as { email: string }).email,
-        } as FindOptionsWhere<ObjectLiteral>,
-      });
+      const existingUser = await userRepository.findOneBy({
+        email: (object as unknown as { email: string }).email,
+      } as FindOptionsWhere<ObjectLiteral>);
       if (existingUser) {
         throw new ApiError(400, "User with this email already exists");
       }
     }
-    const relArray = relations
+    const relArray = Array.isArray(relations)
       ? await Promise.all(
           relations.map(async (relation) => {
             const relationRepository = AppDataSource.getRepository(

@@ -14,6 +14,7 @@ export class AccountRoute {
       {
         name: "bank",
         type: "string",
+        required: true,
       },
       {
         name: "type",

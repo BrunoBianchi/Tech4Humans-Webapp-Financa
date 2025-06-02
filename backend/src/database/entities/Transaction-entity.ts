@@ -2,11 +2,12 @@ import { BeforeInsert, Column, Entity, ManyToOne } from "typeorm";
 import { Account } from "./Account-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
 import { Category } from "./Category-entity";
-import { IsPositive } from "class-validator";
+import { IsNotEmpty, IsPositive } from "class-validator";
 import { CardEnum } from "../../utils/enums/card-enum";
 @Entity()
 export class Transaction extends BaseEntity {
   @Column()
+  @IsNotEmpty()
   date!: Date;
   @BeforeInsert()
   setDate() {
@@ -15,6 +16,7 @@ export class Transaction extends BaseEntity {
 
   @Column({ nullable: false })
   @IsPositive()
+  @IsNotEmpty()
   amount!: number;
 
   @Column({ nullable: true })
@@ -24,6 +26,7 @@ export class Transaction extends BaseEntity {
   sourceAccount!: Account;
 
   @Column({ type: "enum", enum: CardEnum, nullable: false })
+  @IsNotEmpty()
   type!: string;
 
   @Column({ default: "pending" })

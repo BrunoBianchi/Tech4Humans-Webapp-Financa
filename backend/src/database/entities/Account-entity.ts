@@ -6,12 +6,14 @@ import { Contact } from "./Contact-entity";
 import { Investiment } from "./Investment-entity";
 import { BaseEntity } from "../baseEntity/base-entity";
 import { AccountType } from "../../utils/enums/account-enum";
-import { IsPositive } from "class-validator";
+import { IsNotEmpty, IsPositive } from "class-validator";
 @Entity()
 export class Account extends BaseEntity {
   @Column()
+  @IsNotEmpty()
   bank!: string;
 
+  @IsNotEmpty()
   @Column({ type: "enum", enum: AccountType })
   type!: string;
 
