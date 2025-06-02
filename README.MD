@@ -467,39 +467,39 @@ Foi implementado um limite de taxa (rate limiting) como medida adicional de prot
 ## Testes Unitários
 
 - Os testes unitários foram focados nas regras de negócio da aplicação:
-        - **Usuário**:
-                - Criação de usuário:
-                        - E-mail inválido
-                        - Senha curta
-                        - E-mail já existente
-                        - Criação válida
-        - **Transações:**
-                - Criação de transação:
-                        - Valor inválido
-                        - Saldo insuficiente
-                        - Categoria inválida
-                        - Sem Categoria
-                        - Conta inválida
-                        - Criação válida
-        - **Contatos:**
-                - Criação de Contato:
-                        - Conta inválida
-                        - Sem Nome
-                        - Criação válida
-        - **Categoria:**
-                - Criação de Categoria:
-                        - Sem nome
-        - **Cartão:**
-                - Criação de Cartão:
-                        - Sem nome
-                        - Limite menor que 0
-                        - Criação válida
-                - Remoção de Cartão:
-                        - ID inválido
-                        - Remoção válida
-        - **Middlewares:**
-                - Autenticação
-                - Dono da conta
+    - **Usuário:**
+        - Criação de usuário:
+            - E-mail inválido
+            - Senha curta
+            - E-mail já existente
+            - Criação válida
+    - **Transações:**
+        - Criação de transação:
+            - Valor inválido
+            - Saldo insuficiente
+            - Categoria inválida
+            - Sem categoria
+            - Conta inválida
+            - Criação válida
+    - **Contatos:**
+        - Criação de contato:
+            - Conta inválida
+            - Sem nome
+            - Criação válida
+    - **Categoria:**
+        - Criação de categoria:
+            - Sem nome
+    - **Cartão:**
+        - Criação de cartão:
+            - Sem nome
+            - Limite menor que 0
+            - Criação válida
+        - Remoção de cartão:
+            - ID inválido
+            - Remoção válida
+    - **Middlewares:**
+        - Autenticação
+        - Dono da conta
 
 ---
 
