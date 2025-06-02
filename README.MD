@@ -184,7 +184,6 @@ cd backend
 cp .env.example .env  # Se o arquivo .env.example existir
 cd ..
 ```
-Revise o arquivo `backend/.env` e ajuste as variáveis conforme necessário, especialmente `POSTGRES_HOST`, `POSTGRES_PORT`, `REDIS_HOST`, `REDIS_PORT` se não estiver usando Docker (ex: `POSTGRES_HOST=localhost`). Muitas variáveis podem ser lidas do `.env` da raiz se a aplicação estiver configurada para tal, mas o `backend/.env` tem precedência para o serviço de backend.
 
 ### 3. Execução
 
