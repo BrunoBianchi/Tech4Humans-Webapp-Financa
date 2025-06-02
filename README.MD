@@ -436,6 +436,8 @@ O projeto foi concebido para criar um sistema financeiro que suporte a criação
 #### 11. Rate Limit
 Foi implementado um limite de taxa (rate limiting) como medida adicional de proteção ao servidor, prevenindo sobrecargas, com um máximo de 20 requisições por segundo.
 
+#### 12. Responsividade 
+Site é inteiramente responsivo tanto para desktop quanto mobile.
 ---
 
 ## Possíveis Melhorias / Funcionalidades Adicionais Sugeridas
