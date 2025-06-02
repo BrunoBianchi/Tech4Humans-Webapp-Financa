@@ -400,3 +400,32 @@ Para o projeto, foi pensando em criar um sistema financeiro que suporta a criaca
     - Saldo da conta de origem
     - Saldo da conta de destino
     - Status de ``Pending`` para ``Completed``
+---
+
+#### 11. Rate limit
+Foi utilizado rate limit para fazer uma protecao a mais ao servidor para sanar tambem a sobrecarga dele, sendo de maximo 20 requests por segundo.
+
+## Possiveis Melhorias / Funcionalidades que seriam interessantes
+
+### 1. Sistema de cache
+- **Desempenho:** Melhorar o desempenho do backend utilizando um sistema de cache redis para envio de dados salvos em uma memoria flash para nao ter que fazer requisicoes ao banco de dados.
+- **Reducao de latencia:** Respostas mais rapidas.
+- **Escabilidade Horizontal:** 
+    - **Cache distribuido:** Suporte a modelos de cluster e replicacao (shards ou replicas de leitura)
+    - **Camada de estado compartilhado:** Redis centralizado para varias aplicacoes.
+- **Alivio de "picos de trafego"**:
+    - **Protecao contra "cache stampede":** Evita que centenas de processos facam a mesma consulta pesado ao banco ao memso tempo, populando um cache apos primeira requisicao para demais processos.
+
+### 2. Commits
+- **Melhorado o padrao:**
+    - Ter utilizado melhor o padrao de feat, fix e etc
+    - Mais commits para deixar melhorar a especificidade da mudanca
+
+#### 3. Utilizacao de testes End-to-End
+- Utilizacao de bibliotecas como [Cypress](https://www.cypress.io) para testar inteiramente o fluxo de processos entre frontend e backend
+
+#### 4. Pagination da API
+- Transacoes, Contatos, cartoes sao todos enviados em um unico request, poderia ser melhorado a velocidade e sobrecarga do servidor fazer a divisao da requisicao limitando por paginas e entao consumi-las assim que necessario.
+
+
+
