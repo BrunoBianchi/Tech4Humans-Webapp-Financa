@@ -277,6 +277,9 @@ O sistema foi projetado com validação em múltiplas camadas, garantindo robust
 #### Banco de Dados (PostgreSQL)
 - **Validação de integridade e restrições:** Antes da inserção de novos dados, o banco de dados aplica validações automáticas por meio de constraints e tipos de dados definidos no modelo, prevenindo inconsistências e mantendo a integridade das informações.
 
+### Utilizacao do redis
+Redis foi escolhido para simular um caso real de varias transacoe sem sobrecarregamento do servidor.
+
 ### Utilização de cookies 
 
 A escolha por utilizar cookies no frontend, em vez de localStorage ou sessionStorage, é justificada pelos seguintes benefícios:
@@ -360,6 +363,7 @@ Para o projeto, foi pensando em criar um sistema financeiro que suporta a criaca
 - **Regras de Negocio:**
     - Valor maior que 0
     - Transacao somente para banco de usuarios diferentes
+    - Selecionar uma categoria 
 
 #### 5. Filtros Dinamicos
 - **Tipos:**
@@ -371,11 +375,28 @@ Para o projeto, foi pensando em criar um sistema financeiro que suporta a criaca
 - **Inputs:** contas podem ser procurados por nome
 
 #### 6. Categorias
+- **Divisao do dinheiro:** Possibilita visualizacao do dinheiro gasto nas transacoes
 
 #### 7. Dashboard
+- **Informativo:**
+    - Visualizacao total de contas 
+    - Saldo total
+    - Saidas e entradas
+    - Divisao das contas
 
 #### 8. IA
+- **Ajudar na manutencao do dinheiro:** FinanceTechAi recebe todos os dados do usuario, tais como contas, dinheiro, cartoes, transacoes, categorias e faz um planejamento para ajudar usuario a entender como esta acontecendo a movimentacao do dinheiro, alem disso da dicas importantes para manter dinheiro seguro.
+-**Popup Chat:** Usuario consegue conversar diretamente com IA para sanar sua duvidas ou ter insights
+    -**Account:** O Popup em ``/dashboard/account`` utiliza dados especificos da conta na conversa do usuario
+    -**Dashboard:** O Popup em ``/dashboard`` utiliza dados de todas as contas, transacoes e categorias na conversa com o usuario.
+    -**Continuacao da conversa:** IA consegue interpretar a conversa e continuar a produzindo insights.
 
 #### 9. Contatos
+-**Multiplos Contatos:** Usuario pode cadastrar em cada conta usuarios para fazer transacoes mais rapidamente.
 
 #### 10. Filas em Redis
+-**Sistema de fila:** Utiliza-se o principio FIFO (First In - First Out) para o processamente das transacoes.
+-**Alteracao Dinamica do dinheiro:** Após o processamento da transação a api executa a tarefa de modificar
+    - Saldo da conta de origem
+    - Saldo da conta de destino
+    - Status de ``Pending`` para ``Completed``
