@@ -386,17 +386,17 @@ Para o projeto, foi pensando em criar um sistema financeiro que suporta a criaca
 
 #### 8. IA
 - **Ajudar na manutencao do dinheiro:** FinanceTechAi recebe todos os dados do usuario, tais como contas, dinheiro, cartoes, transacoes, categorias e faz um planejamento para ajudar usuario a entender como esta acontecendo a movimentacao do dinheiro, alem disso da dicas importantes para manter dinheiro seguro.
--**Popup Chat:** Usuario consegue conversar diretamente com IA para sanar sua duvidas ou ter insights
-    -**Account:** O Popup em ``/dashboard/account`` utiliza dados especificos da conta na conversa do usuario
-    -**Dashboard:** O Popup em ``/dashboard`` utiliza dados de todas as contas, transacoes e categorias na conversa com o usuario.
-    -**Continuacao da conversa:** IA consegue interpretar a conversa e continuar a produzindo insights.
+- **Popup Chat:** Usuario consegue conversar diretamente com IA para sanar sua duvidas ou ter insights
+    - **Account:** O Popup em ``/dashboard/account`` utiliza dados especificos da conta na conversa do usuario
+    - **Dashboard:** O Popup em ``/dashboard`` utiliza dados de todas as contas, transacoes e categorias na conversa com o usuario.
+    - **Continuacao da conversa:** IA consegue interpretar a conversa e continuar a produzindo insights.
 
 #### 9. Contatos
--**Multiplos Contatos:** Usuario pode cadastrar em cada conta usuarios para fazer transacoes mais rapidamente.
+- **Multiplos Contatos:** Usuario pode cadastrar em cada conta usuarios para fazer transacoes mais rapidamente.
 
 #### 10. Filas em Redis
--**Sistema de fila:** Utiliza-se o principio FIFO (First In - First Out) para o processamente das transacoes.
--**Alteracao Dinamica do dinheiro:** Após o processamento da transação a api executa a tarefa de modificar
+- **Sistema de fila:** Utiliza-se o principio FIFO (First In - First Out) para o processamente das transacoes.
+- **Alteracao Dinamica do dinheiro:** Após o processamento da transação a api executa a tarefa de modificar
     - Saldo da conta de origem
     - Saldo da conta de destino
     - Status de ``Pending`` para ``Completed``
