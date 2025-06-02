@@ -177,14 +177,6 @@ REDIS_PORT=6379                 # Porta exposta pelo container Redis ou porta lo
 PRIVATE_KEY=SuaChaveSecretaSuperSeguraAqui # Substitua por uma chave secreta forte e única.
 ```
 
-#### 2.2 Variáveis do Backend (Arquivo `backend/.env`)
-O backend possui seu próprio arquivo `.env` para configurações específicas. Se o arquivo `backend/.env.example` existir, copie-o.
-```sh
-cd backend
-cp .env.example .env  # Se o arquivo .env.example existir
-cd ..
-```
-
 ### 3. Execução
 
 Você pode rodar o projeto usando Docker (recomendado para simplicidade) ou manualmente configurando cada serviço.
