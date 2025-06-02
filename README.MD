@@ -2,19 +2,45 @@
 
 Bem-vindo ao repositório do **TechFinance**, uma aplicação fullstack desenvolvida para o desafio TechLab 2025 da Tech4Humans. Este documento oferece uma visão detalhada do projeto, incluindo decisões de arquitetura, lógica de desenvolvimento, estrutura do projeto, instruções de execução e cobertura de testes.
 
---- 
+---
 
 ## Índice
 
 - [Visão Geral](#visão-geral)
-- [Decisões de Arquitetura](#decisões-de-arquitetura)
-- [Lógica de Desenvolvimento](#lógica-de-desenvolvimento)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Instruções de Execução](#instruções-de-execução)
-- [Cobertura de Testes](#cobertura-de-testes)
-- [Modelo da Aplicação](#modelo-da-aplicação)
-- [Modelo de Dados](#modelo-de-dados)
+- [Arquitetura da Aplicação](#arquitetura-da-aplicação)
+    - [Arquitetura do Backend](#arquitetura-do-backend)
+    - [Arquitetura da API](#arquitetura-da-api)
+    - [Arquitetura das Entidades do Banco de Dados](#arquitetura-das-entidades-do-banco-de-dados)
+- [Decisões de Arquitetura](#decisões-de-arquitetura)
+    - [Backend - Arquitetura Modular e MVC](#backend---arquitetura-modular-e-mvc)
+    - [Frontend - Arquitetura Modular Baseada em Componentes](#frontend---arquitetura-modular-baseada-em-componentes)
+    - [Validação em Camadas (Frontend, Backend e Banco de Dados)](#validação-em-camadas-frontend-backend-e-banco-de-dados)
+    - [Utilização do Redis](#utilização-do-redis)
+    - [Utilização de Cookies](#utilização-de-cookies)
+    - [Utilização de JsonWebToken (JWT) para Autenticação](#utilização-de-jsonwebtoken-jwt-para-autenticação)
+- [Lógica de Desenvolvimento](#lógica-de-desenvolvimento)
+    - [Principais Funcionalidades](#principais-funcionalidades)
+        - [Usuário](#1-usuário)
+        - [Contas](#2-contas)
+        - [Cartões](#3-cartões)
+        - [Transações](#4-transações)
+        - [Filtros Dinâmicos](#5-filtros-dinâmicos)
+        - [Categorias](#6-categorias)
+        - [Dashboard](#7-dashboard)
+        - [IA](#8-ia)
+        - [Contatos](#9-contatos)
+        - [Filas em Redis](#10-filas-em-redis)
+        - [Rate Limit](#11-rate-limit)
+- [Possíveis Melhorias / Funcionalidades Adicionais Sugeridas](#possíveis-melhorias--funcionalidades-adicionais-sugeridas)
+    - [Implementação de Sistema de Cache](#1-implementação-de-sistema-de-cache)
+    - [Padronização de Commits](#2-padronização-de-commits)
+    - [Implementação de Testes End-to-End](#3-implementação-de-testes-end-to-end)
+    - [Paginação na API](#4-paginação-na-api)
+- [Testes Unitários](#testes-unitários)
+- [Agradecimentos](#agradecimentos)
 
 ---
 
@@ -199,6 +225,7 @@ pnpm install
 pnpm run dev # Ou 'vite', dependendo do script configurado em frontend/package.json
 ```
 O frontend estará rodando na porta especificada (ex: `5173`).
+
 ---
 
 ## Arquitetura da Aplicação
@@ -212,16 +239,16 @@ A aplicação foi desenvolvida com uma arquitetura de serviços independentes, e
 ![Modelo Geral da Aplicação](https://i.imgur.com/Kq8GzZn.png "Diagrama da arquitetura geral da aplicação TechFinance")
 
 ### Arquitetura do Backend
+
 O backend foi modelado utilizando uma estrutura modular, visando facilitar a organização e manutenção do código. As funcionalidades são agrupadas em módulos, cada um contendo seus respectivos controllers, services, DTOs (Data Transfer Objects) e entidades.
 
-#### Arquitetura da API
+### Arquitetura da API
+
 A API foi desenvolvida seguindo um padrão de design inspirado no [NestJS](https://docs.nestjs.com/controllers), utilizando decorators e `reflect-metadata` para definir rotas, validações e injeção de dependência de forma declarativa. Este padrão promove uma organização clara de responsabilidades e facilita a escalabilidade da API.
 
 ![Modelo da API Backend](https://i.imgur.com/4ZLtVVq.png "Diagrama do padrão da API backend, inspirado no NestJS")
 
----
-
-#### Arquitetura das Entidades do Banco de Dados
+### Arquitetura das Entidades do Banco de Dados
 
 O diagrama Entidade-Relacionamento (ER) abaixo ilustra as principais entidades do sistema e seus relacionamentos:
 
@@ -232,9 +259,11 @@ O diagrama Entidade-Relacionamento (ER) abaixo ilustra as principais entidades d
 ## Decisões de Arquitetura
 
 ### Backend - Arquitetura Modular e MVC
+
 A combinação das arquiteturas [modular](https://medium.com/geekculture/what-is-modular-architecture-benefits-implementation-methods-8c272ebc05eb) e [MVC](https://coodesh.com/blog/dicionario/o-que-e-arquitetura-mvc/) no backend proporciona uma base sólida e flexível para o desenvolvimento do sistema, inspirada no framework moderno [NestJS](https://nestjs.com).
 
 #### 1. Arquitetura Modular
+
 A adoção de uma arquitetura modular no backend foi uma decisão estratégica, motivada pela familiaridade com estruturas semelhantes (como a do Angular) e pelos seguintes benefícios:
 
 - **Separação de Responsabilidades (SoC):** Cada módulo é dedicado a uma funcionalidade específica do negócio (ex: autenticação, gerenciamento de transações). Isso isola as responsabilidades, tornando o código mais compreensível e focado.
@@ -246,6 +275,7 @@ A adoção de uma arquitetura modular no backend foi uma decisão estratégica, 
 - **Desenvolvimento Paralelo:** Diferentes equipes ou desenvolvedores podem trabalhar em módulos distintos simultaneamente com menor conflito, agilizando o processo de desenvolvimento.
 
 #### 2. Arquitetura MVC (Model-View-Controller)
+
 Inspirada no NestJS, esta arquitetura foi utilizada para separar logicamente as responsabilidades de negócio, a interface do usuário e a interação com o usuário.
 
 - **Menos código boilerplate:** Decorators abstraem grande parte da configuração de rotas.
@@ -268,15 +298,19 @@ A arquitetura do frontend foi pensada para maximizar a modularidade e a clareza,
 O sistema foi projetado com validação em múltiplas camadas, garantindo robustez contra falhas e fornecendo feedback imediato ao usuário. Cada camada implementa mecanismos específicos de validação, promovendo segurança, integridade dos dados e melhor experiência de uso.
 
 #### Frontend
+
 - **Validação de tipos e expressões:** Utilização de expressões regulares (regex) e checagem de tipos antes do envio dos dados para a API, evitando requisições inválidas e reduzindo o consumo desnecessário de recursos.
 
 #### Backend
+
 - **Validação automática estruturada:** A arquitetura do backend, aliada ao uso de decorators e da biblioteca Zod, garante validação automática e rigorosa dos dados recebidos, assegurando que apenas informações corretas e no formato esperado sejam processadas.
 
 #### Banco de Dados (PostgreSQL)
+
 - **Validação de integridade e restrições:** Antes da inserção de novos dados, o banco de dados aplica validações automáticas por meio de constraints e tipos de dados definidos no modelo, prevenindo inconsistências e mantendo a integridade das informações.
 
 ### Utilização do Redis
+
 O Redis foi escolhido para simular um cenário real com múltiplas transações, visando evitar a sobrecarga do servidor.
 
 ### Utilização de Cookies
@@ -284,21 +318,21 @@ O Redis foi escolhido para simular um cenário real com múltiplas transações,
 A escolha por utilizar cookies no frontend, em vez de localStorage ou sessionStorage, é justificada pelos seguintes benefícios:
 
 1. **Proteção contra ataques XSS (Cross-Site Scripting)**
-    - **Cookies HttpOnly:** Ao marcar um cookie como `HttpOnly=true`, ele se torna inacessível ao JavaScript do navegador. Assim, mesmo que exista uma vulnerabilidade XSS, um atacante não conseguirá ler esse cookie via `document.cookie`.
-    - **localStorage/sessionStorage vulneráveis:** Dados armazenados em `localStorage` ou `sessionStorage` ficam sempre disponíveis em `window.localStorage` ou `window.sessionStorage`. Se houver um script malicioso injetado, ele pode facilmente ler e extrair esses dados.
+        - **Cookies HttpOnly:** Ao marcar um cookie como `HttpOnly=true`, ele se torna inacessível ao JavaScript do navegador. Assim, mesmo que exista uma vulnerabilidade XSS, um atacante não conseguirá ler esse cookie via `document.cookie`.
+        - **localStorage/sessionStorage vulneráveis:** Dados armazenados em `localStorage` ou `sessionStorage` ficam sempre disponíveis em `window.localStorage` ou `window.sessionStorage`. Se houver um script malicioso injetado, ele pode facilmente ler e extrair esses dados.
 
 2. **Expiração e escopo de domínio**
-    - **Configuração granular:** Cookies permitem definir `Expires`/`Max-Age`, `Domain`, `Path`, `Secure` e `SameSite`, oferecendo controle preciso sobre validade, escopo e segurança.
-    - **localStorage/sessionStorage:** Não possuem controle nativo de expiração ou escopo de domínio, exigindo implementação manual dessas regras.
+        - **Configuração granular:** Cookies permitem definir `Expires`/`Max-Age`, `Domain`, `Path`, `Secure` e `SameSite`, oferecendo controle preciso sobre validade, escopo e segurança.
+        - **localStorage/sessionStorage:** Não possuem controle nativo de expiração ou escopo de domínio, exigindo implementação manual dessas regras.
 
 3. **Persistência e compartilhamento entre abas**
-    - **Cookies:** Permitem controle de expiração e são compartilhados entre abas e janelas do navegador, facilitando a manutenção do estado de autenticação.
-    - **sessionStorage:** Dados somem ao fechar a aba e não são compartilhados entre abas.
-    - **localStorage:** Dados persistem indefinidamente, mas não oferecem controle de expiração automática.
+        - **Cookies:** Permitem controle de expiração e são compartilhados entre abas e janelas do navegador, facilitando a manutenção do estado de autenticação.
+        - **sessionStorage:** Dados somem ao fechar a aba e não são compartilhados entre abas.
+        - **localStorage:** Dados persistem indefinidamente, mas não oferecem controle de expiração automática.
 
 4. **Segurança de transporte (HTTPS/Secure flag)**
-    - **Cookie com Secure=true:** Garante que o cookie só seja enviado em conexões HTTPS, protegendo contra interceptação em conexões inseguras.
-    - **localStorage/sessionStorage:** Dados podem ser expostos se houver downgrade para HTTP, pois não há proteção nativa de transporte.
+        - **Cookie com Secure=true:** Garante que o cookie só seja enviado em conexões HTTPS, protegendo contra interceptação em conexões inseguras.
+        - **localStorage/sessionStorage:** Dados podem ser expostos se houver downgrade para HTTP, pois não há proteção nativa de transporte.
 
 ---
 
@@ -307,26 +341,27 @@ A escolha por utilizar cookies no frontend, em vez de localStorage ou sessionSto
 A escolha pelo uso de JWT (JSON Web Token) como mecanismo de autenticação na aplicação se baseia em diversos benefícios que atendem tanto à segurança quanto à escalabilidade do sistema:
 
 1. **Autenticação stateless e escalável**
-    - **Sem sessão no servidor:** O JWT armazena todas as informações relevantes (ID do usuário, permissões, expiração) dentro do próprio token, eliminando a necessidade de manter sessões no backend. Isso facilita o balanceamento de carga e a escalabilidade horizontal, pois qualquer instância do backend pode validar o token localmente.
+        - **Sem sessão no servidor:** O JWT armazena todas as informações relevantes (ID do usuário, permissões, expiração) dentro do próprio token, eliminando a necessidade de manter sessões no backend. Isso facilita o balanceamento de carga e a escalabilidade horizontal, pois qualquer instância do backend pode validar o token localmente.
 
 2. **Padrão amplamente suportado e interoperável**
-    - **Integração facilitada:** JWT é um padrão aberto, suportado por diversas linguagens e frameworks, tornando-o ideal para sistemas distribuídos, microsserviços e integrações com terceiros.
-    - **Transporte flexível:** Pode ser transmitido via cabeçalho HTTP (`Authorization: Bearer <token>`), cookies ou até mesmo parâmetros de URL, conforme a necessidade da aplicação.
+        - **Integração facilitada:** JWT é um padrão aberto, suportado por diversas linguagens e frameworks, tornando-o ideal para sistemas distribuídos, microsserviços e integrações com terceiros.
+        - **Transporte flexível:** Pode ser transmitido via cabeçalho HTTP (`Authorization: Bearer <token>`), cookies ou até mesmo parâmetros de URL, conforme a necessidade da aplicação.
 
 3. **Segurança e controle de expiração**
-    - **Assinatura digital:** O token é assinado (HMAC ou RSA), garantindo integridade e autenticidade dos dados. O backend pode verificar se o token foi alterado ou forjado.
-    - **Expiração automática:** O campo `exp` define a validade do token, limitando o tempo de uso e reduzindo riscos em caso de vazamento. É possível implementar refresh tokens para sessões prolongadas de forma segura.
+        - **Assinatura digital:** O token é assinado (HMAC ou RSA), garantindo integridade e autenticidade dos dados. O backend pode verificar se o token foi alterado ou forjado.
+        - **Expiração automática:** O campo `exp` define a validade do token, limitando o tempo de uso e reduzindo riscos em caso de vazamento. É possível implementar refresh tokens para sessões prolongadas de forma segura.
 
 4. **Flexibilidade e customização**
-    - **Claims personalizados:** O JWT permite incluir informações adicionais (claims) conforme as necessidades do negócio, como roles, permissões ou dados contextuais, facilitando decisões de autorização diretamente no backend.
-    - **Controle granular de acesso:** Permite implementar diferentes níveis de acesso e políticas de segurança de forma centralizada e padronizada.
+        - **Claims personalizados:** O JWT permite incluir informações adicionais (claims) conforme as necessidades do negócio, como roles, permissões ou dados contextuais, facilitando decisões de autorização diretamente no backend.
+        - **Controle granular de acesso:** Permite implementar diferentes níveis de acesso e políticas de segurança de forma centralizada e padronizada.
 
 5. **Compatibilidade com cookies seguros**
-    - **Armazenamento seguro:** O JWT pode ser armazenado em cookies com flags `HttpOnly`, `Secure` e `SameSite`, combinando os benefícios de ambos os mecanismos para máxima proteção contra ataques XSS e CSRF.
+        - **Armazenamento seguro:** O JWT pode ser armazenado em cookies com flags `HttpOnly`, `Secure` e `SameSite`, combinando os benefícios de ambos os mecanismos para máxima proteção contra ataques XSS e CSRF.
 
 ---
 
 ## Lógica de Desenvolvimento
+
 O projeto foi concebido para criar um sistema financeiro que suporte a criação de múltiplas contas e cartões, permitindo um controle financeiro mais abrangente.
 
 ### Principais Funcionalidades
@@ -340,36 +375,36 @@ O projeto foi concebido para criar um sistema financeiro que suporte a criação
 - **Tipos:** As contas podem ser do tipo Poupança ou Corrente.
 - **Validação:** Middleware para verificar a existência da conta e se o usuário é o proprietário.
 - **Regras de Negócio:**
-    - Saldo mínimo inicial da conta de R$ 1,00.
+        - Saldo mínimo inicial da conta de R$ 1,00.
 
 #### 3. Cartões
 - **Múltiplos Cartões:** Permite ao usuário cadastrar múltiplos cartões.
 - **Tipos:** Os cartões podem ser do tipo Crédito ou Débito.
 - **Limite:** Possibilidade de adicionar limite aos cartões.
 - **Ícones dinâmicos:**
-    - **Visa:** Se o primeiro dígito for `4`.
-    - **Mastercard:** Se o primeiro dígito for `5` ou os quatro primeiros dígitos estiverem entre `2221` e `2720`.
-    - **American Express:** Se os dois primeiros dígitos forem `34` ou `37`.
-    - **Discover:** Se o primeiro dígito for `6`.
-    - **Outros:** Caso não corresponda a nenhuma bandeira, nenhum ícone específico é exibido.
+        - **Visa:** Se o primeiro dígito for `4`.
+        - **Mastercard:** Se o primeiro dígito for `5` ou os quatro primeiros dígitos estiverem entre `2221` e `2720`.
+        - **American Express:** Se os dois primeiros dígitos forem `34` ou `37`.
+        - **Discover:** Se o primeiro dígito for `6`.
+        - **Outros:** Caso não corresponda a nenhuma bandeira, nenhum ícone específico é exibido.
 - **Regras de Negócio:**
-    - Limite do cartão deve ser superior a 0.
+        - Limite do cartão deve ser superior a 0.
 
 #### 4. Transações
 - **Transações entre Contas:** Permite realizar transferências de valores entre contas.
 - **Validação de Saldo:** Verificação prévia ao processamento da transação para garantir que a conta de origem não fique com saldo negativo.
 - **Transação e Saldo Pendentes:** Cada transação criada é marcada como pendente, sinalizando na conta de origem (em vermelho) e na conta de destino (em verde). Após a validação pela fila do Redis, os valores são debitados e creditados.
 - **Regras de Negócio:**
-    - Valor maior que 0.
-    - Transação permitida somente entre contas de usuários diferentes.
-    - Selecionar uma categoria.
+        - Valor maior que 0.
+        - Transação permitida somente entre contas de usuários diferentes.
+        - Selecionar uma categoria.
 
 #### 5. Filtros Dinâmicos
 - **Tipos:**
-    - [a-z]
-    - [A-Z]
-    - [Período]
-    - [Tipo]: Aplicável a contas, permite filtrar por Poupança ou Corrente.
+        - [a-z]
+        - [A-Z]
+        - [Período]
+        - [Tipo]: Aplicável a contas, permite filtrar por Poupança ou Corrente.
 - **Componentes:** Válido para contas e contatos.
 - **Inputs:** Contas podem ser pesquisadas por nome.
 
@@ -378,17 +413,17 @@ O projeto foi concebido para criar um sistema financeiro que suporte a criação
 
 #### 7. Dashboard
 - **Informativo:**
-    - Visualização do total de contas.
-    - Saldo total.
-    - Saídas e entradas (fluxo de caixa).
-    - Divisão de saldos por conta.
+        - Visualização do total de contas.
+        - Saldo total.
+        - Saídas e entradas (fluxo de caixa).
+        - Divisão de saldos por conta.
 
 #### 8. IA
 - **Auxílio na Gestão Financeira:** O FinanceTechAI analisa os dados do usuário (contas, saldos, cartões, transações, categorias) para fornecer um planejamento financeiro, ajudando o usuário a entender a movimentação de seu dinheiro e oferecendo dicas para uma gestão financeira segura.
 - **Popup Chat:** O usuário pode interagir diretamente com a IA para sanar dúvidas ou obter insights.
-    - **Conta Específica:** O popup em `/dashboard/account` utiliza dados específicos da conta selecionada na conversa com o usuário.
-    - **Visão Geral (Dashboard):** O popup em `/dashboard` utiliza dados consolidados de todas as contas, transações e categorias na conversa com o usuário.
-    - **Continuidade da Conversa:** A IA é capaz de interpretar o histórico da conversa e continuar fornecendo insights relevantes.
+        - **Conta Específica:** O popup em `/dashboard/account` utiliza dados específicos da conta selecionada na conversa com o usuário.
+        - **Visão Geral (Dashboard):** O popup em `/dashboard` utiliza dados consolidados de todas as contas, transações e categorias na conversa com o usuário.
+        - **Continuidade da Conversa:** A IA é capaz de interpretar o histórico da conversa e continuar fornecendo insights relevantes.
 
 #### 9. Contatos
 - **Múltiplos Contatos:** O usuário pode cadastrar contatos associados a cada conta para agilizar transações recorrentes.
@@ -396,13 +431,14 @@ O projeto foi concebido para criar um sistema financeiro que suporte a criação
 #### 10. Filas em Redis
 - **Sistema de Fila:** Utiliza o princípio FIFO (First In, First Out) para o processamento das transações.
 - **Alteração Dinâmica de Saldos:** Após o processamento da transação, a API executa as seguintes tarefas:
-    - Saldo da conta de origem.
-    - Saldo da conta de destino.
-    - Alteração do status da transação de `Pending` para `Completed`.
----
+        - Saldo da conta de origem.
+        - Saldo da conta de destino.
+        - Alteração do status da transação de `Pending` para `Completed`.
 
 #### 11. Rate Limit
 Foi implementado um limite de taxa (rate limiting) como medida adicional de proteção ao servidor, prevenindo sobrecargas, com um máximo de 20 requisições por segundo.
+
+---
 
 ## Possíveis Melhorias / Funcionalidades Adicionais Sugeridas
 
@@ -410,60 +446,63 @@ Foi implementado um limite de taxa (rate limiting) como medida adicional de prot
 - **Desempenho:** Aprimorar o desempenho do backend utilizando um sistema de cache com Redis para armazenar dados frequentemente acessados em memória, reduzindo a necessidade de consultas ao banco de dados.
 - **Redução de Latência:** Proporcionar respostas mais rápidas.
 - **Escalabilidade Horizontal:**
-    - **Cache Distribuído:** Suporte a modelos de cluster e replicação (shards ou réplicas de leitura).
-    - **Camada de Estado Compartilhado:** Redis centralizado para múltiplas instâncias da aplicação.
+        - **Cache Distribuído:** Suporte a modelos de cluster e replicação (shards ou réplicas de leitura).
+        - **Camada de Estado Compartilhado:** Redis centralizado para múltiplas instâncias da aplicação.
 - **Alívio de Picos de Tráfego:**
-    - **Proteção contra "Cache Stampede":** Evita que múltiplos processos realizem a mesma consulta pesada ao banco de dados simultaneamente, populando o cache após a primeira requisição para os demais processos.
+        - **Proteção contra "Cache Stampede":** Evita que múltiplos processos realizem a mesma consulta pesada ao banco de dados simultaneamente, populando o cache após a primeira requisição para os demais processos.
 
 ### 2. Padronização de Commits
 - **Aprimorar o padrão de commits:**
-    - Utilizar de forma mais consistente o padrão convencional de commits (ex: feat, fix, chore).
-    - Realizar commits mais granulares para aumentar a especificidade das alterações.
+        - Utilizar de forma mais consistente o padrão convencional de commits (ex: feat, fix, chore).
+        - Realizar commits mais granulares para aumentar a especificidade das alterações.
 
 ### 3. Implementação de Testes End-to-End
 - Utilização de bibliotecas como [Cypress](https://www.cypress.io) para testar integralmente os fluxos de processos entre o frontend e o backend.
 
 ### 4. Paginação na API
-- Transações, contatos e cartões são atualmente enviados em uma única requisição. A implementação de paganação poderia melhorar a velocidade de resposta e reduzir a sobrecarga do servidor, dividindo os dados em páginas e consumindo-as conforme necessário.
+- Transações, contatos e cartões são atualmente enviados em uma única requisição. A implementação de paginação poderia melhorar a velocidade de resposta e reduzir a sobrecarga do servidor, dividindo os dados em páginas e consumindo-as conforme necessário.
 
 ---
 
 ## Testes Unitários
+
 - Os testes unitários foram focados nas regras de negócio da aplicação:
-    - **Usuário**:
-        - Criação de usuário:
-            - E-mail inválido
-            - Senha curta
-            - E-mail já existente
-            - Criação válida
-    - **Transações:**
-        - Criação de transação:
-            - Valor inválido
-            - Saldo insuficiente
-            - Categoria inválida
-            - Sem Categoria
-            - Conta inválida
-            - Criação válida
-    - **Contatos:**
-        - Criação de Contato:
-            - Conta inválida
-            - Sem Nome
-            - Criação válida
-    - **Categoria:**
-        - Criação de Categoria:
-            - Sem nome
-    - **Cartão:**
-        - Criação de Cartão:
-            - Sem nome
-            - Limite menor que 0
-            - Criação válida
-        - Remoção de Cartão:
-            - ID inválido
-            - Remoção válida
-    - **Middlewares:**
-        - Autenticação
-        - Dono da conta
+        - **Usuário**:
+                - Criação de usuário:
+                        - E-mail inválido
+                        - Senha curta
+                        - E-mail já existente
+                        - Criação válida
+        - **Transações:**
+                - Criação de transação:
+                        - Valor inválido
+                        - Saldo insuficiente
+                        - Categoria inválida
+                        - Sem Categoria
+                        - Conta inválida
+                        - Criação válida
+        - **Contatos:**
+                - Criação de Contato:
+                        - Conta inválida
+                        - Sem Nome
+                        - Criação válida
+        - **Categoria:**
+                - Criação de Categoria:
+                        - Sem nome
+        - **Cartão:**
+                - Criação de Cartão:
+                        - Sem nome
+                        - Limite menor que 0
+                        - Criação válida
+                - Remoção de Cartão:
+                        - ID inválido
+                        - Remoção válida
+        - **Middlewares:**
+                - Autenticação
+                - Dono da conta
+
 ---
 
 ## Agradecimentos
+
 > Desde já, agradeço imensamente à Tech4Humans e ao CEU pela oportunidade de participar desta dinâmica que envolveu grande esforço, trabalho e aprendizado. Ser avaliado por profissionais experientes nesta área é uma experiência única, que certamente possibilitará maior aprendizagem e me ajudará a identificar áreas para aprimoramento. Muito obrigado!
