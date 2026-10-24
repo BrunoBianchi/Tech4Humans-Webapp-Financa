@@ -1,5 +1,15 @@
 # TechFinance - TechLab 2025
 
+> 🏆 **1º lugar no TechLab 2025 da Tech4Humans.**
+
+Webapp de gestão financeira pessoal: contas, cartões, transações, categorias e contatos, com um assistente de IA que analisa os dados do usuário e responde dúvidas em um chat.
+
+**Problema:** quem controla dinheiro em várias contas e cartões costuma perder a visão do todo. O TechFinance junta tudo em um painel, valida cada operação em várias camadas e usa um LLM para transformar os números em um resumo e dicas de gestão.
+
+**Stack:** React + Vite + TypeScript no frontend · Node.js + Express + TypeScript no backend · PostgreSQL com TypeORM · Redis + Bull para a fila de transações · JWT em cookies HttpOnly · Jest · Docker Compose.
+
+**IA no produto:** o assistente (popup de chat no dashboard e na tela de conta) envia os dados da conta ou o consolidado do usuário para o modelo `meta-llama/llama-4-scout-17b-16e-instruct` via API da Groq e devolve a análise já formatada em HTML. Detalhes na seção [IA](#8-ia).
+
 Bem-vindo ao repositório do **TechFinance**, uma aplicação fullstack desenvolvida para o desafio TechLab 2025 da Tech4Humans. Este documento oferece uma visão detalhada do projeto, incluindo decisões de arquitetura, lógica de desenvolvimento, estrutura do projeto, instruções de execução e cobertura de testes.
 
 ---
@@ -223,7 +233,7 @@ A aplicação foi desenvolvida com uma arquitetura de serviços independentes, e
 - Um servidor **frontend** (React/Vite) responsável pela interface do usuário e consumo da API.
 - Um servidor **backend** (Node.js/Express/TypeScript) responsável pela API RESTful, lógica de negócios, e comunicação com o banco de dados e Redis.
 - Um servidor de banco de dados **PostgreSQL**.
-- Um servidor **Redis** para caching e/ou gerenciamento de filas.
+- Um servidor **Redis**, usado pelo Bull como fila FIFO para processar as transações.
 
 ![Modelo Geral da Aplicação](https://i.imgur.com/Kq8GzZn.png "Diagrama da arquitetura geral da aplicação TechFinance")
 
